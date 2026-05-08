@@ -1,0 +1,83 @@
+---
+import { businessUnits } from '@config/business-units';
+import { dictFor } from '@lib/i18n';
+import type { Locale } from '@config/site';
+import Icon from '@components/icons/Icon.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = dictFor(locale);
+---
+
+<div class="relative" data-bu-dropdown>
+  <button
+    type="button"
+    class="inline-flex h-10 items-center gap-1.5 rounded px-2 text-sm font-medium text-ink-1 hover:text-ink-0 transition-colors"
+    aria-haspopup="true"
+    aria-expanded="false"
+    aria-controls="bu-menu"
+    data-bu-trigger
+  >
+    {dict.nav.businessUnits}
+    <Icon name="chevron-down" size={16} />
+  </button>
+
+  <div
+    id="bu-menu"
+    role="menu"
+    aria-label={dict.nav.businessUnits}
+    class="absolute end-0 mt-2 hidden w-72 rounded-lg border border-line bg-surface-0 p-2 shadow-[var(--ct-shadow-2)] z-50"
+    data-bu-menu
+  >
+    {businessUnits.map((unit) => (
+      <a
+        href={unit.url}
+        role="menuitem"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-start gap-3 rounded px-3 py-2.5 hover:bg-surface-1 focus:bg-surface-1 focus:outline-none"
+      >
+        <span class="mt-0.5 inline-flex h-5 w-5 items-center justify-center text-ink-2">
+          <Icon name="external" size={14} />
+        </span>
+        <span class="flex-1">
+          <span class="block text-sm font-semibold text-ink-0">{unit.label[locale]}</span>
+          <span class="block text-xs text-ink-2">{unit.url.replace('https://', '')}</span>
+        </span>
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  (function () {
+    const root = document.querySelector('[data-bu-dropdown]');
+    const trigger = root?.querySelector<HTMLButtonElement>('[data-bu-trigger]');
+    const menu = root?.querySelector<HTMLDivElement>('[data-bu-menu]');
+    if (!root || !trigger || !menu) return;
+
+    function setOpen(open: boolean) {
+      trigger!.setAttribute('aria-expanded', String(open));
+      menu!.classList.toggle('hidden', !open);
+    }
+
+    trigger.addEventListener('click', () => {
+      const open = trigger.getAttribute('aria-expanded') === 'true';
+      setOpen(!open);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!root!.contains(event.target as Node)) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        trigger?.focus();
+      }
+    });
+  })();
+</script>

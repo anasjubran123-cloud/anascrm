@@ -1,5 +1,9 @@
 ---
 import { dictFor, localizedPath } from '@lib/i18n';
+import { businessUnits } from '@config/business-units';
+import { site } from '@config/site';
+import Icon from '@components/icons/Icon.astro';
+import Logo from '@components/layout/Logo.astro';
 import type { Locale } from '@config/site';
 
 interface Props {
@@ -9,26 +13,105 @@ interface Props {
 const { locale } = Astro.props;
 const dict = dictFor(locale);
 const year = new Date().getFullYear();
+
+const corporate = [
+  { href: localizedPath(locale, 'about'), label: dict.nav.about },
+  { href: localizedPath(locale, 'capabilities'), label: dict.nav.capabilities },
+  { href: localizedPath(locale, 'sectors'), label: dict.nav.sectors },
+  { href: localizedPath(locale, 'projects'), label: dict.nav.projects },
+  { href: localizedPath(locale, 'news'), label: dict.nav.news },
+  { href: localizedPath(locale, 'careers'), label: dict.nav.careers },
+];
+
+const legal = [
+  { href: localizedPath(locale, 'legal/privacy'), label: dict.footer.privacy },
+  { href: localizedPath(locale, 'legal/cookies'), label: dict.footer.cookies },
+  { href: localizedPath(locale, 'legal/terms'), label: dict.footer.terms },
+];
 ---
 
-<footer class="mt-16 border-t border-line bg-surface-1">
-  <div class="mx-auto flex max-w-wide flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
-    <div class="text-sm text-ink-2">
-      <span class="font-medium text-ink-1">{dict.footer.legalName}</span>
-      <span class="mx-2 text-ink-muted">&middot;</span>
-      <span>{dict.footer.address}</span>
+<footer class="mt-24 border-t border-line bg-surface-1">
+  <div class="mx-auto max-w-wide px-4 py-16 sm:px-6 lg:px-8">
+    <div class="grid gap-12 md:grid-cols-12">
+      <div class="md:col-span-4">
+        <Logo locale={locale} />
+        <p class="mt-4 max-w-xs text-sm text-ink-1">
+          {dict.meta.siteDescription}
+        </p>
+        <div class="mt-6 flex flex-col gap-2 text-sm text-ink-1">
+          <a
+            href={`mailto:${site.contactEmail}`}
+            class="inline-flex items-center gap-2 hover:text-ink-0 transition-colors"
+          >
+            <Icon name="mail" size={16} />
+            <span>{site.contactEmail}</span>
+          </a>
+          <span class="inline-flex items-center gap-2">
+            <Icon name="pin" size={16} />
+            <span>{dict.footer.address}</span>
+          </span>
+        </div>
+      </div>
+
+      <nav class="md:col-span-3" aria-label="Corporate">
+        <p class="text-xs font-semibold uppercase tracking-[var(--ct-tracking-widest)] text-ink-2">
+          {locale === 'ar' ? 'الشركة' : 'Company'}
+        </p>
+        <ul class="mt-4 flex flex-col gap-2.5">
+          {corporate.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm text-ink-1 hover:text-ink-0 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="md:col-span-3" aria-label={dict.nav.businessUnits}>
+        <p class="text-xs font-semibold uppercase tracking-[var(--ct-tracking-widest)] text-ink-2">
+          {dict.nav.businessUnits}
+        </p>
+        <ul class="mt-4 flex flex-col gap-2.5">
+          {businessUnits.map((unit) => (
+            <li>
+              <a
+                href={unit.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-sm text-ink-1 hover:text-ink-0 transition-colors"
+              >
+                <span>{unit.label[locale]}</span>
+                <Icon name="external" size={12} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <nav class="md:col-span-2" aria-label="Legal">
+        <p class="text-xs font-semibold uppercase tracking-[var(--ct-tracking-widest)] text-ink-2">
+          {locale === 'ar' ? 'القانوني' : 'Legal'}
+        </p>
+        <ul class="mt-4 flex flex-col gap-2.5">
+          {legal.map((item) => (
+            <li>
+              <a href={item.href} class="text-sm text-ink-1 hover:text-ink-0 transition-colors">
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
-    <nav class="flex items-center gap-4 text-sm text-ink-2" aria-label="Legal">
-      <a href={localizedPath(locale, 'legal/privacy')} class="hover:text-ink-0 transition-colors">
-        {dict.footer.privacy}
-      </a>
-      <a href={localizedPath(locale, 'legal/cookies')} class="hover:text-ink-0 transition-colors">
-        {dict.footer.cookies}
-      </a>
-      <a href={localizedPath(locale, 'legal/terms')} class="hover:text-ink-0 transition-colors">
-        {dict.footer.terms}
-      </a>
-    </nav>
-    <div class="text-xs text-ink-muted">&copy; {year} &middot; {dict.footer.rights}</div>
+
+    <div class="mt-12 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs text-ink-2">
+        &copy; {year} {dict.footer.legalName}. {dict.footer.rights}
+      </p>
+      <p class="text-xs text-ink-muted">
+        {site.legalNameEn} &middot; {site.legalNameAr}
+      </p>
+    </div>
   </div>
 </footer>

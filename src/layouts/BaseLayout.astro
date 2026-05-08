@@ -5,6 +5,7 @@ import { site } from '@config/site';
 import type { Locale } from '@config/site';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
+import ThemeBootstrap from '@components/layout/ThemeBootstrap.astro';
 
 interface Props {
   locale: Locale;
@@ -12,9 +13,20 @@ interface Props {
   description?: string;
   /** Page path WITHOUT the locale prefix (e.g. "about" or "/" for home). */
   pathInLocale?: string;
+  /** Override OG image; otherwise the site default is used. */
+  ogImage?: string;
+  /** Hide chrome (header/footer). Used by 404 etc. */
+  bare?: boolean;
 }
 
-const { locale, title, description, pathInLocale = '/' } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  pathInLocale = '/',
+  ogImage,
+  bare = false,
+} = Astro.props;
 
 const dict = dictFor(locale);
 const dir = dirFor(locale);
@@ -30,16 +42,20 @@ const altPath = localizedPath(altLocale, pathInLocale);
 const canonicalUrl = new URL(currentPath, site.url).toString();
 const altUrl = new URL(altPath, site.url).toString();
 const xDefaultUrl = new URL(localizedPath(site.defaultLocale, pathInLocale), site.url).toString();
+
+const ogImageUrl = ogImage ? new URL(ogImage, site.url).toString() : new URL('/og/default.png', site.url).toString();
 ---
 
 <!doctype html>
 <html lang={htmlLang} dir={dir}>
   <head>
+    <ThemeBootstrap />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#D00F18" />
+    <meta name="theme-color" content="#D00F18" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E0E10" media="(prefers-color-scheme: dark)" />
 
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
@@ -51,24 +67,30 @@ const xDefaultUrl = new URL(localizedPath(site.defaultLocale, pathInLocale), sit
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={htmlLang.replace('-', '_')} />
+    <meta property="og:locale:alternate" content={htmlLangFor(altLocale).replace('-', '_')} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={metaDescription} />
     <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
 
     {/* Block indexing while the site is in development. Phase 7/8 flips this. */}
     <meta name="robots" content="noindex, nofollow" />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    {/* Apple touch icon and full favicon set ship with the brand handover. */}
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
   </head>
   <body class="font-sans bg-surface-0 text-ink-0 antialiased">
     <a href="#main" class="skip-link">{dict.nav.skipToContent}</a>
-    <Header locale={locale} pathInLocale={pathInLocale} />
+    {!bare && <Header locale={locale} pathInLocale={pathInLocale} />}
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer locale={locale} />
+    {!bare && <Footer locale={locale} />}
   </body>
 </html>

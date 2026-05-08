@@ -1,0 +1,148 @@
+---
+import { dictFor, localizedPath } from '@lib/i18n';
+import { businessUnits } from '@config/business-units';
+import type { Locale } from '@config/site';
+import Icon from '@components/icons/Icon.astro';
+
+interface Props {
+  locale: Locale;
+  pathInLocale: string;
+}
+
+const { locale, pathInLocale } = Astro.props;
+const dict = dictFor(locale);
+
+const primary = [
+  { key: 'about', href: localizedPath(locale, 'about'), label: dict.nav.about },
+  { key: 'capabilities', href: localizedPath(locale, 'capabilities'), label: dict.nav.capabilities },
+  { key: 'sectors', href: localizedPath(locale, 'sectors'), label: dict.nav.sectors },
+  { key: 'businessUnits', href: localizedPath(locale, 'business-units'), label: dict.nav.businessUnits },
+  { key: 'projects', href: localizedPath(locale, 'projects'), label: dict.nav.projects },
+  { key: 'news', href: localizedPath(locale, 'news'), label: dict.nav.news },
+  { key: 'careers', href: localizedPath(locale, 'careers'), label: dict.nav.careers },
+  { key: 'contact', href: localizedPath(locale, 'contact'), label: dict.nav.contact },
+];
+---
+
+<button
+  type="button"
+  class="inline-flex h-10 w-10 items-center justify-center rounded border border-line text-ink-1 hover:border-line-strong md:hidden"
+  aria-label={dict.nav.openMenu}
+  aria-controls="mobile-menu"
+  aria-expanded="false"
+  data-mobile-trigger
+>
+  <Icon name="menu" size={20} />
+</button>
+
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-50 hidden md:hidden"
+  aria-modal="true"
+  role="dialog"
+  data-mobile-menu
+>
+  <div class="absolute inset-0 bg-[rgb(var(--ct-surface-inverse)/0.6)]" data-mobile-overlay></div>
+  <div class="relative ms-auto flex h-full w-full max-w-sm flex-col bg-surface-0 shadow-[var(--ct-shadow-3)]">
+    <div class="flex items-center justify-between border-b border-line px-4 py-3">
+      <span class="text-sm font-semibold text-ink-0">{dict.meta.siteName}</span>
+      <button
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded text-ink-1 hover:bg-surface-1"
+        aria-label={dict.nav.closeMenu}
+        data-mobile-close
+      >
+        <Icon name="close" size={20} />
+      </button>
+    </div>
+    <nav aria-label="Primary" class="flex-1 overflow-y-auto px-4 py-4">
+      <ul class="flex flex-col gap-1">
+        {primary.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="block rounded px-3 py-3 text-base font-medium text-ink-0 hover:bg-surface-1"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-6 border-t border-line pt-4">
+        <p class="px-3 text-xs font-semibold uppercase tracking-[var(--ct-tracking-widest)] text-ink-2">
+          {dict.nav.businessUnits}
+        </p>
+        <ul class="mt-2 flex flex-col gap-1">
+          {businessUnits.map((unit) => (
+            <li>
+              <a
+                href={unit.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex items-center justify-between gap-3 rounded px-3 py-2.5 text-sm text-ink-1 hover:bg-surface-1"
+              >
+                <span>{unit.label[locale]}</span>
+                <Icon name="external" size={14} />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const trigger = document.querySelector<HTMLButtonElement>('[data-mobile-trigger]');
+    const menu = document.querySelector<HTMLDivElement>('[data-mobile-menu]');
+    const closeBtn = document.querySelector<HTMLButtonElement>('[data-mobile-close]');
+    const overlay = document.querySelector<HTMLDivElement>('[data-mobile-overlay]');
+    if (!trigger || !menu) return;
+
+    let lastFocus: HTMLElement | null = null;
+
+    function open() {
+      lastFocus = document.activeElement as HTMLElement | null;
+      trigger!.setAttribute('aria-expanded', 'true');
+      menu!.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      const firstLink = menu!.querySelector<HTMLAnchorElement>('a');
+      firstLink?.focus();
+    }
+
+    function close() {
+      trigger!.setAttribute('aria-expanded', 'false');
+      menu!.classList.add('hidden');
+      document.body.style.overflow = '';
+      lastFocus?.focus();
+    }
+
+    trigger.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    overlay?.addEventListener('click', close);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !menu!.classList.contains('hidden')) {
+        close();
+      }
+      // Simple focus trap: if Tab leaves the menu, bounce back.
+      if (event.key === 'Tab' && !menu!.classList.contains('hidden')) {
+        const focusables = menu!.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled])'
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (!first || !last) return;
+        if (event.shiftKey && document.activeElement === first) {
+          last.focus();
+          event.preventDefault();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          first.focus();
+          event.preventDefault();
+        }
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,12 @@
+{
+  "name": "Convergent Technology",
+  "short_name": "Convergent",
+  "description": "Convergent Technology Company — Saudi systems integrator.",
+  "start_url": "/en",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#D00F18",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

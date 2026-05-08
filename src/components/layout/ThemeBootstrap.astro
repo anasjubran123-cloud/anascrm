@@ -1,0 +1,22 @@
+---
+// Theme bootstrap. Runs inline in <head> BEFORE the body paints so we never
+// flash the wrong theme. Reads the user's stored preference (if any) and
+// applies it; otherwise falls back to system preference handled by the
+// :root:not([data-theme='light']) CSS rule.
+//
+// Inline script is unavoidable for FOUC prevention. It will be referenced by
+// hash in the Phase 7 CSP (script-src 'self' 'sha256-...').
+---
+
+<script is:inline>
+  (function () {
+    try {
+      var stored = localStorage.getItem('ct-theme');
+      if (stored === 'dark' || stored === 'light') {
+        document.documentElement.setAttribute('data-theme', stored);
+      }
+    } catch (e) {
+      /* localStorage may be blocked; fall back to OS preference. */
+    }
+  })();
+</script>

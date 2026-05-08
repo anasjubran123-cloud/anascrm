@@ -1,0 +1,107 @@
+---
+import { businessUnits } from '@config/business-units';
+import { dictFor } from '@lib/i18n';
+import Icon from '@components/icons/Icon.astro';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = dictFor(locale);
+---
+
+<div class="relative" data-bu-menu>
+  <button
+    type="button"
+    data-bu-trigger
+    aria-expanded="false"
+    aria-haspopup="true"
+    aria-controls="bu-menu-panel"
+    class="inline-flex h-10 items-center gap-1.5 rounded px-3 text-sm font-medium text-ink-1 hover:text-ink-0 transition-colors"
+  >
+    {dict.nav.businessUnits}
+    <Icon name="chevron-down" size={16} class="transition-transform duration-[var(--ct-duration-2)] ease-[var(--ct-ease)]" />
+  </button>
+
+  <div
+    id="bu-menu-panel"
+    data-bu-panel
+    role="menu"
+    aria-label={dict.nav.businessUnits}
+    hidden
+    class="absolute end-0 z-30 mt-2 min-w-[20rem] rounded-lg border border-line bg-surface-0 p-2 shadow-[var(--ct-shadow-3)]"
+  >
+    <ul class="space-y-1">
+      {
+        businessUnits.map((unit) => (
+          <li role="none">
+            <a
+              href={unit.url}
+              role="menuitem"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex items-start gap-3 rounded px-3 py-2.5 hover:bg-surface-1 focus-visible:bg-surface-1"
+            >
+              <span class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded bg-[rgb(var(--ct-brand-soft))]">
+                {unit.id === 'dc' && <Icon name="server" size={16} class="text-brand" />}
+                {unit.id === 'it' && <Icon name="zap" size={16} class="text-brand" />}
+                {unit.id === 'av' && <Icon name="monitor" size={16} class="text-brand" />}
+                {unit.id === 'landscaping' && <Icon name="pin" size={16} class="text-brand" />}
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="flex items-center gap-1.5 text-sm font-semibold text-ink-0">
+                  {unit.label[locale]}
+                  <Icon name="external" size={12} class="text-ink-2" />
+                </span>
+                <span class="mt-0.5 block text-xs text-ink-2">{unit.teaser[locale]}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var menu = document.querySelector('[data-bu-menu]');
+    if (!menu) return;
+    var trigger = menu.querySelector('[data-bu-trigger]');
+    var panel = menu.querySelector('[data-bu-panel]');
+    var chevron = trigger && trigger.querySelector('svg');
+
+    function close() {
+      if (!trigger || !panel) return;
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.hidden = true;
+      if (chevron) chevron.style.transform = '';
+    }
+    function open() {
+      if (!trigger || !panel) return;
+      trigger.setAttribute('aria-expanded', 'true');
+      panel.hidden = false;
+      if (chevron) chevron.style.transform = 'rotate(180deg)';
+    }
+    function toggle() {
+      if (!trigger) return;
+      trigger.getAttribute('aria-expanded') === 'true' ? close() : open();
+    }
+
+    trigger && trigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggle();
+    });
+    document.addEventListener('click', function (e) {
+      if (!menu.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        close();
+        trigger && trigger.focus();
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,45 @@
+---
+import { dictFor, otherLocale, localizedPath, htmlLangFor } from '@lib/i18n';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+  pathInLocale: string;
+  class?: string;
+}
+
+const { locale, pathInLocale, class: className = '' } = Astro.props;
+const dict = dictFor(locale);
+const altLocale = otherLocale(locale);
+const altPath = localizedPath(altLocale, pathInLocale);
+const label = altLocale === 'ar' ? dict.nav.switchToArabic : dict.nav.switchToEnglish;
+---
+
+<a
+  href={altPath}
+  class:list={[
+    'inline-flex h-10 items-center rounded border border-line px-3 text-sm font-medium text-ink-1 hover:border-line-strong hover:text-ink-0 transition-colors',
+    className,
+  ]}
+  rel="alternate"
+  hreflang={htmlLangFor(altLocale)}
+  data-language-switcher
+  data-target-locale={altLocale}
+>
+  {label}
+</a>
+
+<script>
+  // Persist the user's last manual locale choice so future visits respect it.
+  const link = document.querySelector('[data-language-switcher]');
+  if (link instanceof HTMLAnchorElement) {
+    link.addEventListener('click', () => {
+      try {
+        const target = link.getAttribute('data-target-locale');
+        if (target) localStorage.setItem('ct-locale', target);
+      } catch {
+        /* ignore */
+      }
+    });
+  }
+</script>

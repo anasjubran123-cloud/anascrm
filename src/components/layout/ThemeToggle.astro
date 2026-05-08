@@ -1,0 +1,82 @@
+---
+import Icon from '@components/icons/Icon.astro';
+import type { Locale } from '@config/site';
+import { dictFor } from '@lib/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = dictFor(locale);
+
+// Labels are bilingual; the SR-only span swaps based on current state via
+// data attributes on the button (read by the script below).
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  class="inline-flex h-10 w-10 items-center justify-center rounded border border-line text-ink-1 hover:border-line-strong hover:text-ink-0 transition-colors"
+  aria-label={locale === 'ar' ? 'تبديل المظهر' : 'Toggle theme'}
+>
+  <span data-theme-icon="light" aria-hidden="true">
+    <Icon name="sun" size={18} />
+  </span>
+  <span data-theme-icon="dark" class="hidden" aria-hidden="true">
+    <Icon name="moon" size={18} />
+  </span>
+</button>
+
+<script>
+  (function () {
+    const button = document.querySelector('[data-theme-toggle]');
+    if (!button) return;
+
+    const lightIcon = button.querySelector('[data-theme-icon="light"]');
+    const darkIcon = button.querySelector('[data-theme-icon="dark"]');
+
+    function currentTheme(): 'light' | 'dark' {
+      const explicit = document.documentElement.getAttribute('data-theme');
+      if (explicit === 'light' || explicit === 'dark') return explicit;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+
+    function applyIcons(theme: 'light' | 'dark') {
+      // Show the icon for the OPPOSITE state (the action the user would take).
+      if (theme === 'dark') {
+        lightIcon?.classList.remove('hidden');
+        darkIcon?.classList.add('hidden');
+      } else {
+        lightIcon?.classList.add('hidden');
+        darkIcon?.classList.remove('hidden');
+      }
+    }
+
+    applyIcons(currentTheme());
+
+    button.addEventListener('click', () => {
+      const next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try {
+        localStorage.setItem('ct-theme', next);
+      } catch {
+        /* ignore */
+      }
+      applyIcons(next);
+    });
+
+    // React to system theme changes when the user has not made an explicit
+    // choice (i.e. localStorage is empty).
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    mql.addEventListener?.('change', () => {
+      try {
+        if (!localStorage.getItem('ct-theme')) {
+          applyIcons(currentTheme());
+        }
+      } catch {
+        /* ignore */
+      }
+    });
+  })();
+</script>
