@@ -1,0 +1,88 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'primary' | 'secondary' | 'ghost' | 'inverse';
+type Size = 'sm' | 'md' | 'lg';
+
+interface Props extends HTMLAttributes<'a'> {
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  variant?: Variant;
+  size?: Size;
+  /** Render an external-link arrow and apply rel='noopener noreferrer'. */
+  external?: boolean;
+  class?: string;
+  disabled?: boolean;
+}
+
+const {
+  href,
+  type = 'button',
+  variant = 'primary',
+  size = 'md',
+  external = false,
+  class: className = '',
+  disabled = false,
+  ...rest
+} = Astro.props;
+
+const variantClass = {
+  primary:
+    'bg-brand text-brand-contrast hover:bg-[rgb(var(--ct-brand-strong))] focus-visible:outline-offset-2',
+  secondary:
+    'border border-line-strong bg-transparent text-ink-0 hover:bg-surface-1',
+  ghost:
+    'bg-transparent text-ink-1 hover:bg-surface-1 hover:text-ink-0',
+  inverse:
+    'bg-[rgb(var(--ct-surface-inverse))] text-[rgb(var(--ct-ink-inverse))] hover:opacity-90',
+}[variant];
+
+const sizeClass = {
+  sm: 'h-9 px-3.5 text-sm gap-1.5',
+  md: 'h-11 px-5 text-sm gap-2',
+  lg: 'h-12 px-6 text-base gap-2',
+}[size];
+
+const baseClass =
+  'inline-flex items-center justify-center rounded font-semibold transition-colors duration-[var(--ct-duration-2)] ease-[var(--ct-ease)] disabled:opacity-50 disabled:cursor-not-allowed';
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class:list={[baseClass, variantClass, sizeClass, className]}
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      aria-disabled={disabled ? 'true' : undefined}
+      {...rest}
+    >
+      <slot />
+      {external && (
+        <svg
+          aria-hidden="true"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M7 7h10v10" />
+          <path d="M7 17 17 7" />
+        </svg>
+      )}
+    </a>
+  ) : (
+    <button
+      type={type}
+      disabled={disabled}
+      class:list={[baseClass, variantClass, sizeClass, className]}
+      {...rest}
+    >
+      <slot />
+    </button>
+  )
+}

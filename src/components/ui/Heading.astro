@@ -1,0 +1,23 @@
+---
+interface Props {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'display';
+  balance?: boolean;
+  class?: string;
+}
+
+const { level = 2, size = 'lg', balance = true, class: className = '' } = Astro.props;
+const Tag = (`h${level}`) as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+const sizeClass = {
+  sm: 'text-[length:var(--ct-text-lg)]',
+  md: 'text-[length:var(--ct-text-xl)]',
+  lg: 'text-[length:var(--ct-text-2xl)]',
+  xl: 'text-[length:var(--ct-text-3xl)]',
+  display: 'text-[length:var(--ct-text-4xl)] leading-[var(--ct-leading-tight)]',
+}[size];
+---
+
+<Tag class:list={[sizeClass, balance && 'text-balance', className]}>
+  <slot />
+</Tag>

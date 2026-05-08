@@ -1,0 +1,27 @@
+---
+interface Props {
+  tone?: 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+  class?: string;
+}
+
+const { tone = 'neutral', class: className = '' } = Astro.props;
+
+const toneClass = {
+  success: 'bg-[rgb(var(--ct-success)/0.1)] text-[rgb(var(--ct-success))] border-[rgb(var(--ct-success)/0.2)]',
+  warning: 'bg-[rgb(var(--ct-warning)/0.1)] text-[rgb(var(--ct-warning))] border-[rgb(var(--ct-warning)/0.2)]',
+  danger: 'bg-[rgb(var(--ct-danger)/0.1)] text-[rgb(var(--ct-danger))] border-[rgb(var(--ct-danger)/0.2)]',
+  info: 'bg-[rgb(var(--ct-info)/0.1)] text-[rgb(var(--ct-info))] border-[rgb(var(--ct-info)/0.2)]',
+  neutral: 'bg-surface-1 text-ink-1 border-line',
+}[tone];
+---
+
+<span
+  class:list={[
+    'inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-0.5 text-xs font-medium',
+    toneClass,
+    className,
+  ]}
+  style="border-radius: var(--ct-radius-pill);"
+>
+  <slot />
+</span>

@@ -1,0 +1,24 @@
+---
+interface Props {
+  tone?: 'brand' | 'ink' | 'muted';
+  class?: string;
+}
+
+const { tone = 'brand', class: className = '' } = Astro.props;
+
+const toneClass = {
+  brand: 'text-brand',
+  ink: 'text-ink-1',
+  muted: 'text-ink-2',
+}[tone];
+---
+
+<p
+  class:list={[
+    'text-xs font-semibold tracking-[var(--ct-tracking-widest)] uppercase',
+    toneClass,
+    className,
+  ]}
+>
+  <slot />
+</p>

@@ -1,0 +1,143 @@
+---
+// Dev-only component playground. Excluded from production builds via the
+// import.meta.env.PROD check below — visiting /dev/playground in `npm run
+// build` output 404s, but `npm run dev` renders it.
+//
+// Owner intent: a one-page reference for designers and engineers to inspect
+// every primitive in light + dark, EN + AR. Phase 2 deliverable.
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Button from '@components/ui/Button.astro';
+import Card from '@components/ui/Card.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Badge from '@components/ui/Badge.astro';
+import Prose from '@components/ui/Prose.astro';
+import Icon from '@components/icons/Icon.astro';
+
+if (import.meta.env.PROD) {
+  return new Response('Not found', { status: 404 });
+}
+---
+
+<BaseLayout locale="en" title="Component playground (dev only)" pathInLocale="/dev/playground">
+  <Section tone="default">
+    <Container>
+      <Eyebrow>Dev Playground</Eyebrow>
+      <Heading level={1} size="display" class="mt-3">Design system primitives</Heading>
+      <p class="mt-4 max-w-prose text-ink-1">
+        This page is rendered only during <code>npm run dev</code>. Use it to inspect every primitive
+        in light and dark themes, in both LTR and RTL.
+      </p>
+    </Container>
+  </Section>
+
+  <Section tone="subtle">
+    <Container>
+      <Heading level={2} size="xl">Buttons</Heading>
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <Button variant="primary">Primary</Button>
+        <Button variant="primary" size="lg">Primary lg</Button>
+        <Button variant="primary" size="sm">Primary sm</Button>
+        <Button variant="secondary">Secondary</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="inverse">Inverse</Button>
+        <Button variant="primary" disabled>Disabled</Button>
+        <Button href="https://example.com" external variant="secondary">External link</Button>
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="default">
+    <Container>
+      <Heading level={2} size="xl">Type scale</Heading>
+      <div class="mt-6 space-y-4">
+        <Eyebrow>Eyebrow / overline</Eyebrow>
+        <Heading level={2} size="display">Display — A Gateway to Tomorrow.</Heading>
+        <Heading level={2} size="xl">Section title — engineering-grade infrastructure.</Heading>
+        <Heading level={3} size="lg">Subhead — designed for the people who build Saudi Arabia.</Heading>
+        <Heading level={4} size="md">Card title — modular DC delivery</Heading>
+        <p class="text-[length:var(--ct-text-base)] text-ink-1 max-w-prose">
+          Body — Convergent designs and builds the technology environments behind critical Saudi
+          operations. From data centers to integrated audiovisual, our work supports the
+          institutions that keep the Kingdom running.
+        </p>
+        <p class="text-[length:var(--ct-text-sm)] text-ink-2">Caption / small.</p>
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="subtle">
+    <Container>
+      <Heading level={2} size="xl">Cards</Heading>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <Eyebrow>Capability</Eyebrow>
+          <Heading level={3} size="md" class="mt-3">Data center build</Heading>
+          <p class="mt-3 text-ink-1">From shell-and-core through commissioning.</p>
+        </Card>
+        <Card href="#" hover>
+          <Eyebrow>Capability</Eyebrow>
+          <Heading level={3} size="md" class="mt-3">DCIM &amp; monitoring</Heading>
+          <p class="mt-3 text-ink-1">Operational visibility at every level.</p>
+        </Card>
+        <Card>
+          <Eyebrow>Capability</Eyebrow>
+          <Heading level={3} size="md" class="mt-3">Precision cooling</Heading>
+          <p class="mt-3 text-ink-1">CRAC, IRCU, and direct-liquid cooling.</p>
+        </Card>
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="default">
+    <Container>
+      <Heading level={2} size="xl">Badges</Heading>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <Badge tone="neutral">Neutral</Badge>
+        <Badge tone="success">Live</Badge>
+        <Badge tone="info">Draft</Badge>
+        <Badge tone="warning">Pending</Badge>
+        <Badge tone="danger">Blocked</Badge>
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="default">
+    <Container>
+      <Heading level={2} size="xl">Icons</Heading>
+      <div class="mt-6 grid grid-cols-3 gap-6 sm:grid-cols-6">
+        {['arrow-right','arrow-left','menu','close','sun','moon','check','chevron-down','external','mail','phone','whatsapp','pin','shield','server','monitor','zap'].map((n) => (
+          <div class="flex flex-col items-center gap-2 text-ink-2">
+            <Icon name={n as any} size={24} />
+            <span class="text-xs">{n}</span>
+          </div>
+        ))}
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="subtle">
+    <Container size="narrow">
+      <Heading level={2} size="xl">Prose</Heading>
+      <Prose class="mt-6">
+        <h2>Heading two</h2>
+        <p>Convergent has pioneered integrated ecosystems where we design and build the
+        technology that keeps Saudi enterprises running. Our work spans data centers,
+        IT infrastructure, audiovisual systems, and corporate landscapes.</p>
+        <h3>Heading three</h3>
+        <p>Body text continues with a <a href="#">linked phrase</a> and <strong>bold
+        emphasis</strong>. Lists render with logical-property indentation so they
+        mirror correctly in RTL.</p>
+        <ul>
+          <li>Data center design and turnkey construction.</li>
+          <li>DCIM, UPS, precision cooling.</li>
+          <li>Structured cabling and low-current systems.</li>
+        </ul>
+        <blockquote>"Where Systems Sync."</blockquote>
+      </Prose>
+    </Container>
+  </Section>
+</BaseLayout>

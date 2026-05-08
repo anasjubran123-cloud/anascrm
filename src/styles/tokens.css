@@ -1,9 +1,9 @@
 /*
  * Convergent Technology — design tokens
  *
- * Single source of truth for colour, typography, and motion. Tailwind utility
- * classes resolve to these variables (see tailwind.config.cjs). Brand swaps
- * happen here — nowhere else.
+ * Single source of truth for colour, typography, spacing, motion, and shadow.
+ * Tailwind utility classes resolve to these variables (see tailwind.config.cjs).
+ * Brand swaps happen here — nowhere else.
  *
  * Brand reference: branding/BRAND_GUIDELINE_EXTRACT.md
  *   • Primary brand colour: ROSO red #D00F18 (CT GROUP)
@@ -13,21 +13,99 @@
  * `<alpha-value>` modifier works (e.g. text-brand/80).
  */
 
+/*
+ * Cairo woff2 self-hosting
+ *
+ * Place subset woff2 files at public/fonts/cairo/ named as below. They are
+ * NOT in the repo yet — registry/CDN access was blocked when this scaffold
+ * was authored, so download them locally from
+ * https://fonts.google.com/specimen/Cairo (OFL) and commit. Latin and Arabic
+ * subsets are kept separate so the browser only fetches what it renders.
+ */
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-latin-400.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-latin-500.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-latin-600.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-latin-700.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-arabic-400.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-arabic-500.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-arabic-600.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/cairo/cairo-arabic-700.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
 :root {
   /* Brand */
   --ct-brand: 208 15 24;            /* #D00F18 — ROSO red */
+  --ct-brand-strong: 178 12 20;     /* hover/active state */
+  --ct-brand-soft: 252 232 233;     /* subtle backgrounds, not for text */
   --ct-brand-contrast: 255 255 255; /* foreground on brand fills */
 
   /* Surfaces (light mode) */
   --ct-surface-0: 255 255 255;      /* page background */
   --ct-surface-1: 248 248 249;      /* subtle section */
   --ct-surface-2: 240 240 242;      /* card / elevated */
+  --ct-surface-inverse: 14 14 16;   /* dark sections in light theme */
 
   /* Ink (light mode) */
   --ct-ink-0: 17 17 19;             /* primary text — near-black */
   --ct-ink-1: 51 51 57;             /* secondary */
   --ct-ink-2: 102 102 110;          /* tertiary */
   --ct-ink-muted: 142 142 150;
+  --ct-ink-inverse: 248 248 249;    /* text on inverse surfaces */
 
   /* Lines / borders */
   --ct-line: 226 226 231;
@@ -45,14 +123,76 @@
   --ct-font-display: 'Cairo', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans Arabic', sans-serif;
   --ct-font-mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, monospace;
 
+  /* Type scale (fluid clamp() — mobile floor → desktop ceiling).
+     Sized for editorial weight: hero h1 caps at ~64px on wide screens. */
+  --ct-text-2xs: clamp(0.6875rem, 0.66rem + 0.1vw, 0.75rem);  /* 11–12 */
+  --ct-text-xs:  clamp(0.75rem,  0.72rem + 0.15vw, 0.8125rem);/* 12–13 */
+  --ct-text-sm:  clamp(0.875rem, 0.84rem + 0.2vw, 0.9375rem); /* 14–15 */
+  --ct-text-base:clamp(1rem,     0.96rem + 0.2vw, 1.0625rem); /* 16–17 */
+  --ct-text-md:  clamp(1.125rem, 1.075rem + 0.25vw, 1.1875rem);/* 18–19 */
+  --ct-text-lg:  clamp(1.25rem,  1.18rem + 0.35vw, 1.375rem); /* 20–22 */
+  --ct-text-xl:  clamp(1.5rem,   1.4rem + 0.5vw, 1.75rem);    /* 24–28 */
+  --ct-text-2xl: clamp(1.875rem, 1.7rem + 0.85vw, 2.25rem);   /* 30–36 */
+  --ct-text-3xl: clamp(2.25rem,  1.95rem + 1.5vw, 3rem);      /* 36–48 */
+  --ct-text-4xl: clamp(2.75rem,  2.25rem + 2.5vw, 4rem);      /* 44–64 */
+
+  /* Line heights — tighter for display, looser for prose. */
+  --ct-leading-tight: 1.1;
+  --ct-leading-snug: 1.25;
+  --ct-leading-normal: 1.55;
+  --ct-leading-relaxed: 1.7;
+
+  /* Tracking — Latin headlines pull negative; AR headlines stay neutral. */
+  --ct-tracking-tight: -0.015em;
+  --ct-tracking-normal: 0;
+  --ct-tracking-wide: 0.04em;
+  --ct-tracking-wider: 0.12em;
+  --ct-tracking-widest: 0.2em;     /* eyebrows */
+
+  /* Spacing scale — multiples of 4px. Matches Tailwind's default rhythm. */
+  --ct-space-1: 0.25rem;
+  --ct-space-2: 0.5rem;
+  --ct-space-3: 0.75rem;
+  --ct-space-4: 1rem;
+  --ct-space-5: 1.25rem;
+  --ct-space-6: 1.5rem;
+  --ct-space-8: 2rem;
+  --ct-space-10: 2.5rem;
+  --ct-space-12: 3rem;
+  --ct-space-16: 4rem;
+  --ct-space-20: 5rem;
+  --ct-space-24: 6rem;
+  --ct-space-32: 8rem;
+
+  /* Radii — sober, not playful. */
+  --ct-radius-xs: 2px;
+  --ct-radius-sm: 4px;
+  --ct-radius-md: 6px;
+  --ct-radius-lg: 10px;
+  --ct-radius-xl: 16px;
+  --ct-radius-2xl: 24px;
+  --ct-radius-pill: 9999px;
+
+  /* Shadows — used sparingly. */
+  --ct-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 1px 0 rgb(0 0 0 / 0.03);
+  --ct-shadow-2: 0 4px 12px -2px rgb(0 0 0 / 0.08), 0 2px 4px -1px rgb(0 0 0 / 0.04);
+  --ct-shadow-3: 0 12px 32px -6px rgb(0 0 0 / 0.12), 0 4px 8px -2px rgb(0 0 0 / 0.06);
+
   /* Motion */
   --ct-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ct-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ct-duration-1: 120ms;
   --ct-duration-2: 220ms;
   --ct-duration-3: 360ms;
 
   /* Layout */
-  --ct-content-max: 88rem;
+  --ct-content-max: 88rem;          /* matches Tailwind's max-w-wide */
+  --ct-prose-max: 68ch;             /* matches Tailwind's max-w-prose */
+  --ct-section-pad-y: clamp(3rem, 2rem + 4vw, 6rem);
+
+  /* Borders */
+  --ct-border-width: 1px;
+  --ct-border-width-strong: 2px;
 }
 
 /* Dark mode token swap — engaged either by user opt-in (data-theme="dark"
@@ -61,12 +201,18 @@
   --ct-surface-0: 14 14 16;
   --ct-surface-1: 22 22 26;
   --ct-surface-2: 30 30 36;
+  --ct-surface-inverse: 248 248 249;
   --ct-ink-0: 240 240 242;
   --ct-ink-1: 210 210 216;
   --ct-ink-2: 168 168 176;
   --ct-ink-muted: 130 130 138;
+  --ct-ink-inverse: 17 17 19;
   --ct-line: 44 44 52;
   --ct-line-strong: 64 64 72;
+  --ct-brand-soft: 56 18 22;
+  --ct-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.4), 0 1px 1px 0 rgb(0 0 0 / 0.3);
+  --ct-shadow-2: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -1px rgb(0 0 0 / 0.3);
+  --ct-shadow-3: 0 12px 32px -6px rgb(0 0 0 / 0.6), 0 4px 8px -2px rgb(0 0 0 / 0.4);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -74,12 +220,18 @@
     --ct-surface-0: 14 14 16;
     --ct-surface-1: 22 22 26;
     --ct-surface-2: 30 30 36;
+    --ct-surface-inverse: 248 248 249;
     --ct-ink-0: 240 240 242;
     --ct-ink-1: 210 210 216;
     --ct-ink-2: 168 168 176;
     --ct-ink-muted: 130 130 138;
+    --ct-ink-inverse: 17 17 19;
     --ct-line: 44 44 52;
     --ct-line-strong: 64 64 72;
+    --ct-brand-soft: 56 18 22;
+    --ct-shadow-1: 0 1px 2px 0 rgb(0 0 0 / 0.4), 0 1px 1px 0 rgb(0 0 0 / 0.3);
+    --ct-shadow-2: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -1px rgb(0 0 0 / 0.3);
+    --ct-shadow-3: 0 12px 32px -6px rgb(0 0 0 / 0.6), 0 4px 8px -2px rgb(0 0 0 / 0.4);
   }
 }
 

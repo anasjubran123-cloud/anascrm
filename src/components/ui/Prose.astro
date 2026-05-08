@@ -1,0 +1,99 @@
+---
+// Prose primitive — long-form text styling for blog posts, legal pages, and
+// MDX content. Mirrors the design tokens; does not depend on the Tailwind
+// typography plugin (we keep the dependency surface small).
+interface Props {
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { size = 'md', class: className = '' } = Astro.props;
+const sizeClass = size === 'sm' ? 'text-[length:var(--ct-text-sm)]' : 'text-[length:var(--ct-text-base)]';
+---
+
+<div class:list={['prose-ct', sizeClass, className]}>
+  <slot />
+</div>
+
+<style is:global>
+  .prose-ct {
+    color: rgb(var(--ct-ink-0));
+    max-width: var(--ct-prose-max);
+    line-height: var(--ct-leading-relaxed);
+  }
+  .prose-ct > * + * {
+    margin-block-start: 1.25em;
+  }
+  .prose-ct h2 {
+    font-size: var(--ct-text-2xl);
+    margin-block-start: 2.5em;
+    margin-block-end: 0.5em;
+  }
+  .prose-ct h3 {
+    font-size: var(--ct-text-xl);
+    margin-block-start: 2em;
+    margin-block-end: 0.4em;
+  }
+  .prose-ct h4 {
+    font-size: var(--ct-text-lg);
+    margin-block-start: 1.6em;
+    margin-block-end: 0.4em;
+  }
+  .prose-ct p,
+  .prose-ct ul,
+  .prose-ct ol {
+    color: rgb(var(--ct-ink-1));
+  }
+  .prose-ct ul,
+  .prose-ct ol {
+    padding-inline-start: 1.5em;
+  }
+  .prose-ct ul { list-style: disc; }
+  .prose-ct ol { list-style: decimal; }
+  .prose-ct li::marker {
+    color: rgb(var(--ct-ink-2));
+  }
+  .prose-ct strong {
+    color: rgb(var(--ct-ink-0));
+    font-weight: 700;
+  }
+  .prose-ct a {
+    color: rgb(var(--ct-brand));
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+  .prose-ct a:hover {
+    text-decoration-thickness: 2px;
+  }
+  .prose-ct blockquote {
+    border-inline-start: 3px solid rgb(var(--ct-brand));
+    padding-inline-start: 1em;
+    color: rgb(var(--ct-ink-1));
+    font-style: italic;
+  }
+  .prose-ct code {
+    background: rgb(var(--ct-surface-2));
+    padding: 0.1em 0.4em;
+    border-radius: var(--ct-radius-xs);
+    font-family: var(--ct-font-mono);
+    font-size: 0.9em;
+  }
+  .prose-ct pre {
+    background: rgb(var(--ct-surface-2));
+    padding: 1em;
+    border-radius: var(--ct-radius-md);
+    overflow-x: auto;
+    font-family: var(--ct-font-mono);
+    font-size: var(--ct-text-sm);
+  }
+  .prose-ct pre code {
+    background: transparent;
+    padding: 0;
+  }
+  .prose-ct hr {
+    border: none;
+    border-block-start: 1px solid rgb(var(--ct-line));
+    margin-block: 2em;
+  }
+</style>

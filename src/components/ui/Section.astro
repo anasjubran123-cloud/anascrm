@@ -1,0 +1,47 @@
+---
+// Editorial Section primitive. Provides consistent vertical rhythm between
+// page sections. Backgrounds use design tokens; tone selects the surface.
+
+interface Props {
+  tone?: 'default' | 'subtle' | 'inverse' | 'brand';
+  blueprint?: boolean;
+  as?: string;
+  id?: string;
+  class?: string;
+  /** Skip default vertical padding when the slot manages it directly. */
+  flush?: boolean;
+}
+
+const {
+  tone = 'default',
+  blueprint = false,
+  as = 'section',
+  id,
+  class: className = '',
+  flush = false,
+} = Astro.props;
+
+const Tag = as;
+
+const toneClass = {
+  default: 'bg-surface-0 text-ink-0',
+  subtle: 'bg-surface-1 text-ink-0',
+  inverse: 'bg-[rgb(var(--ct-surface-inverse))] text-[rgb(var(--ct-ink-inverse))]',
+  brand: 'bg-brand text-brand-contrast',
+}[tone];
+---
+
+<Tag
+  id={id}
+  class:list={[
+    'relative isolate',
+    toneClass,
+    !flush && 'py-[var(--ct-section-pad-y)]',
+    className,
+  ]}
+>
+  {blueprint && <div aria-hidden="true" class="bg-blueprint pointer-events-none absolute inset-0 opacity-40"></div>}
+  <div class="relative">
+    <slot />
+  </div>
+</Tag>
