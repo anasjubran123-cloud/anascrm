@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, 'claude/**']
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+        # Lint is informative until ESLint plugins are committed and
+        # tested locally; do not fail the build on lint warnings yet.
+        continue-on-error: true
+
+      - name: Format check
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
+
+      - name: Audit
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
+
+  e2e:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build (preview server)
+        run: npm run build
+
+      - name: Run Playwright smoke + axe
+        run: npm test
+        env:
+          CI: '1'
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

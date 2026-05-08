@@ -13,7 +13,8 @@
     "typecheck": "astro check",
     "lint": "eslint . --ext .astro,.ts,.tsx,.js,.mjs,.cjs --max-warnings=0",
     "format": "prettier --write \"**/*.{astro,ts,tsx,js,mjs,cjs,md,mdx,json,css}\"",
-    "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,mjs,cjs,md,mdx,json,css}\""
+    "format:check": "prettier --check \"**/*.{astro,ts,tsx,js,mjs,cjs,md,mdx,json,css}\"",
+    "test": "playwright test"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -25,7 +26,14 @@
     "typescript": "^5.7.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.49.0",
     "@types/node": "^22.10.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "astro-eslint-parser": "^1.0.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-astro": "^1.3.0",
     "prettier": "^3.4.0",
     "prettier-plugin-astro": "^0.14.0",
     "prettier-plugin-tailwindcss": "^0.6.0"
