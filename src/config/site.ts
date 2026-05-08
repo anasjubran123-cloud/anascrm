@@ -1,4 +1,4 @@
-import { SITE_URL, SITE_DOMAIN, DEFAULT_LOCALE, LOCALES } from './site.mjs';
+import { SITE_URL, SITE_DOMAIN, DEFAULT_LOCALE, LOCALES } from './build-constants.mjs';
 
 export type Locale = (typeof LOCALES)[number];
 

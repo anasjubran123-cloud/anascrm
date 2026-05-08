@@ -1,6 +1,6 @@
 import en from '../i18n/en.json';
 import ar from '../i18n/ar.json';
-import { LOCALES, DEFAULT_LOCALE } from '../config/site.mjs';
+import { LOCALES, DEFAULT_LOCALE } from '../config/build-constants.mjs';
 import type { Locale } from '../config/site';
 
 type Dictionary = typeof en;

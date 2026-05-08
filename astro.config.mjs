@@ -4,7 +4,7 @@ import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
-import { SITE_URL, LOCALES, DEFAULT_LOCALE } from './src/config/site.mjs';
+import { SITE_URL, LOCALES, DEFAULT_LOCALE } from './src/config/build-constants.mjs';
 
 export default defineConfig({
   site: SITE_URL,
