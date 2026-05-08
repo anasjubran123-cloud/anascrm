@@ -1,0 +1,59 @@
+---
+import Logo from '@components/layout/Logo.astro';
+import { dictFor, localizedPath, otherLocale } from '@lib/i18n';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+  pathInLocale: string;
+}
+
+const { locale, pathInLocale } = Astro.props;
+const dict = dictFor(locale);
+const altLocale = otherLocale(locale);
+
+// Phase 1 header is intentionally minimal. Phase 3 expands this with full
+// navigation, mobile menu, theme toggle, and Business Units dropdown.
+const navItems = [
+  { key: 'about', href: localizedPath(locale, 'about'), label: dict.nav.about },
+  { key: 'capabilities', href: localizedPath(locale, 'capabilities'), label: dict.nav.capabilities },
+  { key: 'businessUnits', href: localizedPath(locale, 'business-units'), label: dict.nav.businessUnits },
+  { key: 'projects', href: localizedPath(locale, 'projects'), label: dict.nav.projects },
+  { key: 'contact', href: localizedPath(locale, 'contact'), label: dict.nav.contact },
+];
+
+const switcherLabel = altLocale === 'ar' ? dict.nav.switchToArabic : dict.nav.switchToEnglish;
+const switcherHref = localizedPath(altLocale, pathInLocale);
+---
+
+<header class="border-b border-line bg-surface-0/95 backdrop-blur-sm">
+  <div class="mx-auto flex max-w-wide items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:px-8">
+    <a href={localizedPath(locale, '/')} class="block focus-visible:outline-2" aria-label={dict.meta.siteName}>
+      <Logo locale={locale} />
+    </a>
+
+    <nav aria-label={dict.nav.openMenu} class="hidden items-center gap-6 md:flex">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="text-sm font-medium text-ink-1 hover:text-ink-0 transition-colors"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a
+        href={switcherHref}
+        class="rounded border border-line px-3 py-1.5 text-sm font-medium text-ink-1 hover:border-line-strong hover:text-ink-0 transition-colors"
+        rel="alternate"
+        hreflang={altLocale === 'ar' ? 'ar-SA' : 'en-SA'}
+      >
+        {switcherLabel}
+      </a>
+    </div>
+  </div>
+</header>

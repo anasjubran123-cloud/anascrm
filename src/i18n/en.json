@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "siteName": "Convergent Technology",
+    "siteTagline": "Where Systems Sync.",
+    "siteDescription": "Convergent Technology Company is a Saudi systems integrator delivering data-center, IT infrastructure, audiovisual, and landscape engineering. Headquartered in Al Khobar."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "capabilities": "Capabilities",
+    "sectors": "Sectors",
+    "businessUnits": "Business Units",
+    "projects": "Projects",
+    "news": "News & Insights",
+    "careers": "Careers",
+    "contact": "Contact",
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchToArabic": "العربية",
+    "switchToEnglish": "English"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "legalName": "Convergent Technology Company",
+    "address": "Al Khobar, Kingdom of Saudi Arabia",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "terms": "Terms"
+  },
+  "home": {
+    "heroEyebrow": "A Gateway to Tomorrow",
+    "heroTitle": "Engineering the infrastructure behind Saudi enterprises.",
+    "heroLead": "From data centers to integrated technology environments, Convergent designs, builds, operates, and maintains the systems that keep critical Saudi operations running.",
+    "heroPrimaryCta": "Discuss your project",
+    "heroSecondaryCta": "Explore our business units"
+  }
+}

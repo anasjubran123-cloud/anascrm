@@ -1,0 +1,34 @@
+---
+import { dictFor, localizedPath } from '@lib/i18n';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = dictFor(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-16 border-t border-line bg-surface-1">
+  <div class="mx-auto flex max-w-wide flex-col gap-4 px-4 py-8 sm:px-6 lg:px-8 md:flex-row md:items-center md:justify-between">
+    <div class="text-sm text-ink-2">
+      <span class="font-medium text-ink-1">{dict.footer.legalName}</span>
+      <span class="mx-2 text-ink-muted">&middot;</span>
+      <span>{dict.footer.address}</span>
+    </div>
+    <nav class="flex items-center gap-4 text-sm text-ink-2" aria-label="Legal">
+      <a href={localizedPath(locale, 'legal/privacy')} class="hover:text-ink-0 transition-colors">
+        {dict.footer.privacy}
+      </a>
+      <a href={localizedPath(locale, 'legal/cookies')} class="hover:text-ink-0 transition-colors">
+        {dict.footer.cookies}
+      </a>
+      <a href={localizedPath(locale, 'legal/terms')} class="hover:text-ink-0 transition-colors">
+        {dict.footer.terms}
+      </a>
+    </nav>
+    <div class="text-xs text-ink-muted">&copy; {year} &middot; {dict.footer.rights}</div>
+  </div>
+</footer>

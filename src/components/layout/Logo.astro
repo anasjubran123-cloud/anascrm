@@ -1,0 +1,65 @@
+---
+import type { Locale } from '@config/site';
+
+// Typeset CSS wordmark — Phase 1 fallback that mirrors the brand book's
+// "Convergent" + letter-spaced "T e c h n o l o g y" structure (Convergent
+// Technology Logo Guideline v0.1, Oct 2025). When the real master arrives in
+// /branding/ as SVG or PNG, swap this component to render the file. The
+// surrounding layout already gives it correct clear-space.
+
+interface Props {
+  locale: Locale;
+  class?: string;
+  /** Decorative use only when the surrounding link/section already announces context. */
+  decorative?: boolean;
+}
+
+const { locale, class: className = '', decorative = false } = Astro.props;
+const ariaLabel = decorative ? undefined : 'Convergent Technology';
+const role = decorative ? 'presentation' : 'img';
+---
+
+<span class:list={['ct-logo', className]} role={role} aria-label={ariaLabel} data-locale={locale}>
+  <span class="ct-logo__primary">Convergent</span>
+  <span class="ct-logo__secondary" aria-hidden="true">T<span>e</span>c<span>h</span>n<span>o</span>l<span>o</span>g<span>y</span></span>
+</span>
+
+<style>
+  .ct-logo {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+    font-family: var(--ct-font-display);
+    color: rgb(var(--ct-ink-0));
+    user-select: none;
+  }
+
+  .ct-logo__primary {
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .ct-logo__secondary {
+    margin-block-start: 0.15em;
+    font-size: clamp(0.625rem, 0.55rem + 0.18vw, 0.75rem);
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: rgb(var(--ct-ink-1));
+  }
+
+  /* The brand book draws each letter of "Technology" with consistent spacing.
+     Visual letters are fine at any width; we keep the structural span elements
+     for symmetry but they need no extra style. */
+  .ct-logo__secondary span {
+    display: inline;
+  }
+
+  /* RTL: keep the wordmark itself LTR (it is a Latin mark per the guideline)
+     but allow surrounding alignment to mirror. */
+  :global([dir='rtl']) .ct-logo {
+    direction: ltr;
+  }
+</style>

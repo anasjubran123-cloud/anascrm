@@ -1,0 +1,74 @@
+---
+import '@styles/global.css';
+import { dictFor, dirFor, htmlLangFor, otherLocale, localizedPath } from '@lib/i18n';
+import { site } from '@config/site';
+import type { Locale } from '@config/site';
+import Header from '@components/layout/Header.astro';
+import Footer from '@components/layout/Footer.astro';
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  /** Page path WITHOUT the locale prefix (e.g. "about" or "/" for home). */
+  pathInLocale?: string;
+}
+
+const { locale, title, description, pathInLocale = '/' } = Astro.props;
+
+const dict = dictFor(locale);
+const dir = dirFor(locale);
+const htmlLang = htmlLangFor(locale);
+
+const siteName = dict.meta.siteName;
+const fullTitle = title ? `${title} — ${siteName}` : `${siteName} — ${dict.meta.siteTagline}`;
+const metaDescription = description ?? dict.meta.siteDescription;
+
+const currentPath = localizedPath(locale, pathInLocale);
+const altLocale = otherLocale(locale);
+const altPath = localizedPath(altLocale, pathInLocale);
+const canonicalUrl = new URL(currentPath, site.url).toString();
+const altUrl = new URL(altPath, site.url).toString();
+const xDefaultUrl = new URL(localizedPath(site.defaultLocale, pathInLocale), site.url).toString();
+---
+
+<!doctype html>
+<html lang={htmlLang} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#D00F18" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang={htmlLangFor(locale)} href={canonicalUrl} />
+    <link rel="alternate" hreflang={htmlLangFor(altLocale)} href={altUrl} />
+    <link rel="alternate" hreflang="x-default" href={xDefaultUrl} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={htmlLang.replace('-', '_')} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    {/* Block indexing while the site is in development. Phase 7/8 flips this. */}
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {/* Apple touch icon and full favicon set ship with the brand handover. */}
+  </head>
+  <body class="font-sans bg-surface-0 text-ink-0 antialiased">
+    <a href="#main" class="skip-link">{dict.nav.skipToContent}</a>
+    <Header locale={locale} pathInLocale={pathInLocale} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+  </body>
+</html>

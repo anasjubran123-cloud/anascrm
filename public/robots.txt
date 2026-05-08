@@ -1,0 +1,8 @@
+# Convergent Technology — robots.txt
+#
+# DEVELOPMENT / STAGING POSTURE: the site is offline during development per CT
+# decision. Phase 7 (production) replaces this with an allow-all robots.txt
+# and a sitemap reference. Do not flip this without sign-off.
+
+User-agent: *
+Disallow: /

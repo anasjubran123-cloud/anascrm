@@ -1,0 +1,92 @@
+/*
+ * Convergent Technology — design tokens
+ *
+ * Single source of truth for colour, typography, and motion. Tailwind utility
+ * classes resolve to these variables (see tailwind.config.cjs). Brand swaps
+ * happen here — nowhere else.
+ *
+ * Brand reference: branding/BRAND_GUIDELINE_EXTRACT.md
+ *   • Primary brand colour: ROSO red #D00F18 (CT GROUP)
+ *   • Typography: Cairo (unified EN + AR, self-hosted, OFL)
+ *
+ * Colour values are stored as space-separated RGB triplets so Tailwind's
+ * `<alpha-value>` modifier works (e.g. text-brand/80).
+ */
+
+:root {
+  /* Brand */
+  --ct-brand: 208 15 24;            /* #D00F18 — ROSO red */
+  --ct-brand-contrast: 255 255 255; /* foreground on brand fills */
+
+  /* Surfaces (light mode) */
+  --ct-surface-0: 255 255 255;      /* page background */
+  --ct-surface-1: 248 248 249;      /* subtle section */
+  --ct-surface-2: 240 240 242;      /* card / elevated */
+
+  /* Ink (light mode) */
+  --ct-ink-0: 17 17 19;             /* primary text — near-black */
+  --ct-ink-1: 51 51 57;             /* secondary */
+  --ct-ink-2: 102 102 110;          /* tertiary */
+  --ct-ink-muted: 142 142 150;
+
+  /* Lines / borders */
+  --ct-line: 226 226 231;
+  --ct-line-strong: 200 200 207;
+
+  /* Semantic */
+  --ct-success: 22 122 78;
+  --ct-warning: 184 109 12;
+  --ct-danger: 198 32 36;
+  --ct-info: 30 96 162;
+
+  /* Typography stacks. Cairo handles both Latin and Arabic; system fallbacks
+     keep the page legible if the woff2 fails to load. */
+  --ct-font-sans: 'Cairo', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans Arabic', sans-serif;
+  --ct-font-display: 'Cairo', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans Arabic', sans-serif;
+  --ct-font-mono: ui-monospace, SFMono-Regular, 'JetBrains Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  /* Motion */
+  --ct-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ct-duration-1: 120ms;
+  --ct-duration-2: 220ms;
+  --ct-duration-3: 360ms;
+
+  /* Layout */
+  --ct-content-max: 88rem;
+}
+
+/* Dark mode token swap — engaged either by user opt-in (data-theme="dark"
+   on <html>) or system preference when the user has no explicit choice. */
+[data-theme='dark'] {
+  --ct-surface-0: 14 14 16;
+  --ct-surface-1: 22 22 26;
+  --ct-surface-2: 30 30 36;
+  --ct-ink-0: 240 240 242;
+  --ct-ink-1: 210 210 216;
+  --ct-ink-2: 168 168 176;
+  --ct-ink-muted: 130 130 138;
+  --ct-line: 44 44 52;
+  --ct-line-strong: 64 64 72;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ct-surface-0: 14 14 16;
+    --ct-surface-1: 22 22 26;
+    --ct-surface-2: 30 30 36;
+    --ct-ink-0: 240 240 242;
+    --ct-ink-1: 210 210 216;
+    --ct-ink-2: 168 168 176;
+    --ct-ink-muted: 130 130 138;
+    --ct-line: 44 44 52;
+    --ct-line-strong: 64 64 72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ct-duration-1: 0ms;
+    --ct-duration-2: 0ms;
+    --ct-duration-3: 0ms;
+  }
+}

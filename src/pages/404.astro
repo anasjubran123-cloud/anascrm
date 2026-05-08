@@ -1,0 +1,22 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { defaultLocale, localizedPath } from '@lib/i18n';
+
+const locale = defaultLocale();
+---
+
+<BaseLayout locale={locale} title="404 — Page not found" pathInLocale="/404">
+  <section class="mx-auto max-w-wide px-4 py-24 sm:px-6 lg:px-8">
+    <p class="text-sm font-medium uppercase tracking-[0.2em] text-brand">404</p>
+    <h1 class="mt-4 text-4xl font-bold leading-tight sm:text-5xl">Page not found</h1>
+    <p class="mt-4 max-w-prose text-lg text-ink-1">
+      The page you were looking for doesn't exist or has moved.
+    </p>
+    <a
+      href={localizedPath(locale, '/')}
+      class="mt-8 inline-flex items-center rounded bg-brand px-5 py-3 text-sm font-semibold text-brand-contrast hover:opacity-90 transition-opacity"
+    >
+      Return home
+    </a>
+  </section>
+</BaseLayout>
