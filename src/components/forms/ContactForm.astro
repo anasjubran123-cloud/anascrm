@@ -6,6 +6,7 @@
 
 import { dictFor } from '@lib/i18n';
 import type { Locale } from '@config/site';
+import Captcha from '@components/forms/Captcha.astro';
 
 interface Props {
   locale: Locale;
@@ -144,8 +145,8 @@ const categoryKeys = [
     <label for="cf-consent" class="text-sm text-ink-1">{labels.consent}</label>
   </div>
 
-  <!-- hCaptcha placeholder — replaced with the real widget in Phase 6. -->
-  <div data-captcha-slot></div>
+  <Captcha />
+
 
   <button
     type="submit"

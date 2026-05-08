@@ -1,0 +1,19 @@
+---
+// hCaptcha widget wrapper. Loads the script and renders the widget only when
+// PUBLIC_HCAPTCHA_SITE_KEY is set. If unset, the slot stays empty — the form
+// still works (honeypot + min-time-to-submit + form-vendor server-side
+// validation provide layered defence).
+//
+// Privacy posture: the script is loaded only when a site key is present, and
+// only when the user has interacted with the form (Phase 7 will tighten
+// further by lazy-loading on first input focus + cookie consent).
+
+const siteKey = import.meta.env.PUBLIC_HCAPTCHA_SITE_KEY ?? '';
+---
+
+{siteKey && (
+  <>
+    <div class="h-captcha" data-sitekey={siteKey} data-size="normal"></div>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  </>
+)}
