@@ -1,22 +1,27 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Button from '@components/ui/Button.astro';
 import { defaultLocale, localizedPath } from '@lib/i18n';
 
 const locale = defaultLocale();
 ---
 
-<BaseLayout locale={locale} title="404 — Page not found" pathInLocale="/404">
-  <section class="mx-auto max-w-wide px-4 py-24 sm:px-6 lg:px-8">
-    <p class="text-sm font-medium uppercase tracking-[0.2em] text-brand">404</p>
-    <h1 class="mt-4 text-4xl font-bold leading-tight sm:text-5xl">Page not found</h1>
-    <p class="mt-4 max-w-prose text-lg text-ink-1">
-      The page you were looking for doesn't exist or has moved.
-    </p>
-    <a
-      href={localizedPath(locale, '/')}
-      class="mt-8 inline-flex items-center rounded bg-brand px-5 py-3 text-sm font-semibold text-brand-contrast hover:opacity-90 transition-opacity"
-    >
-      Return home
-    </a>
-  </section>
+<BaseLayout locale={locale} title="404 — Page not found" pathInLocale="/404" bare={false}>
+  <Section tone="default">
+    <Container>
+      <div class="max-w-2xl py-16">
+        <Eyebrow>404</Eyebrow>
+        <Heading level={1} size="display" class="mt-4">Page not found</Heading>
+        <p class="mt-4 text-ink-1">The page you were looking for doesn't exist or has moved.</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <Button href={localizedPath('en', '/')} variant="primary">Return home (English)</Button>
+          <Button href={localizedPath('ar', '/')} variant="secondary">العودة إلى الرئيسية</Button>
+        </div>
+      </div>
+    </Container>
+  </Section>
 </BaseLayout>

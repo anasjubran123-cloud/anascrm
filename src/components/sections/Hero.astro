@@ -1,0 +1,45 @@
+---
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Button from '@components/ui/Button.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  primary?: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const { eyebrow, title, lead, primary, secondary } = Astro.props;
+---
+
+<Section tone="default" blueprint>
+  <Container size="wide">
+    <div class="max-w-4xl">
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <Heading level={1} size="display" class="mt-4">
+        {title}
+      </Heading>
+      <p class="mt-6 max-w-prose text-[length:var(--ct-text-md)] text-ink-1">
+        {lead}
+      </p>
+      {(primary || secondary) && (
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          {primary && (
+            <Button href={primary.href} variant="primary" size="lg">
+              {primary.label}
+            </Button>
+          )}
+          {secondary && (
+            <Button href={secondary.href} variant="secondary" size="lg">
+              {secondary.label}
+            </Button>
+          )}
+        </div>
+      )}
+    </div>
+  </Container>
+</Section>

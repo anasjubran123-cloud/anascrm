@@ -1,0 +1,187 @@
+---
+// ContactForm — visual scaffold of the contact form. Phase 4 ships the
+// markup and validation copy; Phase 6 wires the action endpoint, hCaptcha,
+// honeypot, and submit handling. Both phases share this single component
+// so swapping in the form vendor URL later is a single env-var change.
+
+import { dictFor } from '@lib/i18n';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = dictFor(locale);
+const labels = dict.contact.form;
+
+// Inquiry categories live as keys in the dictionary so AR labels mirror EN
+// without us having to hand-translate them in two places.
+const categoryKeys = [
+  'dc-build',
+  'dcim',
+  'ups',
+  'cooling',
+  'modular',
+  'low-current',
+  'cctv',
+  'av',
+  'maintenance',
+  'partnership',
+  'careers',
+  'other',
+] as const;
+---
+
+<form
+  data-contact-form
+  method="post"
+  action={import.meta.env.PUBLIC_CONTACT_FORM_ENDPOINT ?? '#contact'}
+  novalidate
+  class="space-y-5"
+  aria-describedby="contact-form-status"
+>
+  <!-- Honeypot — hidden from real users; bots fill it in. Server side
+       discards any submission with website set. -->
+  <div aria-hidden="true" class="hidden">
+    <label for="website">Leave this field empty.</label>
+    <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <!-- Min-time-to-submit guard. Set when the form mounts; checked at submit. -->
+  <input type="hidden" name="t" data-form-time value="" />
+
+  <!-- Form vendor (Web3Forms / Formspree) typically wants the recipient as a
+       form field; the value is set in Phase 6 via env. -->
+  <input type="hidden" name="_subject" value="Convergent.sa contact form" />
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="cf-name" class="block text-sm font-medium text-ink-1">{labels.name}</label>
+      <input
+        id="cf-name"
+        name="name"
+        type="text"
+        required
+        minlength="2"
+        maxlength="120"
+        autocomplete="name"
+        class="mt-1.5 block h-11 w-full rounded border border-line bg-surface-0 px-3 text-sm text-ink-0 focus:border-brand focus:outline-none"
+      />
+    </div>
+    <div>
+      <label for="cf-company" class="block text-sm font-medium text-ink-1">{labels.company}</label>
+      <input
+        id="cf-company"
+        name="company"
+        type="text"
+        maxlength="160"
+        autocomplete="organization"
+        class="mt-1.5 block h-11 w-full rounded border border-line bg-surface-0 px-3 text-sm text-ink-0 focus:border-brand focus:outline-none"
+      />
+    </div>
+    <div>
+      <label for="cf-email" class="block text-sm font-medium text-ink-1">{labels.email}</label>
+      <input
+        id="cf-email"
+        name="email"
+        type="email"
+        required
+        maxlength="200"
+        autocomplete="email"
+        class="mt-1.5 block h-11 w-full rounded border border-line bg-surface-0 px-3 text-sm text-ink-0 focus:border-brand focus:outline-none"
+      />
+    </div>
+    <div>
+      <label for="cf-phone" class="block text-sm font-medium text-ink-1">{labels.phone}</label>
+      <input
+        id="cf-phone"
+        name="phone"
+        type="tel"
+        maxlength="40"
+        autocomplete="tel"
+        class="mt-1.5 block h-11 w-full rounded border border-line bg-surface-0 px-3 text-sm text-ink-0 focus:border-brand focus:outline-none"
+      />
+    </div>
+  </div>
+
+  <div>
+    <label for="cf-category" class="block text-sm font-medium text-ink-1">{labels.category}</label>
+    <select
+      id="cf-category"
+      name="category"
+      required
+      class="mt-1.5 block h-11 w-full rounded border border-line bg-surface-0 px-3 text-sm text-ink-0 focus:border-brand focus:outline-none"
+    >
+      <option value="">—</option>
+      {categoryKeys.map((k) => (
+        <option value={k}>{labels.categoryOptions[k]}</option>
+      ))}
+    </select>
+  </div>
+
+  <div>
+    <label for="cf-message" class="block text-sm font-medium text-ink-1">{labels.message}</label>
+    <textarea
+      id="cf-message"
+      name="message"
+      required
+      minlength="10"
+      maxlength="4000"
+      rows="6"
+      class="mt-1.5 block w-full rounded border border-line bg-surface-0 px-3 py-2 text-sm text-ink-0 focus:border-brand focus:outline-none"
+    ></textarea>
+  </div>
+
+  <div class="flex items-start gap-2">
+    <input
+      id="cf-consent"
+      name="consent"
+      type="checkbox"
+      required
+      class="mt-1 h-4 w-4 rounded border-line accent-[rgb(var(--ct-brand))]"
+    />
+    <label for="cf-consent" class="text-sm text-ink-1">{labels.consent}</label>
+  </div>
+
+  <!-- hCaptcha placeholder — replaced with the real widget in Phase 6. -->
+  <div data-captcha-slot></div>
+
+  <button
+    type="submit"
+    class="inline-flex h-11 items-center justify-center rounded bg-brand px-5 text-sm font-semibold text-brand-contrast hover:opacity-90"
+  >
+    {labels.submit}
+  </button>
+
+  <p id="contact-form-status" class="sr-only" role="status" aria-live="polite"></p>
+</form>
+
+<script>
+  (function () {
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    if (!form) return;
+
+    const timeField = form.querySelector<HTMLInputElement>('[data-form-time]');
+    if (timeField) timeField.value = String(Date.now());
+
+    form.addEventListener('submit', (event) => {
+      // Honeypot
+      const website = form.querySelector<HTMLInputElement>('[name="website"]');
+      if (website && website.value.trim() !== '') {
+        event.preventDefault();
+        return;
+      }
+      // Min-time-to-submit (3 seconds — humans take longer)
+      if (timeField) {
+        const opened = Number(timeField.value);
+        if (Number.isFinite(opened) && Date.now() - opened < 3000) {
+          event.preventDefault();
+          return;
+        }
+      }
+      // Phase 6 will replace this with a fetch() to the form vendor and
+      // inline the success/error UI based on the response.
+    });
+  })();
+</script>

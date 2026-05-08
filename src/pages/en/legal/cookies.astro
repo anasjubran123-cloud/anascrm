@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LegalShell from '@components/sections/LegalShell.astro';
+import { dictFor } from '@lib/i18n';
+
+const locale = 'en' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.legal.cookies.title} description={dict.legal.cookies.lead} pathInLocale="/legal/cookies">
+  <LegalShell locale={locale} title={dict.legal.cookies.title} lead={dict.legal.cookies.lead}>
+    <h2>What this site uses</h2>
+    <p>www.convergent.sa is a static informational site. At launch it sets <strong>no marketing cookies</strong>, no advertising trackers, and no analytics scripts.</p>
+
+    <h2>Strictly necessary storage</h2>
+    <ul>
+      <li><code>ct-theme</code> — localStorage. Stores your light/dark theme preference. No personal data.</li>
+      <li><code>ct-locale</code> — localStorage. Stores your last manual language choice.</li>
+    </ul>
+
+    <h2>Future analytics</h2>
+    <p>If we add privacy-respecting analytics (Cloudflare Web Analytics or self-hosted Plausible/Umami) it will be activated only after you opt-in via a consent banner. {`{{TODO: confirm before launch.}}`}</p>
+
+    <h2>Third-party services</h2>
+    <p>The contact form posts to a third-party form vendor ({`{{TODO: Web3Forms or Formspree, decided in Phase 6}}`}). When you submit, that vendor processes the message contents on our behalf, then forwards them to <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+
+    <h2>Managing</h2>
+    <p>You can clear localStorage at any time via your browser. Doing so resets your theme and language preferences.</p>
+  </LegalShell>
+</BaseLayout>

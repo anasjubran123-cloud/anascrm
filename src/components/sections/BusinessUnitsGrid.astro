@@ -1,0 +1,54 @@
+---
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Card from '@components/ui/Card.astro';
+import Icon from '@components/icons/Icon.astro';
+import { businessUnits } from '@config/business-units';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  tone?: 'default' | 'subtle';
+}
+
+const { locale, eyebrow, title, lead, tone = 'default' } = Astro.props;
+
+const iconFor = (id: string) => {
+  if (id === 'dc') return 'server';
+  if (id === 'it') return 'zap';
+  if (id === 'av') return 'monitor';
+  return 'pin';
+};
+---
+
+<Section tone={tone}>
+  <Container>
+    <div class="max-w-2xl">
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <Heading level={2} size="xl" class="mt-3">{title}</Heading>
+      {lead && <p class="mt-4 text-ink-1">{lead}</p>}
+    </div>
+    <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {businessUnits.map((unit) => (
+        <Card href={unit.url} hover>
+          <span class="inline-flex h-10 w-10 items-center justify-center rounded bg-[rgb(var(--ct-brand-soft))]">
+            <Icon name={iconFor(unit.id) as any} size={18} class="text-brand" />
+          </span>
+          <Heading level={3} size="md" class="mt-4">
+            <span class="inline-flex items-center gap-1.5">
+              {unit.label[locale]}
+              <Icon name="external" size={14} class="text-ink-2" />
+            </span>
+          </Heading>
+          <p class="mt-2 text-sm text-ink-1">{unit.teaser[locale]}</p>
+          <p class="mt-4 text-xs text-ink-2">{unit.url.replace('https://', '')}</p>
+        </Card>
+      ))}
+    </div>
+  </Container>
+</Section>

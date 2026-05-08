@@ -1,0 +1,19 @@
+---
+import { dictFor } from '@lib/i18n';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = dictFor(locale);
+---
+
+<div class="border-y border-[rgb(var(--ct-warning)/0.4)] bg-[rgb(var(--ct-warning)/0.08)] py-3">
+  <div class="mx-auto max-w-wide px-4 sm:px-6 lg:px-8">
+    <p class="text-sm text-ink-0">
+      <span class="font-semibold">Draft.</span> {dict.legal.draftBanner}
+    </p>
+  </div>
+</div>

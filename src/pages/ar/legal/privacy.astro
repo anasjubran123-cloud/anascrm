@@ -1,0 +1,42 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LegalShell from '@components/sections/LegalShell.astro';
+import { dictFor } from '@lib/i18n';
+
+const locale = 'ar' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.legal.privacy.title} description={dict.legal.privacy.lead} pathInLocale="/legal/privacy">
+  <LegalShell locale={locale} title={dict.legal.privacy.title} lead={dict.legal.privacy.lead}>
+    <p>يصف هذا الإشعار كيفية جمع شركة التقنية المترابطة («كونفرجنت» أو «نحن») للبيانات الشخصية واستخدامها وكشفها وحمايتها عبر موقع www.convergent.sa، وفقًا لنظام حماية البيانات الشخصية في المملكة (PDPL).</p>
+
+    <h2>ما الذي نجمعه</h2>
+    <ul>
+      <li><strong>بيانات نموذج التواصل</strong> — الاسم، الشركة، البريد، الهاتف، نوع الاستفسار، ومتن الرسالة.</li>
+      <li><strong>سجلات الخادم</strong> — عنوان IP، وكيل المستخدم، عناوين الطلبات، والطوابع الزمنية، يحتفظ بها مزود الاستضافة لفترات محدودة لأغراض الأمن والتشغيل.</li>
+    </ul>
+
+    <h2>كيف نستخدمها</h2>
+    <ul>
+      <li>للردّ على استفسارك وتوجيهه إلى وحدة الأعمال المعنية.</li>
+      <li>للحفاظ على سجلات تجارية للمراسلات حسب الحاجة.</li>
+      <li>لرصد ومنع إساءة استخدام قنوات التواصل.</li>
+    </ul>
+
+    <h2>الأساس النظامي</h2>
+    <p>نعالج البيانات الشخصية، عند الاقتضاء، على أساس موافقتك الصريحة (مربع الموافقة في النموذج) وعلى أساس المصلحة المشروعة في التواصل مع الأطراف التجارية.</p>
+
+    <h2>المشاركة والمعالجون</h2>
+    <p>{`{{TODO: قائمة المعالجين — تُحدَّد في المرحلة 7. تشمل مزود نموذج الاتصال (Web3Forms أو Formspree)، ومزود الاستضافة (HostGator)، وCloudflare عند التفعيل.}}`}</p>
+
+    <h2>الاحتفاظ</h2>
+    <p>{`{{TODO: مدد الاحتفاظ — تُؤكَّد مع المستشار القانوني.}}`}</p>
+
+    <h2>حقوقك</h2>
+    <p>وفقًا لنظام حماية البيانات الشخصية، يحق لك طلب الوصول والتصحيح والحذف والاعتراض. أرسل أي طلب إلى <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+
+    <h2>التواصل</h2>
+    <p>استفسارات الخصوصية: <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+  </LegalShell>
+</BaseLayout>

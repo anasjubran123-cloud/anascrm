@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import BusinessUnitsGrid from '@components/sections/BusinessUnitsGrid.astro';
+import Cta from '@components/sections/Cta.astro';
+import { dictFor, localizedPath } from '@lib/i18n';
+
+const locale = 'ar' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.businessUnits.title} description={dict.businessUnits.lead} pathInLocale="/business-units">
+  <Section tone="default" blueprint>
+    <Container>
+      <div class="max-w-3xl">
+        <Eyebrow>{dict.businessUnits.eyebrow}</Eyebrow>
+        <Heading level={1} size="display" class="mt-4">{dict.businessUnits.title}</Heading>
+        <p class="mt-6 max-w-prose text-[length:var(--ct-text-md)] text-ink-1">{dict.businessUnits.lead}</p>
+      </div>
+    </Container>
+  </Section>
+
+  <BusinessUnitsGrid
+    locale={locale}
+    eyebrow={dict.home.businessUnitsEyebrow}
+    title={dict.home.businessUnitsTitle}
+    tone="subtle"
+  />
+
+  <Cta
+    title={dict.home.ctaTitle}
+    lead={dict.home.ctaLead}
+    primary={{ label: dict.home.ctaPrimary, href: localizedPath(locale, 'contact') }}
+  />
+</BaseLayout>

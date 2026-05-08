@@ -1,5 +1,11 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
+import Hero from '@components/sections/Hero.astro';
+import CapabilitiesGrid from '@components/sections/CapabilitiesGrid.astro';
+import BusinessUnitsGrid from '@components/sections/BusinessUnitsGrid.astro';
+import SectorsStrip from '@components/sections/SectorsStrip.astro';
+import PartnersStrip from '@components/sections/PartnersStrip.astro';
+import Cta from '@components/sections/Cta.astro';
 import { dictFor, localizedPath } from '@lib/i18n';
 
 const locale = 'ar' as const;
@@ -7,27 +13,46 @@ const dict = dictFor(locale);
 ---
 
 <BaseLayout locale={locale} pathInLocale="/">
-  <section class="mx-auto max-w-wide px-4 py-16 sm:px-6 sm:py-24 lg:px-8 lg:py-32">
-    <p class="text-sm font-medium uppercase tracking-[0.2em] text-brand">{dict.home.heroEyebrow}</p>
-    <h1 class="mt-4 max-w-3xl text-balance text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl lg:text-6xl">
-      {dict.home.heroTitle}
-    </h1>
-    <p class="mt-6 max-w-prose text-lg text-ink-1">
-      {dict.home.heroLead}
-    </p>
-    <div class="mt-8 flex flex-wrap items-center gap-3">
-      <a
-        href={localizedPath(locale, 'contact')}
-        class="inline-flex items-center rounded bg-brand px-5 py-3 text-sm font-semibold text-brand-contrast hover:opacity-90 transition-opacity"
-      >
-        {dict.home.heroPrimaryCta}
-      </a>
-      <a
-        href={localizedPath(locale, 'business-units')}
-        class="inline-flex items-center rounded border border-line-strong px-5 py-3 text-sm font-semibold text-ink-0 hover:bg-surface-1 transition-colors"
-      >
-        {dict.home.heroSecondaryCta}
-      </a>
-    </div>
-  </section>
+  <Hero
+    eyebrow={dict.home.heroEyebrow}
+    title={dict.home.heroTitle}
+    lead={dict.home.heroLead}
+    primary={{ label: dict.home.heroPrimaryCta, href: localizedPath(locale, 'contact') }}
+    secondary={{ label: dict.home.heroSecondaryCta, href: localizedPath(locale, 'business-units') }}
+  />
+
+  <BusinessUnitsGrid
+    locale={locale}
+    eyebrow={dict.home.businessUnitsEyebrow}
+    title={dict.home.businessUnitsTitle}
+    lead={dict.home.businessUnitsLead}
+    tone="default"
+  />
+
+  <CapabilitiesGrid
+    locale={locale}
+    eyebrow={dict.home.capabilitiesEyebrow}
+    title={dict.home.capabilitiesTitle}
+    lead={dict.home.capabilitiesLead}
+  />
+
+  <SectorsStrip
+    locale={locale}
+    eyebrow={dict.home.sectorsEyebrow}
+    title={dict.home.sectorsTitle}
+    lead={dict.home.sectorsLead}
+  />
+
+  <PartnersStrip
+    eyebrow={dict.home.partnersEyebrow}
+    title={dict.home.partnersTitle}
+    note={dict.home.partnersNote}
+  />
+
+  <Cta
+    title={dict.home.ctaTitle}
+    lead={dict.home.ctaLead}
+    primary={{ label: dict.home.ctaPrimary, href: localizedPath(locale, 'contact') }}
+    secondary={{ label: dict.home.ctaSecondary, href: 'mailto:info@convergent.sa' }}
+  />
 </BaseLayout>

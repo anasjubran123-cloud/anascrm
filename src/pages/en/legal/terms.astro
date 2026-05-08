@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LegalShell from '@components/sections/LegalShell.astro';
+import { dictFor } from '@lib/i18n';
+
+const locale = 'en' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.legal.terms.title} description={dict.legal.terms.lead} pathInLocale="/legal/terms">
+  <LegalShell locale={locale} title={dict.legal.terms.title} lead={dict.legal.terms.lead}>
+    <h2>Use of this site</h2>
+    <p>www.convergent.sa is published by Convergent Technology Company ("Convergent"). The site is provided as informational material; it does not constitute a contract or commercial offer.</p>
+
+    <h2>Intellectual property</h2>
+    <p>All trademarks, logos, brand assets, copy, and imagery on this site are owned by Convergent or used with permission. You may not redistribute or reproduce them without prior written consent.</p>
+
+    <h2>Third-party links</h2>
+    <p>This site contains links to subsidiary business-unit subdomains (av/it/dc/landscaping.convergent.sa) and to third-party sites. We are not responsible for the content of external sites.</p>
+
+    <h2>No warranty</h2>
+    <p>The information on this site is provided "as is" without warranty of any kind. Specific commercial commitments are made only in formally executed contracts.</p>
+
+    <h2>Governing law</h2>
+    <p>These terms are governed by the laws of the Kingdom of Saudi Arabia. {`{{TODO: confirm forum-selection clause with CT legal counsel.}}`}</p>
+
+    <h2>Contact</h2>
+    <p>Questions: <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+  </LegalShell>
+</BaseLayout>

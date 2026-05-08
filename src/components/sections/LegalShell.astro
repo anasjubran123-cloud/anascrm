@@ -1,0 +1,33 @@
+---
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Prose from '@components/ui/Prose.astro';
+import Badge from '@components/ui/Badge.astro';
+import { dictFor } from '@lib/i18n';
+import type { Locale } from '@config/site';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  lead: string;
+}
+
+const { locale, title, lead } = Astro.props;
+const dict = dictFor(locale);
+---
+
+<Section tone="default">
+  <Container size="narrow">
+    <Badge tone="warning">{locale === 'ar' ? 'مسوّدة' : 'Draft'}</Badge>
+    <Heading level={1} size="xl" class="mt-3">{title}</Heading>
+    <p class="mt-4 max-w-prose text-ink-1">{lead}</p>
+    <p class="mt-4 rounded border border-line bg-surface-1 p-4 text-sm text-ink-2">
+      {dict.legal.draftBanner}
+    </p>
+    <Prose class="mt-10">
+      <slot />
+    </Prose>
+  </Container>
+</Section>

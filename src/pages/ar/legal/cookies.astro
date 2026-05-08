@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LegalShell from '@components/sections/LegalShell.astro';
+import { dictFor } from '@lib/i18n';
+
+const locale = 'ar' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.legal.cookies.title} description={dict.legal.cookies.lead} pathInLocale="/legal/cookies">
+  <LegalShell locale={locale} title={dict.legal.cookies.title} lead={dict.legal.cookies.lead}>
+    <h2>ما يستخدمه الموقع</h2>
+    <p>موقع www.convergent.sa موقع معلوماتي ثابت. لا تُستخدم عند الإطلاق أي ملفات تعريف ارتباط تسويقية أو متتبعات إعلانية أو نصوص تحليلات.</p>
+
+    <h2>تخزين ضروري بحت</h2>
+    <ul>
+      <li><code>ct-theme</code> — localStorage. يخزّن تفضيلك للمظهر الفاتح/الداكن. لا يحتوي بيانات شخصية.</li>
+      <li><code>ct-locale</code> — localStorage. يخزّن آخر اختيار يدوي للغة.</li>
+    </ul>
+
+    <h2>التحليلات لاحقًا</h2>
+    <p>إن أُضيفت تحليلات تحترم الخصوصية، فلن تُفعَّل إلا بعد موافقتك عبر شريط الموافقة. {`{{TODO: يؤكَّد قبل النشر.}}`}</p>
+
+    <h2>الخدمات الخارجية</h2>
+    <p>يُرسل نموذج التواصل البيانات إلى مزود نموذج خارجي ({`{{TODO: Web3Forms أو Formspree}}`})، الذي يعالج محتوى الرسالة بالنيابة عنا قبل تحويلها إلى <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+
+    <h2>الإدارة</h2>
+    <p>يمكنك مسح localStorage في أي وقت من إعدادات المتصفح، مما يعيد ضبط تفضيلات المظهر واللغة.</p>
+  </LegalShell>
+</BaseLayout>

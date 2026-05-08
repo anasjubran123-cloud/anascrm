@@ -33,6 +33,124 @@
     "heroTitle": "Engineering the infrastructure behind Saudi enterprises.",
     "heroLead": "From data centers to integrated technology environments, Convergent designs, builds, operates, and maintains the systems that keep critical Saudi operations running.",
     "heroPrimaryCta": "Discuss your project",
-    "heroSecondaryCta": "Explore our business units"
+    "heroSecondaryCta": "Explore our business units",
+    "capabilitiesEyebrow": "Group capabilities",
+    "capabilitiesTitle": "End-to-end engineering across the technology stack.",
+    "capabilitiesLead": "Eight capability domains delivered as one programme — designed for clients who need a single accountable partner, not a kit of parts.",
+    "businessUnitsEyebrow": "Business units",
+    "businessUnitsTitle": "Specialist teams under one group.",
+    "businessUnitsLead": "Convergent Technology operates four specialised business units. Pick the one closest to your scope; each is reachable directly.",
+    "sectorsEyebrow": "Sectors",
+    "sectorsTitle": "Where we work.",
+    "sectorsLead": "Our work spans the institutions and industries that move the Kingdom forward.",
+    "projectsEyebrow": "Selected work",
+    "projectsTitle": "Programs we are proud of.",
+    "projectsLead": "Case studies are published only with the client's written approval. Placeholders below mark where they will appear.",
+    "partnersEyebrow": "Partners",
+    "partnersTitle": "Vendor relationships, vendor-neutral counsel.",
+    "partnersNote": "Logos shown for reference. Tier or authorisation claims appear only after written confirmation from each partner.",
+    "ctaTitle": "Have a brief?",
+    "ctaLead": "Send a short note and we'll route it to the right pre-sales lead within one business day.",
+    "ctaPrimary": "Contact pre-sales",
+    "ctaSecondary": "Email info@convergent.sa"
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "A Saudi systems integrator built on engineering rigour.",
+    "lead": "Convergent Technology Company designs, builds, operates, and maintains the technology behind Saudi enterprises. Headquartered in Al Khobar, organised as a group of four specialist business units.",
+    "missionTitle": "Our mission",
+    "missionBody": "To deliver the technology infrastructure behind the institutions that move Saudi Arabia forward — engineered to last, operated to spec, and accountable end-to-end.",
+    "valuesTitle": "How we operate",
+    "valuesBody": "Engineering rigour. Vendor-neutral counsel. Disciplined commercial conduct. Long-term operational accountability.",
+    "leadershipTitle": "Leadership",
+    "leadershipBody": "{{TODO: leadership profiles — handover required}}"
+  },
+  "capabilities": {
+    "eyebrow": "Capabilities",
+    "title": "Eight capability domains. One programme.",
+    "lead": "Our group-level capabilities. Specialised execution lives inside the four business units; this overview shows what the group can do as a whole."
+  },
+  "sectors": {
+    "eyebrow": "Sectors",
+    "title": "We serve the institutions that operate Saudi Arabia.",
+    "lead": "From government to enterprise, banking to telecom — our work sits behind the systems these clients depend on."
+  },
+  "businessUnits": {
+    "eyebrow": "Business units",
+    "title": "Four specialist units under one group.",
+    "lead": "Each business unit operates with its own engineering team, partner ecosystem, and delivery practice. Reach them directly via the links below — each will lead the conversation, with the group available where needed."
+  },
+  "projects": {
+    "eyebrow": "Projects & case studies",
+    "title": "Selected work.",
+    "lead": "Case studies appear here only with the client's written approval. Placeholders mark where future entries will go.",
+    "approvalNote": "Disclosure approval pending."
+  },
+  "news": {
+    "eyebrow": "News & insights",
+    "title": "What we are publishing.",
+    "lead": "Notes from the team — engineering perspectives, programme updates, and points of view on Saudi enterprise technology.",
+    "readMore": "Read article"
+  },
+  "careers": {
+    "eyebrow": "Careers",
+    "title": "Build alongside engineers who care about the work.",
+    "lead": "We hire engineers, project leads, and operations professionals who want to work on infrastructure that matters. If we don't have the right open role for you today, send your CV and we'll keep it on file.",
+    "openRolesTitle": "Open roles",
+    "openRolesEmpty": "No open roles published right now. Reach out via the contact form and we'll route your CV to the right team.",
+    "applyCta": "Apply for this role"
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Tell us about your project.",
+    "lead": "We respond to every qualified inquiry within one business day. For urgent commercial matters, email info@convergent.sa directly.",
+    "form": {
+      "name": "Full name",
+      "company": "Company",
+      "email": "Email",
+      "phone": "Phone (optional)",
+      "category": "Inquiry category",
+      "categoryOptions": {
+        "dc-build": "Data center design & build",
+        "dcim": "DCIM",
+        "ups": "UPS & power",
+        "cooling": "Precision cooling",
+        "modular": "Modular DC",
+        "low-current": "Low-current systems",
+        "cctv": "CCTV / access control",
+        "av": "Audiovisual",
+        "maintenance": "Maintenance & support",
+        "partnership": "Partnership",
+        "careers": "Careers",
+        "other": "Other"
+      },
+      "message": "Message",
+      "consent": "I consent to Convergent Technology contacting me about this inquiry.",
+      "submit": "Send message",
+      "submittingState": "Sending…",
+      "successTitle": "Message received.",
+      "successBody": "Thank you. We will respond within one business day.",
+      "errorTitle": "Something went wrong.",
+      "errorBody": "Please try again, or email info@convergent.sa directly.",
+      "validationRequired": "This field is required.",
+      "validationEmail": "Please enter a valid email address."
+    },
+    "directTitle": "Direct contact",
+    "directBody": "info@convergent.sa · Al Khobar, Saudi Arabia"
+  },
+  "legal": {
+    "draftBanner": "This document is a draft pending review by Convergent Technology's legal counsel. Final wording may change.",
+    "privacy": {
+      "title": "Privacy notice",
+      "lead": "How Convergent Technology collects, uses, and protects personal data on this site, in line with the Saudi Personal Data Protection Law (PDPL)."
+    },
+    "cookies": {
+      "title": "Cookie notice",
+      "lead": "What cookies and similar technologies this site uses, and how to control them."
+    },
+    "terms": {
+      "title": "Terms of use",
+      "lead": "The terms governing your use of www.convergent.sa."
+    }
   }
 }

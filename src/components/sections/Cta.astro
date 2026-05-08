@@ -1,0 +1,36 @@
+---
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Heading from '@components/ui/Heading.astro';
+import Button from '@components/ui/Button.astro';
+
+interface Props {
+  title: string;
+  lead?: string;
+  primary: { label: string; href: string };
+  secondary?: { label: string; href: string };
+}
+
+const { title, lead, primary, secondary } = Astro.props;
+---
+
+<Section tone="inverse">
+  <Container>
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl">
+        <Heading level={2} size="xl">{title}</Heading>
+        {lead && <p class="mt-4 text-[rgb(var(--ct-ink-inverse)/0.85)]">{lead}</p>}
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <Button href={primary.href} variant="primary" size="lg">
+          {primary.label}
+        </Button>
+        {secondary && (
+          <Button href={secondary.href} variant="ghost" size="lg" class="border border-[rgb(var(--ct-ink-inverse)/0.3)] text-[rgb(var(--ct-ink-inverse))]">
+            {secondary.label}
+          </Button>
+        )}
+      </div>
+    </div>
+  </Container>
+</Section>

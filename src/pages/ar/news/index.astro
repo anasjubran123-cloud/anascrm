@@ -1,0 +1,39 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Card from '@components/ui/Card.astro';
+import { dictFor } from '@lib/i18n';
+import { sampleArticles, pick } from '@lib/content';
+
+const locale = 'ar' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.news.title} description={dict.news.lead} pathInLocale="/news">
+  <Section tone="default">
+    <Container>
+      <div class="max-w-3xl">
+        <Eyebrow>{dict.news.eyebrow}</Eyebrow>
+        <Heading level={1} size="display" class="mt-4">{dict.news.title}</Heading>
+        <p class="mt-6 max-w-prose text-[length:var(--ct-text-md)] text-ink-1">{dict.news.lead}</p>
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="subtle" flush>
+    <Container>
+      <div class="grid gap-4 py-12 sm:grid-cols-2 lg:grid-cols-3">
+        {sampleArticles.map((a) => (
+          <Card>
+            <p class="text-xs text-ink-2">{new Date(a.publishedAt).toLocaleDateString('ar-SA', { dateStyle: 'medium' })}</p>
+            <Heading level={2} size="md" class="mt-3">{pick(a.title, locale)}</Heading>
+            <p class="mt-3 text-sm text-ink-1">{pick(a.excerpt, locale)}</p>
+          </Card>
+        ))}
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

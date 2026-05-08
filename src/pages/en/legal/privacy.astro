@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LegalShell from '@components/sections/LegalShell.astro';
+import { dictFor } from '@lib/i18n';
+
+const locale = 'en' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.legal.privacy.title} description={dict.legal.privacy.lead} pathInLocale="/legal/privacy">
+  <LegalShell locale={locale} title={dict.legal.privacy.title} lead={dict.legal.privacy.lead}>
+    <p>This privacy notice describes how Convergent Technology Company ("Convergent", "we") collects, uses, discloses, and protects personal data through www.convergent.sa, in line with the Saudi Personal Data Protection Law (PDPL).</p>
+
+    <h2>What we collect</h2>
+    <ul>
+      <li><strong>Contact form data</strong> — name, company, email, phone, inquiry category, and message body submitted through forms on this site.</li>
+      <li><strong>Server logs</strong> — IP address, user-agent, requested URL, and timestamps held by our hosting provider for limited periods for security and operations.</li>
+    </ul>
+
+    <h2>How we use it</h2>
+    <ul>
+      <li>To respond to your inquiry and route it to the appropriate Convergent business unit.</li>
+      <li>To maintain commercial records of correspondence as required.</li>
+      <li>To detect and prevent abuse of the contact channels.</li>
+    </ul>
+
+    <h2>Lawful basis</h2>
+    <p>Where applicable, we process personal data on the basis of your explicit consent (the consent checkbox on the contact form) and on the basis of the legitimate interest of communicating with prospective and current commercial counter-parties.</p>
+
+    <h2>Sharing &amp; processors</h2>
+    <p>{`{{TODO: list of processors — to be confirmed in Phase 7. Includes the form vendor (Web3Forms / Formspree), the hosting provider (HostGator), and Cloudflare if enabled.}}`}</p>
+
+    <h2>Retention</h2>
+    <p>{`{{TODO: retention periods for form submissions (default 24 months) and careers data (default 12 months) — confirm with CT legal counsel.}}`}</p>
+
+    <h2>Your rights</h2>
+    <p>Under PDPL you may request access, correction, deletion, restriction, and objection regarding your personal data. Send any such request to <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+
+    <h2>Cookies</h2>
+    <p>See our <a href="/en/legal/cookies">cookie notice</a> for details of any cookies set by this site.</p>
+
+    <h2>Contact</h2>
+    <p>Privacy queries: <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+
+    <h2>Changes</h2>
+    <p>We may update this notice. The current version is shown at the top of the page along with the date of the last revision.</p>
+  </LegalShell>
+</BaseLayout>

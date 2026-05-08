@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import LegalShell from '@components/sections/LegalShell.astro';
+import { dictFor } from '@lib/i18n';
+
+const locale = 'ar' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.legal.terms.title} description={dict.legal.terms.lead} pathInLocale="/legal/terms">
+  <LegalShell locale={locale} title={dict.legal.terms.title} lead={dict.legal.terms.lead}>
+    <h2>استخدام الموقع</h2>
+    <p>يصدر موقع www.convergent.sa عن شركة التقنية المترابطة («كونفرجنت»). يُقدَّم الموقع كمواد إعلامية فقط ولا يشكّل عقدًا أو عرضًا تجاريًا.</p>
+
+    <h2>الملكية الفكرية</h2>
+    <p>جميع العلامات التجارية والشعارات وأصول الهوية والنصوص والصور على الموقع مملوكة لـكونفرجنت أو مستخدمة بإذن. لا يجوز إعادة توزيعها أو نسخها دون موافقة خطية مسبقة.</p>
+
+    <h2>الروابط الخارجية</h2>
+    <p>يحتوي الموقع روابط لمواقع وحدات الأعمال الفرعية (av / it / dc / landscaping.convergent.sa) ومواقع خارجية أخرى. نحن غير مسؤولين عن محتوى المواقع الخارجية.</p>
+
+    <h2>إخلاء المسؤولية</h2>
+    <p>المعلومات المنشورة على هذا الموقع تُقدَّم «كما هي» دون أي ضمانات. الالتزامات التجارية المحددة تُبرم في عقود رسمية فقط.</p>
+
+    <h2>القانون الحاكم</h2>
+    <p>تخضع هذه الشروط لأنظمة المملكة العربية السعودية. {`{{TODO: تأكيد بند اختيار المحكمة مع المستشار القانوني.}}`}</p>
+
+    <h2>التواصل</h2>
+    <p>للاستفسارات: <a href="mailto:info@convergent.sa">info@convergent.sa</a>.</p>
+  </LegalShell>
+</BaseLayout>

@@ -1,0 +1,59 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import Section from '@components/ui/Section.astro';
+import Container from '@components/ui/Container.astro';
+import Eyebrow from '@components/ui/Eyebrow.astro';
+import Heading from '@components/ui/Heading.astro';
+import Card from '@components/ui/Card.astro';
+import Button from '@components/ui/Button.astro';
+import Cta from '@components/sections/Cta.astro';
+import { dictFor, localizedPath } from '@lib/i18n';
+import { sampleRoles, pick } from '@lib/content';
+
+const locale = 'ar' as const;
+const dict = dictFor(locale);
+---
+
+<BaseLayout locale={locale} title={dict.careers.title} description={dict.careers.lead} pathInLocale="/careers">
+  <Section tone="default">
+    <Container>
+      <div class="max-w-3xl">
+        <Eyebrow>{dict.careers.eyebrow}</Eyebrow>
+        <Heading level={1} size="display" class="mt-4">{dict.careers.title}</Heading>
+        <p class="mt-6 max-w-prose text-[length:var(--ct-text-md)] text-ink-1">{dict.careers.lead}</p>
+      </div>
+    </Container>
+  </Section>
+
+  <Section tone="subtle" flush>
+    <Container>
+      <div class="py-12">
+        <Heading level={2} size="lg">{dict.careers.openRolesTitle}</Heading>
+        <div class="mt-6 grid gap-4">
+          {sampleRoles.length === 0 ? (
+            <p class="text-ink-1">{dict.careers.openRolesEmpty}</p>
+          ) : (
+            sampleRoles.map((role) => (
+              <Card>
+                <Heading level={3} size="md">{pick(role.title, locale)}</Heading>
+                <p class="mt-1 text-xs text-ink-2">
+                  {pick(role.location, locale)} &middot; {role.type}
+                </p>
+                <p class="mt-3 text-ink-1">{pick(role.summary, locale)}</p>
+                <Button href={localizedPath(locale, 'contact')} variant="secondary" size="sm" class="mt-5">
+                  {dict.careers.applyCta}
+                </Button>
+              </Card>
+            ))
+          )}
+        </div>
+      </div>
+    </Container>
+  </Section>
+
+  <Cta
+    title={dict.home.ctaTitle}
+    lead={dict.home.ctaLead}
+    primary={{ label: dict.home.ctaPrimary, href: localizedPath(locale, 'contact') }}
+  />
+</BaseLayout>
