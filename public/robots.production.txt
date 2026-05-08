@@ -1,0 +1,13 @@
+# www.convergent.sa — production robots.txt
+#
+# Rename this file to robots.txt during the production deploy (Phase 12).
+# The repo's public/robots.txt is the offline-during-development version
+# (Disallow: /). This file replaces it once the site goes public.
+
+User-agent: *
+Allow: /
+
+# Block private development / test routes.
+Disallow: /dev/
+
+Sitemap: https://www.convergent.sa/sitemap-index.xml

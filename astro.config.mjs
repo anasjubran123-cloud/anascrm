@@ -35,6 +35,8 @@ export default defineConfig({
           ar: 'ar-SA',
         },
       },
+      // Exclude the dev playground from the sitemap.
+      filter: (page) => !page.includes('/dev/'),
     }),
   ],
   vite: {

@@ -6,6 +6,8 @@ import type { Locale } from '@config/site';
 import Header from '@components/layout/Header.astro';
 import Footer from '@components/layout/Footer.astro';
 import ThemeBootstrap from '@components/layout/ThemeBootstrap.astro';
+import JsonLd from '@components/seo/JsonLd.astro';
+import { organizationLD, localBusinessLD } from '@lib/seo/jsonld';
 
 interface Props {
   locale: Locale;
@@ -84,6 +86,8 @@ const ogImageUrl = ogImage ? new URL(ogImage, site.url).toString() : new URL('/o
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
+
+    <JsonLd data={[organizationLD({ locale }), localBusinessLD({ locale })]} />
   </head>
   <body class="font-sans bg-surface-0 text-ink-0 antialiased">
     <a href="#main" class="skip-link">{dict.nav.skipToContent}</a>
