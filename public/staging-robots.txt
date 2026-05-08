@@ -1,0 +1,5 @@
+# staging.convergent.sa robots.txt
+# Rename to robots.txt at the staging document root. Disallows everything
+# even if the basic-auth wall is misconfigured.
+User-agent: *
+Disallow: /

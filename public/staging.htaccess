@@ -1,0 +1,38 @@
+# =============================================================================
+# Convergent Technology — staging.convergent.sa .htaccess (rename to .htaccess
+# in the staging document root; not deployed to production)
+# =============================================================================
+# Two extra protections beyond the production .htaccess:
+#   1) HTTP basic auth gate (use cPanel's Directory Privacy or set up
+#      AuthUserFile manually). Username/password is shared with CT reviewers
+#      out-of-band.
+#   2) X-Robots-Tag noindex,nofollow header on every response, plus a hard
+#      Disallow / robots.txt (in this same directory) so search engines can't
+#      index staging even if they manage to crawl past basic auth.
+# =============================================================================
+
+ServerSignature Off
+Options -Indexes -ExecCGI
+
+# Force HTTPS
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L,NE]
+
+# Basic-auth gate (use cPanel "Directory Privacy" to populate AuthUserFile)
+AuthType Basic
+AuthName "Convergent staging — restricted"
+AuthUserFile "/home/<cpanel-user>/.htpasswds/staging/passwd"
+Require valid-user
+
+# Headers
+<IfModule mod_headers.c>
+  Header always set X-Robots-Tag "noindex, nofollow"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Strict-Transport-Security "max-age=300"
+</IfModule>
+
+# Custom error documents
+ErrorDocument 404 /en/404

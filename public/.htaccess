@@ -1,0 +1,162 @@
+# =============================================================================
+# Convergent Technology — public/.htaccess
+# =============================================================================
+# Phase 7 hardened Apache config for HostGator. Cloudflare is NOT yet in front
+# of HostGator; once Cloudflare lands (DEPLOY.md "Add Cloudflare later"), some
+# rules below become defence-in-depth backups instead of the only line.
+#
+# Notes
+# -----
+#   • CSP is intentionally shipped in Report-Only mode at first launch so we
+#     can observe violations from real traffic before flipping to enforcement.
+#     Switch to Content-Security-Policy (without -Report-Only) after a clean
+#     observation window.
+#   • HSTS uses a short max-age (300 = 5 minutes) at first launch. Increase to
+#     1 year (31536000) only after 1–2 weeks of clean HTTPS operation per
+#     master prompt §14.3.
+#   • inline scripts are limited to the single FOUC-prevention bootstrap. Its
+#     hash is in the script-src directive below; recompute if the script
+#     changes (run the build, look at the rendered <head>, sha256 the script
+#     body, base64-encode).
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Server signature off; index listing off
+# -----------------------------------------------------------------------------
+ServerSignature Off
+Options -Indexes -ExecCGI
+
+# -----------------------------------------------------------------------------
+# Force HTTPS + canonical host (apex → www, non-canonical hosts blocked)
+# -----------------------------------------------------------------------------
+RewriteEngine On
+
+# HTTP → HTTPS
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L,NE]
+
+# Apex (convergent.sa) → www.convergent.sa
+RewriteCond %{HTTP_HOST} ^convergent\.sa$ [NC]
+RewriteRule ^(.*)$ https://www.convergent.sa/$1 [R=301,L,NE]
+
+# Anything that is not www.convergent.sa or staging.convergent.sa is blocked
+# from serving content (defence in depth against host-header oddities).
+# Comment this block out during local previews if your host header doesn't
+# match.
+RewriteCond %{HTTP_HOST} !^www\.convergent\.sa$ [NC]
+RewriteCond %{HTTP_HOST} !^staging\.convergent\.sa$ [NC]
+RewriteRule ^ - [F,L]
+
+# -----------------------------------------------------------------------------
+# Block dotfiles, source maps, and config that should never be served
+# -----------------------------------------------------------------------------
+<FilesMatch "(^|/)(\.|node_modules|package\.json|package-lock\.json|astro\.config|tsconfig|tailwind\.config|README|DEPLOY|SECURITY|CONTENT|PERFORMANCE|TESTING|OPERATIONS|REDIRECTS)\.?(.*)?$">
+  Require all denied
+</FilesMatch>
+
+<FilesMatch "\.(map|env|env\..*|gitignore|gitattributes|gitkeep|npmrc|yarnrc|prettierrc|eslintrc.*)$">
+  Require all denied
+</FilesMatch>
+
+# Allow .well-known (security.txt et al.)
+<DirectoryMatch "(.*?)/\.well-known(/|$)">
+  Require all granted
+</DirectoryMatch>
+
+# -----------------------------------------------------------------------------
+# Custom error documents
+# -----------------------------------------------------------------------------
+ErrorDocument 404 /en/404
+# 500 only if a static fallback ships at /500.html — Phase 12 decision.
+# ErrorDocument 500 /500.html
+
+# -----------------------------------------------------------------------------
+# Security headers
+# -----------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # HSTS — STAGED. Start at 5 minutes; bump to a year after clean operation.
+  Header always set Strict-Transport-Security "max-age=300"
+  # Once stable for 1–2 weeks:
+  # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Preload submission requires explicit owner approval — do NOT add 'preload'
+  # automatically.
+
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "DENY"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+  Header always set Permissions-Policy "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()"
+
+  # Content-Security-Policy — staged.
+  #
+  # Sources allowed:
+  #   default-src 'self'                         everything self-hosted
+  #   img-src     'self' data:                   inline data URIs only
+  #   style-src   'self' 'unsafe-inline'         Astro's hashed CSS + a
+  #                                              minimal set of inline
+  #                                              <style> tags from Astro
+  #                                              scoped components
+  #   script-src  'self' 'sha256-…'              the FOUC theme bootstrap
+  #                                              hash. Recompute if its
+  #                                              content changes.
+  #   connect-src 'self' https://api.web3forms.com https://hcaptcha.com https://*.hcaptcha.com
+  #   frame-src   https://hcaptcha.com https://*.hcaptcha.com
+  #   font-src    'self'
+  #   form-action 'self' https://api.web3forms.com
+  #   frame-ancestors 'none'
+  #   base-uri 'self'
+  #
+  # PHASE 1 (observation): Report-Only — log, do not block.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://api.web3forms.com https://hcaptcha.com https://*.hcaptcha.com; frame-src https://hcaptcha.com https://*.hcaptcha.com; font-src 'self'; form-action 'self' https://api.web3forms.com https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+  # PHASE 2 (enforcement) — uncomment after the Report-Only window is clean.
+  # Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://api.web3forms.com https://hcaptcha.com https://*.hcaptcha.com; frame-src https://hcaptcha.com https://*.hcaptcha.com; font-src 'self'; form-action 'self' https://api.web3forms.com https://formspree.io; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# Caching
+# -----------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Hashed assets: long-lived, immutable.
+  <FilesMatch "\.(?:css|js|woff2?|ttf|otf|svg|png|jpe?g|webp|avif|gif|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # HTML must always revalidate so a deploy is reflected immediately.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # robots.txt + sitemap should be checked frequently
+  <FilesMatch "^(robots\.txt|sitemap\.xml|rss\.xml)$">
+    Header set Cache-Control "public, max-age=3600"
+  </FilesMatch>
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# Compression
+# -----------------------------------------------------------------------------
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/plain text/xml text/javascript
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json application/xml
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml application/font-sfnt
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml text/javascript
+  AddOutputFilterByType DEFLATE application/javascript application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml application/font-sfnt
+</IfModule>
+
+# -----------------------------------------------------------------------------
+# MIME types Apache sometimes misses
+# -----------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType image/avif         .avif
+  AddType image/webp         .webp
+  AddType image/svg+xml      .svg
+  AddType application/json   .webmanifest
+  AddType font/woff2         .woff2
+</IfModule>
