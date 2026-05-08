@@ -46,5 +46,31 @@ export default defineConfig({
     ssr: {
       noExternal: [],
     },
+    server: {
+      // Hosts permitted to reach the dev server. A leading dot is a
+      // suffix-match wildcard (e.g. .trycloudflare.com matches any
+      // foo.trycloudflare.com). LAN IPs and localhost are always allowed.
+      // We list the common preview/tunnel domains so testing the dev
+      // server from a phone via Cloudflare quick-tunnels or ngrok works
+      // out of the box. This block has no effect on production builds.
+      allowedHosts: [
+        '.trycloudflare.com',
+        '.ngrok-free.app',
+        '.ngrok.app',
+        '.ngrok.io',
+        '.localhost',
+        'localhost',
+      ],
+    },
+    preview: {
+      allowedHosts: [
+        '.trycloudflare.com',
+        '.ngrok-free.app',
+        '.ngrok.app',
+        '.ngrok.io',
+        '.localhost',
+        'localhost',
+      ],
+    },
   },
 });
