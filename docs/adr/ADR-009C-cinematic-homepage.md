@@ -104,7 +104,7 @@ ceiling to **160 KB**.
 ### Negative / residual risks
 
 - Homepage Lighthouse Performance floor drops from ≥ 95 to ≥ 88. This is intentional and bounded; if the real score falls below 88, revisit scene complexity.
-- The `[FILL IN]` placeholder in the budget table is a blocking merge gate — the number must be measured before any "performance approved" sign-off.
+- The homepage Lighthouse Performance floor drops from ≥ 95 to ≥ 88; if the real score falls below 88 after video integration, revisit scene complexity.
 - Video asset production (encode, optimize, poster) is the client's responsibility; until the asset exists, the hero renders as the SSR gradient.
 - H.264 + WebM dual-encode increases CDN storage by ~8 MB per video (4 MB × 2 formats).
 

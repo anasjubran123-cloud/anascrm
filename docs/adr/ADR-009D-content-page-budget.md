@@ -74,8 +74,8 @@ normal to absorb.
 
 ### Follow-ups
 
-- [ ] Update `LAUNCH_LIGHTHOUSE_BASELINE.md` content-page row: First Load JS
-      ≤ 160 KB (was ≤ 100 KB).
+- [x] Update `LAUNCH_LIGHTHOUSE_BASELINE.md` content-page row: First Load JS
+      ≤ 160 KB (was ≤ 100 KB) — done 2026-05-21.
 - [ ] Run Lighthouse on `it-infrastructure`, `data-centers`, `audiovisual`
       after launch; record real Performance scores.
 - [ ] Add a CI build-size assertion at 160 KB for content routes and 165 KB
