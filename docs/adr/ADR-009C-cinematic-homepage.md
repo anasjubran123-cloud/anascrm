@@ -57,13 +57,38 @@ The homepage is decoupled from content pages to reflect their genuinely differen
 | CLS | ≤ 0.05 | ≤ 0.05 |
 | INP | ≤ 200 ms | ≤ 200 ms |
 | Total Blocking Time | ≤ 350 ms | ≤ 200 ms |
-| First Load JS (gzipped) | ≤ **[FILL IN after `pnpm build`]** KB | ≤ 100 KB |
+| First Load JS (gzipped) | **160 KB measured 2026-05-21** — ceiling TBD | ≤ 100 KB |
 | Lighthouse Performance | ≥ 88 | ≥ 95 |
 | Lighthouse A11y / BP / SEO | ≥ 95 | ≥ 95 |
 
-**Action required:** run `pnpm build` (or `npm run build` in the Astro project), inspect the bundle analysis output, and replace `[FILL IN after build]` with the real gzipped First Load JS for the homepage route. Commit with the number filled in before merging to main / staging.
+### Measurement — 2026-05-21 (`pnpm build`, Next.js production site)
 
-If existing R3F scenes alone already exceed a reasonable ceiling, record the honest number and open a separate ADR or issue to decide whether to cut scenes or raise the budget with explicit justification.
+The production site routes `/` → `/[lang]` via a language-redirect middleware:
+
+| Route | First Load JS (gzipped) | Notes |
+|-------|------------------------|-------|
+| `/` (literal) | 103 KB | Language-redirect entry; 135 B route-specific |
+| `/[lang]` (renders `/en`, `/ar` — the real homepage) | **160 KB** | 6.1 KB route-specific + 103 KB shared + R3F + cinematic-hero scaffold |
+
+**160 KB** is what visitors actually load on the homepage. The homepage ceiling
+is recorded as **measured but not yet ratified** — see open decision below.
+
+### Side-finding — content pages over the 100 KB ceiling
+
+The same build revealed three content pages already exceed the ≤ 100 KB
+content-page budget this ADR sets:
+
+| Route | First Load JS (gzipped) | Over budget by |
+|-------|------------------------|----------------|
+| `it-infrastructure` | 156 KB | +56 KB |
+| `data-centers` | 131 KB | +31 KB |
+| `audiovisual` | 129 KB | +29 KB |
+
+This is the "open a separate issue" path the follow-up checklist anticipated.
+It is **out of scope for ADR-009C** (which governs `/` only) and is tracked as
+its own follow-up — see [ADR-009D](ADR-009D-content-page-budget.md) *(to be
+written once the remediation approach is chosen: code-split R3F scenes vs.
+raise the content-page ceiling with explicit justification)*.
 
 ---
 
@@ -85,7 +110,9 @@ If existing R3F scenes alone already exceed a reasonable ceiling, record the hon
 
 ### Follow-ups
 
-- [ ] Run `pnpm build`, measure homepage First Load JS gzipped, fill in `[FILL IN]` above and in `LAUNCH_LIGHTHOUSE_BASELINE.md`.
+- [x] Run `pnpm build`, measure homepage First Load JS gzipped — **160 KB, 2026-05-21**. Recorded above and in `LAUNCH_LIGHTHOUSE_BASELINE.md`.
+- [ ] Ratify the homepage First Load JS ceiling (measured 160 KB; ceiling not yet set).
+- [ ] Write ADR-009D for the three content pages over the 100 KB ceiling (`it-infrastructure` 156, `data-centers` 131, `audiovisual` 129).
 - [ ] Encode hero video: H.264 MP4 + WebM/AV1, ≤4 MB each, 12s loop, poster JPEG. Verify file size before deploying.
 - [ ] Run Lighthouse on the homepage after video integration: confirm score ≥ 88 Performance, ≥ 95 A11y/BP/SEO.
 - [ ] Mark Arabic cinematic i18n keys (`AR-REVIEW-PENDING-PHASE9C`) as reviewed once native-speaker review is complete.
