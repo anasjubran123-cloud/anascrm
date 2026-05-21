@@ -13,7 +13,7 @@ Records for significant architectural decisions made on the Convergent Technolog
 | [ADR-007](ADR-007-analytics.md) | No analytics at launch; Cloudflare Analytics / Plausible deferred | Accepted | 2026-05 |
 | [ADR-008](ADR-008-partner-logos.md) | Partner logos displayed without tier claims; written approvals pre-launch gate | Accepted | 2026-05 |
 | [ADR-009C](ADR-009C-cinematic-homepage.md) | Cinematic homepage hero; per-route performance budget split | Accepted | 2026-05-21 |
-| ADR-009D | Content pages over the 100 KB First Load JS ceiling — remediation | Proposed | 2026-05-21 |
+| [ADR-009D](ADR-009D-content-page-budget.md) | Content-page First Load JS ceiling raised to 160 KB | Accepted | 2026-05-21 |
 
 ## Format
 

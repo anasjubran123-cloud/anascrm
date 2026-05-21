@@ -57,7 +57,7 @@ The homepage is decoupled from content pages to reflect their genuinely differen
 | CLS | ≤ 0.05 | ≤ 0.05 |
 | INP | ≤ 200 ms | ≤ 200 ms |
 | Total Blocking Time | ≤ 350 ms | ≤ 200 ms |
-| First Load JS (gzipped) | **160 KB measured 2026-05-21** — ceiling TBD | ≤ 100 KB |
+| First Load JS (gzipped) | ≤ **165 KB** (measured 160 KB, 2026-05-21 + 5 KB headroom) | ≤ 160 KB — see ADR-009D |
 | Lighthouse Performance | ≥ 88 | ≥ 95 |
 | Lighthouse A11y / BP / SEO | ≥ 95 | ≥ 95 |
 
@@ -71,7 +71,8 @@ The production site routes `/` → `/[lang]` via a language-redirect middleware:
 | `/[lang]` (renders `/en`, `/ar` — the real homepage) | **160 KB** | 6.1 KB route-specific + 103 KB shared + R3F + cinematic-hero scaffold |
 
 **160 KB** is what visitors actually load on the homepage. The homepage ceiling
-is recorded as **measured but not yet ratified** — see open decision below.
+is **ratified at 165 KB** — the measured 160 KB plus 5 KB headroom to absorb
+minor dependency drift. A regression past 165 KB is a build-gate failure.
 
 ### Side-finding — content pages over the 100 KB ceiling
 
@@ -85,10 +86,9 @@ content-page budget this ADR sets:
 | `audiovisual` | 129 KB | +29 KB |
 
 This is the "open a separate issue" path the follow-up checklist anticipated.
-It is **out of scope for ADR-009C** (which governs `/` only) and is tracked as
-its own follow-up — see [ADR-009D](ADR-009D-content-page-budget.md) *(to be
-written once the remediation approach is chosen: code-split R3F scenes vs.
-raise the content-page ceiling with explicit justification)*.
+It is **out of scope for ADR-009C** (which governs `/` only) and is resolved in
+[ADR-009D](ADR-009D-content-page-budget.md), which raises the content-page
+ceiling to **160 KB**.
 
 ---
 
@@ -111,8 +111,8 @@ raise the content-page ceiling with explicit justification)*.
 ### Follow-ups
 
 - [x] Run `pnpm build`, measure homepage First Load JS gzipped — **160 KB, 2026-05-21**. Recorded above and in `LAUNCH_LIGHTHOUSE_BASELINE.md`.
-- [ ] Ratify the homepage First Load JS ceiling (measured 160 KB; ceiling not yet set).
-- [ ] Write ADR-009D for the three content pages over the 100 KB ceiling (`it-infrastructure` 156, `data-centers` 131, `audiovisual` 129).
+- [x] Ratify the homepage First Load JS ceiling — **165 KB** (measured 160 KB + 5 KB headroom).
+- [x] Write ADR-009D for the three content pages over the 100 KB ceiling — Accepted, ceiling raised to 160 KB.
 - [ ] Encode hero video: H.264 MP4 + WebM/AV1, ≤4 MB each, 12s loop, poster JPEG. Verify file size before deploying.
 - [ ] Run Lighthouse on the homepage after video integration: confirm score ≥ 88 Performance, ≥ 95 A11y/BP/SEO.
 - [ ] Mark Arabic cinematic i18n keys (`AR-REVIEW-PENDING-PHASE9C`) as reviewed once native-speaker review is complete.
