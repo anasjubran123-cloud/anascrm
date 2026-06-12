@@ -1,0 +1,2717 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام إتقان الرياضيات — الصف الثاني المتوسط — الفصل الدراسي الأول</title>
+<style>
+/* ============================================================
+   نظام إتقان الرياضيات الشامل — تصميم عربي RTL
+   ============================================================ */
+:root{
+  --primary:#1a5fb4; --primary-dark:#0d3d78; --primary-light:#e8f1fb;
+  --accent:#26a269; --accent-light:#e6f6ee;
+  --warn:#e5a50a; --warn-light:#fdf3d7;
+  --danger:#c01c28; --danger-light:#fbe5e7;
+  --purple:#613583; --purple-light:#f0e7f7;
+  --bg:#f4f6fa; --card:#ffffff; --text:#1c2733; --muted:#5a6b7d;
+  --border:#dde4ec; --radius:14px;
+  --shadow:0 2px 10px rgba(20,40,70,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:17px}
+body{
+  font-family:"Segoe UI","Tahoma","Arial",sans-serif;
+  background:var(--bg); color:var(--text);
+  direction:rtl; text-align:right; line-height:1.75;
+  min-height:100vh;
+}
+#app{max-width:1000px;margin:0 auto;padding:16px 14px 80px}
+h1{font-size:1.55rem} h2{font-size:1.3rem} h3{font-size:1.12rem}
+h1,h2,h3{color:var(--primary-dark);line-height:1.5}
+p{margin:.4em 0}
+.screen{display:none;animation:fadein .35s ease}
+.screen.active{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* بطاقات */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:20px;margin:14px 0}
+.card.tight{padding:14px}
+.card-title{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.hero{background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+  color:#fff;border-radius:var(--radius);padding:26px 22px;margin:10px 0 18px}
+.hero h1,.hero h2{color:#fff}
+.hero p{color:#dce9f9}
+
+/* أزرار */
+.btn{display:inline-block;border:none;border-radius:10px;cursor:pointer;
+  font-family:inherit;font-size:1rem;font-weight:700;padding:12px 22px;margin:4px 2px;
+  background:var(--primary);color:#fff;transition:transform .12s,box-shadow .12s,opacity .12s;
+  min-height:48px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(26,95,180,.3)}
+.btn:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.green{background:var(--accent)} .btn.red{background:var(--danger)}
+.btn.gray{background:#6b7a8c} .btn.purple{background:var(--purple)}
+.btn.outline{background:#fff;color:var(--primary);border:2px solid var(--primary)}
+.btn.small{padding:7px 14px;font-size:.9rem;min-height:38px}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+
+/* شارات الإتقان والحالات */
+.badge{display:inline-block;border-radius:999px;padding:3px 13px;font-size:.85rem;font-weight:700;white-space:nowrap}
+.badge.b-green{background:var(--accent-light);color:#176b46;border:1px solid #9adbbd}
+.badge.b-blue{background:var(--primary-light);color:var(--primary-dark);border:1px solid #b3cdee}
+.badge.b-warn{background:var(--warn-light);color:#7a5705;border:1px solid #ecd28a}
+.badge.b-red{background:var(--danger-light);color:#8c1521;border:1px solid #f0aab1}
+.badge.b-purple{background:var(--purple-light);color:var(--purple);border:1px solid #cfb6e3}
+.badge.b-gray{background:#eef1f5;color:#54616f;border:1px solid #ccd5df}
+
+/* شريط التقدم */
+.progress-wrap{background:#e4e9f0;border-radius:999px;height:14px;overflow:hidden;margin:8px 0}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#52c98e);
+  border-radius:999px;transition:width .4s;min-width:6px}
+.progress-bar.warn{background:linear-gradient(90deg,var(--warn),#f0c14b)}
+.progress-bar.danger{background:linear-gradient(90deg,var(--danger),#e06570)}
+
+/* المؤقّتات */
+.timer-bar{position:sticky;top:0;z-index:50;background:var(--card);border:1px solid var(--border);
+  border-radius:12px;box-shadow:var(--shadow);display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:8px;padding:9px 16px;margin:6px 0 12px}
+.timer-num{font-size:1.25rem;font-weight:800;color:var(--primary-dark);direction:ltr;display:inline-block}
+.timer-num.t-warn{color:var(--warn)} .timer-num.t-danger{color:var(--danger);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.45}}
+.qtimer{font-size:.95rem;color:var(--muted)}
+
+/* بطاقة السؤال */
+.q-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.q-text{font-size:1.15rem;font-weight:700;margin:10px 0 16px;line-height:2}
+.q-figure{background:var(--primary-light);border:1px dashed var(--primary);border-radius:10px;
+  padding:12px 16px;margin:10px 0;font-size:1.05rem;white-space:pre-line}
+table.q-table{border-collapse:collapse;margin:10px auto;background:#fff}
+table.q-table th,table.q-table td{border:1px solid var(--primary);padding:7px 18px;text-align:center}
+table.q-table th{background:var(--primary-light)}
+.opt{display:block;width:100%;text-align:right;background:#fff;border:2px solid var(--border);
+  border-radius:11px;padding:13px 16px;margin:8px 0;font-family:inherit;font-size:1.05rem;cursor:pointer;
+  transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--primary);background:var(--primary-light)}
+.opt:focus-visible{outline:3px solid var(--warn)}
+.opt.sel{border-color:var(--primary);background:var(--primary-light);font-weight:700}
+.opt.ok{border-color:var(--accent);background:var(--accent-light)}
+.opt.bad{border-color:var(--danger);background:var(--danger-light)}
+input[type=text],input[type=password],input[type=number],textarea{
+  width:100%;border:2px solid var(--border);border-radius:10px;padding:12px 14px;
+  font-family:inherit;font-size:1.05rem;background:#fff;color:var(--text)}
+input:focus,textarea:focus{outline:none;border-color:var(--primary)}
+textarea{min-height:90px;resize:vertical}
+.steps-grid label{display:block;font-weight:700;margin:10px 0 4px;color:var(--primary-dark)}
+
+/* التغذية الراجعة */
+.feedback{border-radius:12px;padding:16px 18px;margin:14px 0;border:2px solid}
+.feedback.good{background:var(--accent-light);border-color:var(--accent)}
+.feedback.bad{background:var(--danger-light);border-color:var(--danger)}
+.feedback.neutral{background:var(--warn-light);border-color:var(--warn)}
+.feedback h3{margin-bottom:6px}
+.solved-example{background:#fff;border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-top:10px;white-space:pre-line}
+.diag{font-weight:700;color:var(--danger)}
+
+/* الثقة */
+.conf-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.conf-row .opt{flex:1;min-width:130px;text-align:center;margin:0}
+
+/* قائمة الفصول */
+.chapter-card{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.chapter-card .info{flex:1;min-width:230px}
+.locked{opacity:.6}
+.lock-ico{font-size:1.4rem}
+
+/* جداول التقارير */
+table.report{width:100%;border-collapse:collapse;margin:10px 0;background:#fff}
+table.report th,table.report td{border:1px solid var(--border);padding:9px 12px;text-align:right;vertical-align:top}
+table.report th{background:var(--primary-light);color:var(--primary-dark)}
+table.report tr:nth-child(even){background:#f7f9fc}
+.report-pre{background:#fff;border:1px solid var(--border);border-radius:10px;padding:14px;
+  white-space:pre-wrap;font-family:inherit;max-height:420px;overflow:auto}
+
+/* تنبيهات */
+.alert{border-radius:10px;padding:12px 16px;margin:10px 0;border-right:6px solid}
+.alert.info{background:var(--primary-light);border-color:var(--primary)}
+.alert.ok{background:var(--accent-light);border-color:var(--accent)}
+.alert.warn{background:var(--warn-light);border-color:var(--warn)}
+.alert.err{background:var(--danger-light);border-color:var(--danger)}
+
+/* الإشعارات العائمة */
+#toast{position:fixed;bottom:18px;right:50%;transform:translateX(50%);background:#222e3a;color:#fff;
+  border-radius:10px;padding:12px 22px;box-shadow:0 6px 20px rgba(0,0,0,.3);z-index:200;display:none;
+  font-size:1rem;max-width:90vw;text-align:center}
+
+/* لوحة ولي الأمر */
+.pin-box{max-width:380px;margin:30px auto;text-align:center}
+.kv{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--border);padding:6px 2px}
+.kv b{color:var(--primary-dark)}
+
+/* عناصر مساعدة */
+.muted{color:var(--muted);font-size:.92rem}
+.center{text-align:center}
+.flex{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.spacer{flex:1}
+hr{border:none;border-top:1px solid var(--border);margin:14px 0}
+ul.clean{margin:6px 22px 6px 0}
+a{color:var(--primary)}
+.num{direction:ltr;unicode-bidi:embed;display:inline-block}
+
+/* الطباعة */
+@media print{
+  body{background:#fff}
+  #app{max-width:100%;padding:0}
+  .no-print,.btn,.timer-bar,#toast{display:none !important}
+  .card{box-shadow:none;border:1px solid #999;break-inside:avoid}
+  .report-pre{max-height:none;overflow:visible}
+}
+/* الجوال */
+@media (max-width:640px){
+  html{font-size:16px}
+  #app{padding:10px 8px 70px}
+  .btn{width:100%;margin:4px 0}
+  .btn.small{width:auto}
+  .hero{padding:20px 16px}
+  .conf-row .opt{min-width:46%}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- شاشة الترحيب -->
+  <section class="screen" id="screen-welcome" aria-label="شاشة الترحيب"></section>
+  <!-- لوحة الفصول -->
+  <section class="screen" id="screen-dashboard" aria-label="لوحة الفصول"></section>
+  <!-- شاشة الفصل -->
+  <section class="screen" id="screen-chapter" aria-label="شاشة الفصل"></section>
+  <!-- شاشة الأسئلة -->
+  <section class="screen" id="screen-quiz" aria-label="شاشة الأسئلة"></section>
+  <!-- شاشة التقرير -->
+  <section class="screen" id="screen-report" aria-label="شاشة التقرير"></section>
+  <!-- لوحة ولي الأمر -->
+  <section class="screen" id="screen-parent" aria-label="لوحة ولي الأمر"></section>
+  <!-- التقرير النهائي -->
+  <section class="screen" id="screen-final" aria-label="التقرير النهائي"></section>
+</div>
+
+<script>
+"use strict";
+/* ============================================================================
+   نظام إتقان الرياضيات الشامل — الصف الثاني المتوسط — الفصل الدراسي الأول
+   (المنهج السعودي — كتاب الرياضيات GE-ME-K08-SM1)
+   ملف واحد يعمل محليًا بدون خادم. جميع الأسئلة والشروح مكتوبة مسبقًا،
+   والسلوك "الذكي" مبني على قواعد JavaScript + خريطة اعتماد المفاهيم.
+   ملاحظة: أرقام الصفحات في النسخة الممسوحة ضوئيًا تعذّر استخراجها آليًا،
+   لذلك تُشار المراجع برقم الدرس، وتحمل وسم «يحتاج مراجعة يدوية».
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   الإعدادات العامة
+   ----------------------------------------------------------------------------
+   إعداد إرسال البريد التلقائي (EmailJS):
+   1) أنشئ حسابًا مجانيًا في https://www.emailjs.com
+   2) أنشئ Service و Template (يستقبل المتغيرات: to_email, subject, message)
+   3) ضع القيم الثلاث أدناه مكان العبارات النائبة.
+   - لا تضع هنا أي كلمة مرور SMTP أو مفتاح سري خلفي؛ المفتاح العام فقط.
+   - إذا بقيت القيم كما هي (تبدأ بـ "ضع_")، يعمل النظام تلقائيًا بوضع
+     mailto الاحتياطي: يفتح برنامج البريد برسالة جاهزة للإرسال.
+---------------------------------------------------------------------------- */
+const CONFIG = {
+  EMAILJS_PUBLIC_KEY : "ضع_المفتاح_العام_هنا",      // EmailJS Public Key
+  EMAILJS_SERVICE_ID : "ضع_معرف_الخدمة_هنا",        // EmailJS Service ID
+  EMAILJS_TEMPLATE_ID: "ضع_معرف_القالب_هنا",        // EmailJS Template ID
+  REPORT_RECIPIENT   : "a_jubran2010@hotmail.com",   // مستلم التقارير
+  PARENT_PIN         : "1234",                       // رقم لوحة ولي الأمر (غيّره هنا)
+  PASS_PERCENT       : 90,   // نسبة اجتياز الفصل
+  REVIEW_PERCENT     : 80,   // أقل من 90 وأعلى من/يساوي 80 = يحتاج مراجعة
+  STORAGE_KEY        : "mathMasteryK08SM1_v1",
+  FAST_RATIO         : 0.25, // إجابة أسرع من ربع الوقت المقدر = سريعة جدًا
+  TEACHBACK_MIN_LEN  : 15,   // أقل طول مقبول لإجابة "اشرح بكلماتك"
+  STEPS_MIN_LEN      : 6     // أقل طول مقبول لكل خطوة في "أظهر خطواتك"
+};
+
+/* أسماء حالات الإتقان */
+const MASTERY = {
+  VERY:"متقن جدًا", OK:"متقن", REVIEW:"جيد لكن يحتاج مراجعة", WEAK:"نقطة ضعف",
+  FAIL:"غير متقن", RETEACH:"يحتاج شرح من البداية", PARTIAL:"فهم غير مكتمل",
+  VERIFY:"يحتاج تحقق إضافي", FIX:"يحتاج تثبيت", SHORT:"غير متقن على المدى القصير",
+  NONE:"لم يُختبر بعد"
+};
+
+/* ============================================================================
+   دوال معالجة الإجابات (تطبيع الأرقام العربية، الكسور، النسب المئوية)
+   ============================================================================ */
+function normalizeArabicNumbers(s){
+  if(s===null||s===undefined) return "";
+  s=String(s);
+  const ar="٠١٢٣٤٥٦٧٨٩", fa="۰۱۲۳۴۵۶۷۸۹";
+  let out="";
+  for(const ch of s){
+    const i=ar.indexOf(ch), j=fa.indexOf(ch);
+    if(i>=0) out+=String(i);
+    else if(j>=0) out+=String(j);
+    else if(ch==="٫") out+=".";
+    else if(ch==="٬") out+="";
+    else if(ch==="٪") out+="%";
+    else if(ch==="−") out+="-";
+    else out+=ch;
+  }
+  return out;
+}
+function normalizeAnswer(s){
+  s=normalizeArabicNumbers(s).trim().toLowerCase();
+  s=s.replace(/\s+/g," ")
+     .replace(/[()]/g,"")
+     .replace(/،/g,",")
+     .replace(/‏|‎/g,"")
+     .replace(/\\/g,"/")
+     .replace(/\s*\/\s*/g,"/")
+     .replace(/\s*:\s*/g,":")
+     .replace(/\s*=\s*/g,"=")
+     .replace(/ريال|سم|كجم|كم|متر|م2|م²|درجة|لتر|دقيقة|ساعة|قطعة|كوب|أكواب/g,"")
+     .trim();
+  return s;
+}
+/* يحاول قراءة قيمة عددية من نص: عدد عشري، كسر أ/ب، عدد كسري "ع أ/ب"، نسبة % */
+function parseNumeric(s){
+  s=normalizeAnswer(s);
+  if(s==="") return null;
+  s=s.replace(/^\+/,"");
+  let pct=false;
+  if(s.endsWith("%")){pct=true;s=s.slice(0,-1).trim();}
+  // عدد كسري مثل "2 1/3" أو "-2 1/3"
+  let m=s.match(/^(-?)(\d+)\s+(\d+)\/(\d+)$/);
+  if(m){const sign=m[1]==="-"?-1:1;const d=Number(m[4]);if(d===0)return null;
+    let v=sign*(Number(m[2])+Number(m[3])/d);return pct?v/100:v;}
+  // كسر مثل "3/4" أو "-3/4"
+  m=s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if(m){const d=Number(m[2]);if(d===0)return null;let v=Number(m[1])/d;return pct?v/100:v;}
+  // عدد عادي
+  if(/^-?\d+(?:\.\d+)?$/.test(s)){let v=Number(s);return pct?v/100:v;}
+  return null;
+}
+function isEquivalentFractionOrDecimal(a,b){
+  const x=parseNumeric(a), y=parseNumeric(b);
+  if(x===null||y===null) return false;
+  return Math.abs(x-y)<0.005;
+}
+function comparePercentDecimal(a,b){
+  // يقبل 25% مقابل 0.25 ومقابل 1/4
+  const x=parseNumeric(a), y=parseNumeric(b);
+  if(x===null||y===null) return false;
+  if(Math.abs(x-y)<0.005) return true;
+  return Math.abs(x/100-y)<0.005||Math.abs(x-y/100)<0.005;
+}
+/* المقارنة الرئيسة: نص المستخدم مقابل الإجابة الصحيحة + قائمة الإجابات المقبولة */
+function compareAnswers(user,correct,accepted,allowPercent){
+  const u=normalizeAnswer(user);
+  if(u==="") return false;
+  const all=[correct].concat(accepted||[]);
+  for(const c of all){
+    const cn=normalizeAnswer(c);
+    if(u===cn) return true;
+    if(isEquivalentFractionOrDecimal(u,cn)) return true;
+    if(allowPercent&&comparePercentDecimal(u,cn)) return true;
+  }
+  return false;
+}
+function checkRequiredSteps(fields){
+  // fields: {given, law, substitution, work, final}
+  const missing=[];
+  const names={given:"المعطيات",law:"القانون المستخدم",substitution:"التعويض",work:"خطوات الحل",final:"الإجابة النهائية"};
+  for(const k in names){
+    const v=(fields[k]||"").trim();
+    if(v.length<CONFIG.STEPS_MIN_LEN&&k!=="final") missing.push(names[k]);
+    if(k==="final"&&v.length===0) missing.push(names[k]);
+  }
+  return {ok:missing.length===0, missing};
+}
+function checkTeachBackKeywords(text,keywords){
+  const t=normalizeArabicNumbers(text||"").trim();
+  const found=[],missing=[];
+  (keywords||[]).forEach(group=>{
+    // كل عنصر قد يكون "كلمة|مرادف|مرادف"
+    const alts=group.split("|");
+    if(alts.some(a=>t.includes(a))) found.push(alts[0]); else missing.push(alts[0]);
+  });
+  const longEnough=t.length>=CONFIG.TEACHBACK_MIN_LEN;
+  const autoOk=longEnough&&found.length>=Math.min(2,(keywords||[]).length);
+  return {autoOk,longEnough,found,missing};
+}
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function fmtTime(sec){
+  sec=Math.max(0,Math.round(sec));
+  const m=Math.floor(sec/60),s=sec%60;
+  return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+}
+function esc(s){return String(s===undefined||s===null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function ytLink(topic){return "https://www.youtube.com/results?search_query="+encodeURIComponent("شرح "+topic+" للصف الثاني المتوسط");}
+
+/* ============================================================================
+   خريطة المنهج — كتاب الرياضيات، الصف الثاني المتوسط، الفصل الدراسي الأول
+   (المنهج السعودي). المرجع: رقم الفصل والدرس في الكتاب.
+   أرقام الصفحات: يحتاج مراجعة يدوية (النسخة المرفقة ممسوحة ضوئيًا).
+   ============================================================================ */
+const PAGE_NOTE="المرجع: رقم الدرس في الكتاب — أرقام الصفحات تحتاج مراجعة يدوية";
+
+const CURRICULUM={
+  title:"الرياضيات — الصف الثاني المتوسط — الفصل الدراسي الأول",
+  chapters:[
+  {
+    id:"ch1", num:1, title:"الأعداد النسبية",
+    minutes:90, passPercent:CONFIG.PASS_PERCENT,
+    overview:"يتناول هذا الفصل مفهوم العدد النسبي وكتابته كسرًا أو عددًا عشريًا، ومقارنة الأعداد النسبية وترتيبها، والعمليات الأربع عليها (الضرب، القسمة، الجمع، الطرح) مع التركيز على الإشارات والكسور والأعداد الكسرية.",
+    prereqIds:["p1-1","p1-2","p1-3","p1-4"],
+    prereqNote:"يتطلب هذا الفصل إتقان: العمليات على الأعداد الصحيحة، تبسيط الكسور، ترتيب العمليات، والتحويل بين الكسر والعدد العشري.",
+    lessons:[
+      {id:"l1-1",num:"1-1",title:"الأعداد النسبية",concepts:["c1-1"]},
+      {id:"l1-2",num:"1-2",title:"مقارنة الأعداد النسبية وترتيبها",concepts:["c1-2"]},
+      {id:"l1-3",num:"1-3",title:"ضرب الأعداد النسبية",concepts:["c1-3"]},
+      {id:"l1-4",num:"1-4",title:"قسمة الأعداد النسبية",concepts:["c1-4"]},
+      {id:"l1-5",num:"1-5",title:"جمع الأعداد النسبية وطرحها",concepts:["c1-5"]}
+    ]
+  },
+  {
+    id:"ch2", num:2, title:"الأعداد الحقيقية ونظرية فيثاغورس",
+    minutes:100, passPercent:CONFIG.PASS_PERCENT,
+    overview:"يتناول هذا الفصل الجذور التربيعية وتقديرها، وتصنيف الأعداد الحقيقية إلى نسبية وغير نسبية، ثم نظرية فيثاغورس وعكسها وتطبيقاتها، وإيجاد المسافة بين نقطتين في المستوى الإحداثي.",
+    prereqIds:["p2-1","p2-2","p2-3","p2-4"],
+    prereqNote:"يتطلب هذا الفصل إتقان: تربيع الأعداد، مساحة المربع، حل معادلات بسيطة، والأعداد النسبية (الفصل الأول).",
+    lessons:[
+      {id:"l2-1",num:"2-1",title:"الجذور التربيعية",concepts:["c2-1"]},
+      {id:"l2-2",num:"2-2",title:"تقدير الجذور التربيعية",concepts:["c2-2"]},
+      {id:"l2-3",num:"2-3",title:"الأعداد الحقيقية",concepts:["c2-3"]},
+      {id:"l2-4",num:"2-4",title:"نظرية فيثاغورس",concepts:["c2-4"]},
+      {id:"l2-5",num:"2-5",title:"استعمال نظرية فيثاغورس",concepts:["c2-5"]},
+      {id:"l2-6",num:"2-6",title:"الهندسة: المسافة بين نقطتين",concepts:["c2-6"]}
+    ]
+  },
+  {
+    id:"ch3", num:3, title:"التناسب والتشابه",
+    minutes:100, passPercent:CONFIG.PASS_PERCENT,
+    overview:"يتناول هذا الفصل العلاقات المتناسبة وغير المتناسبة، ومعدل التغير، وحل التناسبات بالضرب التبادلي، والمضلعات المتشابهة، والقياس غير المباشر، ومقياس الرسم.",
+    prereqIds:["p3-1","p3-2","p3-3","p3-4"],
+    prereqNote:"يتطلب هذا الفصل إتقان: الكسور المتكافئة، النسب وتبسيطها، حل معادلات من خطوة واحدة، والعمليات على الأعداد النسبية (الفصل الأول).",
+    lessons:[
+      {id:"l3-1",num:"3-1",title:"العلاقات المتناسبة وغير المتناسبة",concepts:["c3-1"]},
+      {id:"l3-2",num:"3-2",title:"معدل التغير",concepts:["c3-2"]},
+      {id:"l3-3",num:"3-3",title:"حل التناسبات",concepts:["c3-3"]},
+      {id:"l3-4",num:"3-4",title:"المضلعات المتشابهة",concepts:["c3-4"]},
+      {id:"l3-5",num:"3-5",title:"القياس غير المباشر",concepts:["c3-5"]},
+      {id:"l3-6",num:"3-6",title:"مقياس الرسم",concepts:["c3-6"]}
+    ]
+  }]
+};
+
+/* المفاهيم: التعريف، المتطلبات السابقة، ماذا يعتمد عليها، ومسار العلاج عند الإخفاق */
+const CONCEPTS={
+  "c1-1":{title:"مفهوم العدد النسبي وتصنيفه",critical:true,lesson:"l1-1",
+    rule:"العدد النسبي هو كل عدد يمكن كتابته على الصورة أ/ب حيث أ و ب عددان صحيحان و ب ≠ 0. كل عدد صحيح وكل كسر وكل عدد عشري منتهٍ أو دوري هو عدد نسبي.",
+    needs:["الأعداد الصحيحة","الكسور وتبسيطها","القسمة"],
+    feeds:["مقارنة الأعداد النسبية","العمليات على الأعداد النسبية","تصنيف الأعداد الحقيقية (الفصل 2)"],
+    failureMeans:"الإخفاق هنا يدل غالبًا على ضعف في مفهوم الكسر أو العلاقة بين الكسر والعدد العشري.",
+    reviewFirst:["تبسيط الكسور","قسمة البسط على المقام لتحويل الكسر إلى عدد عشري"]},
+  "c1-2":{title:"مقارنة الأعداد النسبية وترتيبها",critical:false,lesson:"l1-2",
+    rule:"للمقارنة: وحّد المقامات أو حوّل إلى أعداد عشرية ثم قارن. على خط الأعداد: العدد الأيمن أكبر، وفي السوالب: كلما بعد العدد عن الصفر صار أصغر.",
+    needs:["مفهوم العدد النسبي","توحيد المقامات","الأعداد السالبة"],
+    feeds:["ترتيب الأعداد الحقيقية (الفصل 2)","مقارنة النسب (الفصل 3)"],
+    failureMeans:"الإخفاق يدل غالبًا على خلط في مقارنة الأعداد السالبة أو ضعف في توحيد المقامات.",
+    reviewFirst:["مفهوم العدد النسبي وتصنيفه","المضاعف المشترك الأصغر"]},
+  "c1-3":{title:"ضرب الأعداد النسبية",critical:true,lesson:"l1-3",
+    rule:"حاصل ضرب كسرين = (البسط × البسط) / (المقام × المقام) مع الاختصار قبل الضرب إن أمكن. إشارتان متشابهتان تعطيان ناتجًا موجبًا، ومختلفتان تعطيان سالبًا. حوّل العدد الكسري إلى كسر غير فعلي قبل الضرب.",
+    needs:["الكسور وتبسيطها","قواعد إشارات الضرب"],
+    feeds:["قسمة الأعداد النسبية","حل التناسبات (الفصل 3)","مقياس الرسم (الفصل 3)"],
+    failureMeans:"الإخفاق يدل غالبًا على خلط بين قاعدتي الضرب والجمع (توحيد المقامات) أو ضعف في الإشارات.",
+    reviewFirst:["تبسيط الكسور","قواعد الإشارات في الضرب"]},
+  "c1-4":{title:"قسمة الأعداد النسبية",critical:true,lesson:"l1-4",
+    rule:"القسمة على عدد نسبي = الضرب في مقلوبه (نقلب الكسر الثاني فقط). مقلوب أ/ب هو ب/أ. قواعد الإشارات نفسها في الضرب.",
+    needs:["ضرب الأعداد النسبية","مفهوم المقلوب"],
+    feeds:["جمع وطرح الأعداد النسبية (التحقق)","معدل التغير (الفصل 3)","حل التناسبات (الفصل 3)"],
+    failureMeans:"الإخفاق يدل غالبًا على قلب الكسر الخطأ أو ضعف سابق في الضرب.",
+    reviewFirst:["ضرب الأعداد النسبية"]},
+  "c1-5":{title:"جمع الأعداد النسبية وطرحها",critical:true,lesson:"l1-5",
+    rule:"لجمع أو طرح كسرين مختلفي المقامين: وحّد المقامين بالمضاعف المشترك الأصغر، ثم اجمع أو اطرح البسطين والمقام كما هو. في الأعداد العشرية: رتّب الفاصلة العشرية. انتبه لإشارات الأعداد السالبة.",
+    needs:["توحيد المقامات","الأعداد الصحيحة السالبة","الأعداد العشرية"],
+    feeds:["حل المعادلات لاحقًا","المسائل اللفظية في كل الفصول"],
+    failureMeans:"الإخفاق يدل غالبًا على جمع البسوط والمقامات معًا (خطأ شائع) أو ضعف في إشارات السوالب.",
+    reviewFirst:["مقارنة الأعداد النسبية وترتيبها","المضاعف المشترك الأصغر","جمع الأعداد الصحيحة السالبة"]},
+  "c2-1":{title:"الجذور التربيعية",critical:true,lesson:"l2-1",
+    rule:"الجذر التربيعي للعدد أ هو العدد الذي إذا ضُرب في نفسه أعطى أ. لكل عدد موجب جذران: موجب وسالب، والرمز √ يعني الجذر الموجب. حل المعادلة س² = أ هو س = ±√أ.",
+    needs:["تربيع الأعداد","مساحة المربع","المعادلات البسيطة"],
+    feeds:["تقدير الجذور","الأعداد الحقيقية","نظرية فيثاغورس","المسافة بين نقطتين"],
+    failureMeans:"الإخفاق يدل غالبًا على خلط بين الجذر والقسمة على 2، أو عدم حفظ مربعات الأعداد من 1 إلى 15.",
+    reviewFirst:["مربعات الأعداد من 1 إلى 15","مساحة المربع"]},
+  "c2-2":{title:"تقدير الجذور التربيعية",critical:false,lesson:"l2-2",
+    rule:"لتقدير √ع: ابحث عن أقرب مربعين كاملين يقع العدد بينهما، فيقع الجذر بين جذريهما، ثم اختر الأقرب. مثال: √52 بين √49 و√64 أي بين 7 و8، وهو أقرب إلى 7.",
+    needs:["الجذور التربيعية","المربعات الكاملة"],
+    feeds:["الأعداد الحقيقية","نظرية فيثاغورس (نواتج غير كاملة)"],
+    failureMeans:"الإخفاق يدل غالبًا على عدم حفظ المربعات الكاملة أو ضعف في مفهوم الجذر نفسه.",
+    reviewFirst:["الجذور التربيعية"]},
+  "c2-3":{title:"الأعداد الحقيقية وتصنيفها",critical:true,lesson:"l2-3",
+    rule:"الأعداد الحقيقية = الأعداد النسبية + الأعداد غير النسبية. غير النسبي هو عدد عشري لا منتهٍ وغير دوري مثل √2 و π. جذر العدد الذي ليس مربعًا كاملًا عدد غير نسبي.",
+    needs:["مفهوم العدد النسبي (الفصل 1)","الجذور التربيعية","تقدير الجذور"],
+    feeds:["المقارنة والترتيب على خط الأعداد","فهم نواتج نظرية فيثاغورس"],
+    failureMeans:"الإخفاق يدل غالبًا على ضعف في تعريف العدد النسبي من الفصل الأول.",
+    reviewFirst:["مفهوم العدد النسبي وتصنيفه","الجذور التربيعية"]},
+  "c2-4":{title:"نظرية فيثاغورس",critical:true,lesson:"l2-4",
+    rule:"في المثلث القائم الزاوية: مربع الوتر = مجموع مربعي الضلعين القائمين، أي ج² = أ² + ب² حيث ج الوتر (أطول الأضلاع، المقابل للزاوية القائمة).",
+    needs:["الجذور التربيعية","تربيع الأعداد","المثلث القائم"],
+    feeds:["استعمال نظرية فيثاغورس","المسافة بين نقطتين","القياس غير المباشر (الفصل 3)"],
+    failureMeans:"الإخفاق يدل غالبًا على عدم تمييز الوتر، أو الجمع بدون تربيع.",
+    reviewFirst:["الجذور التربيعية","تقدير الجذور التربيعية"]},
+  "c2-5":{title:"استعمال نظرية فيثاغورس",critical:true,lesson:"l2-5",
+    rule:"تُستعمل النظرية لإيجاد ضلع مجهول في مثلث قائم (وتر: اجمع المربعين، ضلع: اطرح ثم جذّر)، وعكس النظرية للتحقق: إذا حقق أطول ضلع ج² = أ² + ب² كان المثلث قائمًا.",
+    needs:["نظرية فيثاغورس","الجذور التربيعية"],
+    feeds:["المسافة بين نقطتين","مسائل القياس في الفصول اللاحقة"],
+    failureMeans:"الإخفاق يدل غالبًا على تطبيق النظرية على مثلث غير قائم أو خلط بين إيجاد الوتر وإيجاد ضلع.",
+    reviewFirst:["نظرية فيثاغورس"]},
+  "c2-6":{title:"المسافة بين نقطتين",critical:false,lesson:"l2-6",
+    rule:"المسافة بين (س1،ص1) و(س2،ص2) = جذر[(س2-س1)² + (ص2-ص1)²]. وهي تطبيق مباشر لنظرية فيثاغورس على المستوى الإحداثي.",
+    needs:["نظرية فيثاغورس","المستوى الإحداثي","الجذور التربيعية"],
+    feeds:["الهندسة الإحداثية في الصفوف اللاحقة"],
+    failureMeans:"الإخفاق يدل غالبًا على نسيان التربيع أو خطأ في طرح الإحداثيات السالبة.",
+    reviewFirst:["نظرية فيثاغورس","جمع الأعداد النسبية وطرحها"]},
+  "c3-1":{title:"العلاقات المتناسبة وغير المتناسبة",critical:true,lesson:"l3-1",
+    rule:"تكون العلاقة متناسبة إذا كانت النسبة بين الكميتين ثابتة (ص/س = ثابت التناسب). إذا اختلفت النسبة بين الأزواج أو وُجد مقدار ثابت مضاف، فالعلاقة غير متناسبة.",
+    needs:["الكسور المتكافئة","قسمة الأعداد النسبية (الفصل 1)"],
+    feeds:["معدل التغير","حل التناسبات","المضلعات المتشابهة","مقياس الرسم"],
+    failureMeans:"الإخفاق يدل غالبًا على المقارنة بالطرح بدل القسمة أو ضعف في الكسور المتكافئة.",
+    reviewFirst:["قسمة الأعداد النسبية","الكسور المتكافئة"]},
+  "c3-2":{title:"معدل التغير",critical:false,lesson:"l3-2",
+    rule:"معدل التغير = التغير في الكمية الثانية ÷ التغير في الكمية الأولى (مثل: كم/ساعة). قد يكون موجبًا (زيادة) أو سالبًا (نقصان)، ويُكتب دائمًا مع وحدتيه.",
+    needs:["العلاقات المتناسبة","قسمة الأعداد النسبية","الأعداد السالبة"],
+    feeds:["الميل في الصفوف اللاحقة","قراءة الجداول والرسوم البيانية"],
+    failureMeans:"الإخفاق يدل غالبًا على قسمة معكوسة (س على ص) أو إهمال الإشارة السالبة.",
+    reviewFirst:["العلاقات المتناسبة وغير المتناسبة","قسمة الأعداد النسبية"]},
+  "c3-3":{title:"حل التناسبات",critical:true,lesson:"l3-3",
+    rule:"التناسب معادلة بين نسبتين: أ/ب = ج/د. يُحل بالضرب التبادلي: أ×د = ب×ج، ثم نقسم لإيجاد المجهول.",
+    needs:["العلاقات المتناسبة","ضرب وقسمة الأعداد النسبية","حل معادلة بسيطة"],
+    feeds:["المضلعات المتشابهة","القياس غير المباشر","مقياس الرسم","النسبة المئوية لاحقًا"],
+    failureMeans:"الإخفاق يدل غالبًا على ضرب طرفين خاطئين أو ضعف في حل المعادلات.",
+    reviewFirst:["العلاقات المتناسبة وغير المتناسبة","قسمة الأعداد النسبية"]},
+  "c3-4":{title:"المضلعات المتشابهة",critical:true,lesson:"l3-4",
+    rule:"يتشابه مضلعان إذا تطابقت زواياهما المتناظرة وتناسبت أطوال أضلاعهما المتناظرة. النسبة بين الأضلاع المتناظرة تسمى نسبة التشابه، ونسبة المحيطين = نسبة التشابه.",
+    needs:["حل التناسبات","النسب"],
+    feeds:["القياس غير المباشر","مقياس الرسم"],
+    failureMeans:"الإخفاق يدل غالبًا على افتراض أن كل شكلين من النوع نفسه متشابهان، أو خطأ في ترتيب الأضلاع المتناظرة.",
+    reviewFirst:["حل التناسبات"]},
+  "c3-5":{title:"القياس غير المباشر",critical:false,lesson:"l3-5",
+    rule:"نستعمل المثلثات المتشابهة لإيجاد أطوال يصعب قياسها مباشرة: طول الجسم ÷ ظله = طول الجسم الآخر ÷ ظله (في اللحظة نفسها)، ثم نحل التناسب.",
+    needs:["المضلعات المتشابهة","حل التناسبات"],
+    feeds:["تطبيقات هندسية لاحقة"],
+    failureMeans:"الإخفاق يدل غالبًا على وضع الأطوال في غير مواضعها المتناظرة في التناسب.",
+    reviewFirst:["المضلعات المتشابهة","حل التناسبات"]},
+  "c3-6":{title:"مقياس الرسم",critical:false,lesson:"l3-6",
+    rule:"مقياس الرسم = البعد في الرسم : البعد الحقيقي. لإيجاد البعد الحقيقي: كوّن تناسبًا بين المقياس والأبعاد، وانتبه لتوحيد الوحدات.",
+    needs:["حل التناسبات","تحويل الوحدات"],
+    feeds:["الخرائط والنماذج في التطبيقات الحياتية"],
+    failureMeans:"الإخفاق يدل غالبًا على عكس النسبة (حقيقي:رسم) أو خطأ في تحويل الوحدات.",
+    reviewFirst:["حل التناسبات","المضلعات المتشابهة"]}
+};
+
+/* ============================================================================
+   بنك الأسئلة
+   تُكتب الأسئلة بمفاتيح مختصرة ثم تُوسَّع إلى المخطط الكامل المطلوب
+   (id, chapterId, chapterTitle, lessonId, lessonTitle, pageReference,
+    conceptId, conceptTitle, difficulty, questionType, questionText, options,
+    correctAnswer, acceptedAnswers, explanation, wrongAnswerFeedback,
+    mistakeType, solvedExample, followUpQuestionId, requiredSteps,
+    keywordsForTeachBack, examRelevance, isCritical, estimatedTime, tags)
+   ============================================================================ */
+const DIFF_LABELS={1:"سهل",2:"متوسط",3:"صعب",4:"تحدي",5:"نمط اختبار",6:"سؤال يكشف الفهم الحقيقي"};
+const TYPE_LABELS={mcq:"اختيار من متعدد",tf:"صح أو خطأ",fill:"أكمل الفراغ",solve:"حل مباشر",
+  steps:"حل خطوة بخطوة (أظهر عملك)",teachback:"اشرح بكلماتك",error:"اكتشف الخطأ",prereq:"فحص متطلب سابق"};
+
+function expandQuestion(r){
+  const cn=CONCEPTS[r.c]||null;
+  let chapter=null,lesson=null;
+  if(cn){
+    for(const ch of CURRICULUM.chapters){
+      const l=ch.lessons.find(x=>x.id===cn.lesson);
+      if(l){chapter=ch;lesson=l;break;}
+    }
+  }else if(r.pre){
+    chapter=CURRICULUM.chapters.find(ch=>ch.id===r.pre)||null;
+  }
+  return {
+    id:r.id,
+    chapterId:chapter?chapter.id:"",
+    chapterTitle:chapter?chapter.title:"",
+    lessonId:lesson?lesson.id:"",
+    lessonTitle:lesson?("الدرس "+lesson.num+": "+lesson.title):(r.pre?"فحص المتطلبات السابقة":""),
+    pageReference:lesson?("الدرس "+lesson.num+" — "+PAGE_NOTE):PAGE_NOTE,
+    conceptId:r.c||"",
+    conceptTitle:cn?cn.title:(r.pre?"متطلبات سابقة":""),
+    difficulty:r.d, difficultyLabel:DIFF_LABELS[r.d],
+    questionType:r.t, questionTypeLabel:TYPE_LABELS[r.t]||r.t,
+    questionText:r.q,
+    figure:r.fig||null,
+    options:r.opts||null,
+    correctAnswer:r.a,
+    acceptedAnswers:r.acc||[],
+    explanation:r.ex||"",
+    wrongAnswerFeedback:r.wf||"",
+    mistakeType:r.mt||"خطأ في فهم السؤال",
+    solvedExample:r.se||"",
+    followUpQuestionId:r.fu||null,
+    requiredSteps:!!(r.t==="steps"),
+    keywordsForTeachBack:r.ks||[],
+    examRelevance:r.er||"سؤال على نمط أسئلة الاختبارات",
+    isCritical:cn?!!cn.critical:false,
+    estimatedTime:r.time||({1:30,2:60,3:120,4:150,5:120,6:150}[r.d]||60),
+    exactMatch:!!r.exact,
+    allowPercent:!!r.pct,
+    tags:r.tags||[]
+  };
+}
+
+const RAW_QUESTIONS=[
+/* ===================== فحوص المتطلبات السابقة ===================== */
+{id:"p1-1",pre:"ch1",d:1,t:"solve",q:"أوجد ناتج: -7 + 12",a:"5",
+ ex:"عند جمع عددين مختلفي الإشارة نطرح ونأخذ إشارة الأكبر قيمةً مطلقة: 12 - 7 = 5 والإشارة موجبة.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",se:"مثال: -9 + 4 = -5 لأن 9 أكبر وإشارتها سالبة.",tags:["prereq"]},
+{id:"p1-2",pre:"ch1",d:1,t:"fill",q:"اكتب الكسر 18/24 في أبسط صورة.",a:"3/4",exact:true,acc:["٣/٤"],
+ ex:"نقسم البسط والمقام على القاسم المشترك الأكبر 6: ‏18÷6 = 3 و 24÷6 = 4.",
+ mt:"خطأ في الكسور",se:"مثال: 10/15 = 2/3 بالقسمة على 5.",tags:["prereq"]},
+{id:"p1-3",pre:"ch1",d:1,t:"mcq",q:"ناتج 3 + 2 × 4 يساوي:",opts:["20","11","24","14"],a:"11",
+ ex:"الضرب قبل الجمع حسب ترتيب العمليات: 2 × 4 = 8 ثم 3 + 8 = 11.",
+ mt:"خطأ في ترتيب العمليات",se:"مثال: 5 + 3 × 2 = 5 + 6 = 11 وليس 16.",tags:["prereq"]},
+{id:"p1-4",pre:"ch1",d:1,t:"solve",q:"اكتب الكسر 3/5 عددًا عشريًا.",a:"0.6",acc:["0.60",".6"],
+ ex:"نقسم البسط على المقام: 3 ÷ 5 = 0.6.",
+ mt:"خطأ في الأعداد العشرية",se:"مثال: 1/4 = 1 ÷ 4 = 0.25.",tags:["prereq"]},
+
+{id:"p2-1",pre:"ch2",d:1,t:"solve",q:"أوجد قيمة: 9²",a:"81",
+ ex:"تربيع العدد يعني ضربه في نفسه: 9 × 9 = 81.",
+ mt:"خطأ حسابي",se:"مثال: 7² = 7 × 7 = 49.",tags:["prereq"]},
+{id:"p2-2",pre:"ch2",d:1,t:"solve",q:"مربع طول ضلعه 6 سم، ما مساحته بالسنتيمتر المربع؟",a:"36",
+ ex:"مساحة المربع = الضلع × الضلع = 6 × 6 = 36 سم².",
+ mt:"خطأ في اختيار القانون",se:"مثال: ضلع 8 سم ⟸ المساحة 64 سم².",tags:["prereq"]},
+{id:"p2-3",pre:"ch2",d:1,t:"solve",q:"حل المعادلة: س + 7 = 12",a:"5",acc:["س=5","س = 5"],
+ ex:"نطرح 7 من الطرفين: س = 12 - 7 = 5.",
+ mt:"خطأ في التعويض",se:"مثال: س + 3 = 10 ⟸ س = 7.",tags:["prereq"]},
+{id:"p2-4",pre:"ch2",d:1,t:"mcq",q:"قيمة 13² تساوي:",opts:["26","139","169","196"],a:"169",
+ ex:"13 × 13 = 169. (تذكر: 14² = 196 و 12² = 144).",
+ mt:"خطأ حسابي",se:"احفظ مربعات الأعداد من 1 إلى 15 فهي أساس فصل الجذور.",tags:["prereq"]},
+
+{id:"p3-1",pre:"ch3",d:1,t:"tf",q:"الكسران 2/3 و 8/12 متكافئان.",opts:["صح","خطأ"],a:"صح",
+ ex:"بضرب بسط 2/3 ومقامه في 4 نحصل على 8/12، فهما متكافئان.",
+ mt:"خطأ في الكسور",se:"مثال: 3/5 = 9/15 بالضرب في 3.",tags:["prereq"]},
+{id:"p3-2",pre:"ch3",d:1,t:"solve",q:"اشترى أنس 4 أقلام متماثلة بـ 36 ريالًا. ما ثمن القلم الواحد بالريال؟",a:"9",
+ ex:"ثمن القلم = 36 ÷ 4 = 9 ريالات. هذا هو «معدل الوحدة».",
+ mt:"خطأ حسابي",se:"مثال: 5 دفاتر بـ 20 ريالًا ⟸ الدفتر بـ 4 ريالات.",tags:["prereq"]},
+{id:"p3-3",pre:"ch3",d:1,t:"solve",q:"حل المعادلة: 3س = 21",a:"7",acc:["س=7","س = 7"],
+ ex:"نقسم الطرفين على 3: س = 21 ÷ 3 = 7.",
+ mt:"خطأ في التعويض",se:"مثال: 5س = 40 ⟸ س = 8.",tags:["prereq"]},
+{id:"p3-4",pre:"ch3",d:1,t:"mcq",q:"أبسط صورة للنسبة 12 : 18 هي:",opts:["6 : 9","2 : 3","3 : 2","4 : 6"],a:"2 : 3",
+ ex:"نقسم الحدين على القاسم المشترك الأكبر 6: ‏12÷6 = 2 و 18÷6 = 3.",
+ mt:"خطأ في الكسور",se:"مثال: 10 : 15 = 2 : 3.",tags:["prereq"]},
+
+/* ===================== الفصل 1 — المفهوم 1-1: مفهوم العدد النسبي وتصنيفه ===================== */
+{id:"q1-1-1",c:"c1-1",d:1,t:"mcq",q:"أي الأعداد الآتية عدد نسبي؟",opts:["0.75","-3","2/5","جميع ما سبق"],a:"جميع ما سبق",
+ ex:"كل منها يمكن كتابته على الصورة أ/ب: ‏0.75 = 3/4، و -3 = -3/1، و 2/5 كسر أصلًا، فكلها أعداد نسبية.",
+ wf:"تذكر أن الأعداد الصحيحة والأعداد العشرية المنتهية كلها أعداد نسبية، وليس الكسور فقط.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال محلول: هل 1.2 عدد نسبي؟ نعم لأن 1.2 = 12/10 = 6/5.",fu:"q1-1-2",tags:["lesson"]},
+{id:"q1-1-2",c:"c1-1",d:1,t:"tf",q:"كل عدد صحيح هو عدد نسبي.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح، لأن أي عدد صحيح ن يمكن كتابته على الصورة ن/1، مثل: 7 = 7/1 و -4 = -4/1.",
+ wf:"العدد الصحيح يُكتب دائمًا بمقام 1، فهو يحقق تعريف العدد النسبي.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال: -10 = -10/1 فهو عدد نسبي.",tags:["lesson"]},
+{id:"q1-1-3",c:"c1-1",d:2,t:"fill",q:"اكتب العدد العشري 0.6 على صورة كسر في أبسط صورة.",a:"3/5",exact:true,acc:["٣/٥"],
+ ex:"‏0.6 = 6/10، وبالقسمة على القاسم المشترك 2: ‏6/10 = 3/5.",
+ wf:"اكتب العدد العشري بمقام 10 أو 100 أولًا ثم بسّط الكسر إلى أبسط صورة.",
+ mt:"خطأ في التبسيط",
+ se:"مثال محلول: 0.25 = 25/100 = 1/4 بالقسمة على 25.",fu:"q1-1-4",tags:["lesson"]},
+{id:"q1-1-4",c:"c1-1",d:2,t:"solve",q:"اكتب الكسر 7/8 عددًا عشريًا.",a:"0.875",
+ ex:"نقسم البسط على المقام: 7 ÷ 8 = 0.875 وهو عدد عشري منتهٍ.",
+ wf:"حوّل الكسر إلى عدد عشري بقسمة البسط على المقام قسمة مطولة.",
+ mt:"خطأ في الأعداد العشرية",
+ se:"مثال محلول: 5/8 = 5 ÷ 8 = 0.625.",fu:"q1-1-3",tags:["lesson"]},
+{id:"q1-1-5",c:"c1-1",d:4,t:"solve",q:"اكتب العدد العشري الدوري 0.252525... (حيث يتكرر 25) على صورة كسر في أبسط صورة.",a:"25/99",exact:true,acc:["٢٥/٩٩"],
+ ex:"نفرض ن = 0.2525...، إذن 100ن = 25.2525...، وبالطرح: 99ن = 25، فيكون ن = 25/99.",
+ wf:"العدد العشري الدوري عدد نسبي. افرضه ن، واضربه في 100 (لأن الدورة من رقمين) ثم اطرح المعادلتين.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: 0.444... ⟸ ن = 0.444...، 10ن = 4.444...، بالطرح 9ن = 4 أي ن = 4/9.",fu:"q1-1-3",tags:["test","challenge"]},
+{id:"q1-1-6",c:"c1-1",d:5,t:"solve",q:"قطع عدّاء 5/8 مسافة السباق ثم توقف للراحة. اكتب الجزء الذي قطعه عددًا عشريًا.",a:"0.625",
+ ex:"‏5/8 = 5 ÷ 8 = 0.625، أي قطع 0.625 من المسافة.",
+ wf:"المطلوب تحويل الكسر إلى عدد عشري فقط: اقسم البسط على المقام.",
+ mt:"خطأ في فهم السؤال",
+ se:"مثال محلول: قطع سبّاح 3/4 المسافة = 0.75 منها.",fu:"q1-1-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q1-1-7",c:"c1-1",d:6,t:"error",q:"قال طالب: «العدد 4/0 عدد نسبي لأنه مكتوب على صورة كسر». اكتشف الخطأ في كلامه.",
+ opts:["لا يوجد خطأ؛ كلامه صحيح","الخطأ أن المقام صفر، والقسمة على صفر غير معرفة فليس عددًا نسبيًا","الخطأ أن البسط يجب أن يكون أصغر من المقام","الخطأ أن العدد النسبي يجب أن يكون موجبًا"],
+ a:"الخطأ أن المقام صفر، والقسمة على صفر غير معرفة فليس عددًا نسبيًا",
+ ex:"شرط تعريف العدد النسبي أ/ب أن يكون ب ≠ 0، أما 0/4 (الصفر في البسط) فهو عدد نسبي يساوي صفرًا.",
+ wf:"راجع تعريف العدد النسبي: المقام لا يساوي صفرًا أبدًا، بينما البسط يجوز أن يكون صفرًا.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"قارن: 0/7 = 0 عدد نسبي، لكن 7/0 غير معرف.",tags:["lesson","mistake"]},
+{id:"q1-1-8",c:"c1-1",d:6,t:"teachback",q:"اشرح بكلماتك: متى نقول عن عدد إنه «عدد نسبي»؟ واذكر مثالًا عددًا نسبيًا ومثالًا آخر ليس كذلك.",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["كسر|أ/ب|بسط","صحيح|صحيحان","مقام","صفر|لا يساوي 0|≠ 0"],
+ ex:"الإجابة الجيدة تذكر: عدد يكتب على صورة كسر بسطه ومقامه عددان صحيحان والمقام لا يساوي صفرًا، مع مثال مثل 3/4، ومثال مضاد مثل √2.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q1-1-9",c:"c1-1",d:6,t:"steps",q:"حوّل العدد العشري 2.4 إلى كسر في أبسط صورة، مع كتابة جميع الخطوات.",a:"12/5",exact:true,acc:["2 2/5","١٢/٥"],
+ ex:"‏2.4 = 24/10، وبالقسمة على القاسم المشترك 2 نحصل على 12/5 (أو العدد الكسري 2 2/5).",
+ wf:"اكتب العدد بمقام 10 أولًا (لأن فيه رقمًا عشريًا واحدًا) ثم بسّط.",
+ mt:"خطأ في التبسيط",
+ se:"مثال محلول: 1.5 = 15/10 = 3/2.",tags:["test","steps"]},
+{id:"q1-1-10",c:"c1-1",d:2,t:"mcq",q:"العدد 0.333... (حيث يتكرر الرقم 3 إلى ما لا نهاية) يساوي:",
+ opts:["1/3","3/10","33/100","عدد غير نسبي"],a:"1/3",
+ ex:"العدد العشري الدوري عدد نسبي: 0.333... = 3/9 = 1/3.",
+ wf:"العشري الدوري نسبي دائمًا؛ أما 3/10 فيساوي 0.3 فقط دون تكرار.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"ن = 0.333... ⟸ 10ن = 3.333... ⟸ 9ن = 3 ⟸ ن = 1/3.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 1 — المفهوم 1-2: مقارنة الأعداد النسبية وترتيبها ===================== */
+{id:"q1-2-1",c:"c1-2",d:1,t:"mcq",q:"أي العددين أكبر: 3/4 أم 5/7؟",opts:["3/4","5/7","متساويان","لا يمكن المقارنة"],a:"3/4",
+ ex:"بتوحيد المقامين (28): ‏3/4 = 21/28 و ‏5/7 = 20/28، إذن 3/4 أكبر.",
+ wf:"وحّد المقامين بالمضاعف المشترك الأصغر ثم قارن البسطين.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: قارن 2/3 و 3/5: ‏10/15 مقابل 9/15 ⟸ 2/3 أكبر.",fu:"q1-2-3",tags:["lesson"]},
+{id:"q1-2-2",c:"c1-2",d:1,t:"tf",q:"العدد -2/3 أكبر من العدد -1/2.",opts:["صح","خطأ"],a:"خطأ",
+ ex:"بتوحيد المقامين: -2/3 = -4/6 و -1/2 = -3/6. وفي السوالب: -4/6 أبعد عن الصفر فهو الأصغر، إذن -1/2 هو الأكبر.",
+ wf:"في الأعداد السالبة، العدد الأقرب إلى الصفر هو الأكبر.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال: -5 < -2 لأن -2 أقرب إلى الصفر.",tags:["lesson"]},
+{id:"q1-2-3",c:"c1-2",d:2,t:"fill",q:"ضع الإشارة المناسبة (> أو < أو =): ‏5/6 ___ 7/9",a:">",exact:true,acc:["أكبر","اكبر"],
+ ex:"المضاعف المشترك الأصغر للمقامين 18: ‏5/6 = 15/18 و ‏7/9 = 14/18، إذن 5/6 > 7/9.",
+ wf:"وحّد المقامين إلى 18 ثم قارن البسطين 15 و 14.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: 3/4 ___ 5/8: ‏6/8 مقابل 5/8 ⟸ الإشارة >.",fu:"q1-2-4",tags:["lesson"]},
+{id:"q1-2-4",c:"c1-2",d:2,t:"mcq",q:"الترتيب التصاعدي الصحيح للأعداد: ‏0.7 ، 2/3 ، 0.68 هو:",
+ opts:["2/3 ، 0.68 ، 0.7","0.68 ، 2/3 ، 0.7","0.7 ، 0.68 ، 2/3","2/3 ، 0.7 ، 0.68"],
+ a:"2/3 ، 0.68 ، 0.7",
+ ex:"نحوّل الجميع إلى أعداد عشرية: 2/3 ≈ 0.667، إذن الترتيب: 0.667 ثم 0.68 ثم 0.7.",
+ wf:"حوّل الكسر إلى عدد عشري بثلاث منازل تقريبًا ثم رتب.",
+ mt:"خطأ في الأعداد العشرية",
+ se:"مثال محلول: رتب 0.5، 2/5، 0.45: ‏2/5 = 0.4 ⟸ الترتيب 0.4، 0.45، 0.5.",fu:"q1-2-3",tags:["lesson"]},
+{id:"q1-2-5",c:"c1-2",d:4,t:"mcq",q:"أي الأعداد الآتية يقع بين 1/3 و 3/8؟",opts:["0.35","0.32","0.4","3/9"],a:"0.35",
+ ex:"‏1/3 ≈ 0.333 و ‏3/8 = 0.375، والعدد 0.35 يقع بينهما. (أما 3/9 فيساوي 1/3 نفسه).",
+ wf:"حوّل الحدين إلى عددين عشريين: 0.333 و 0.375 ثم ابحث عن عدد بينهما.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: عدد بين 1/2 و 3/5؟ ‏0.5 و 0.6 ⟸ مثل 0.55.",fu:"q1-2-4",tags:["test","challenge"]},
+{id:"q1-2-6",c:"c1-2",d:5,t:"mcq",q:"سجلت درجات الحرارة الصغرى في أربع مدن كما في الجدول. أي المدن سجلت أدنى درجة حرارة؟",
+ fig:"المدينة: الرياض | أبها | حائل | تبوك\nالدرجة: ‎-2.5‎ | ‎-4‎ | ‎-3.5‎ | ‎-1.5‎",
+ opts:["الرياض","أبها","حائل","تبوك"],a:"أبها",
+ ex:"أدنى درجة هي الأصغر، وفي السوالب الأبعد عن الصفر أصغر: -4 < -3.5 < -2.5 < -1.5، فأدناها أبها.",
+ wf:"قارن الأعداد السالبة: كلما زادت القيمة بعد الإشارة السالبة صار العدد أصغر.",
+ mt:"خطأ في قراءة الجدول",
+ se:"مثال: -7 أدنى من -3.",er:"سؤال جدول على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q1-2-7",c:"c1-2",d:6,t:"error",q:"قال طالب: «-8 أكبر من -5 لأن 8 أكبر من 5». اكتشف الخطأ وصحّحه.",
+ opts:["كلامه صحيح","الصواب: -5 أكبر، لأن العدد السالب الأقرب إلى الصفر هو الأكبر","الصواب: العددان متساويان في القيمة","الصواب: لا يمكن مقارنة الأعداد السالبة"],
+ a:"الصواب: -5 أكبر، لأن العدد السالب الأقرب إلى الصفر هو الأكبر",
+ ex:"قاعدة المقارنة تنعكس مع الإشارة السالبة: على خط الأعداد، -5 يقع يمين -8، إذن -5 > -8.",
+ wf:"تخيل خط الأعداد: الأعداد تكبر كلما اتجهنا يمينًا نحو الصفر ثم الموجبات.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال: رصيد -50 ريالًا أفضل (أكبر) من رصيد -80 ريالًا.",tags:["lesson","mistake"]},
+{id:"q1-2-8",c:"c1-2",d:6,t:"teachback",q:"اشرح بكلماتك: كيف تقارن بين كسرين مقاماهما مختلفان؟ اذكر طريقتين مختلفتين.",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["توحيد|المضاعف|مقام مشترك","عشري|قسمة البسط","بسط","قارن|مقارنة"],
+ ex:"الإجابة الجيدة تذكر طريقتين: توحيد المقامين بالمضاعف المشترك الأصغر ثم مقارنة البسطين، أو تحويل كل كسر إلى عدد عشري ثم المقارنة.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q1-2-9",c:"c1-2",d:6,t:"steps",q:"قارن بين 4/7 و 5/9 مع كتابة جميع الخطوات، واكتب في الإجابة النهائية الكسر الأكبر.",a:"4/7",exact:true,acc:["٤/٧"],
+ ex:"المضاعف المشترك الأصغر للمقامين 63: ‏4/7 = 36/63 و ‏5/9 = 35/63، وبما أن 36 > 35 فإن 4/7 أكبر.",
+ wf:"وحّد المقامين إلى 63 (7×9) ثم قارن البسطين.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: قارن 2/5 و 3/7: ‏14/35 و 15/35 ⟸ 3/7 أكبر.",tags:["test","steps"]},
+{id:"q1-2-10",c:"c1-2",d:2,t:"mcq",q:"الترتيب التنازلي الصحيح للأعداد: ‏-1/2 ، -0.4 ، -0.55 هو:",
+ opts:["-0.4 ، -1/2 ، -0.55","-0.55 ، -1/2 ، -0.4","-1/2 ، -0.4 ، -0.55","-0.4 ، -0.55 ، -1/2"],
+ a:"-0.4 ، -1/2 ، -0.55",
+ ex:"‏-1/2 = -0.5. التنازلي يبدأ بالأكبر: -0.4 ثم -0.5 ثم -0.55 (الأقرب إلى الصفر أكبر).",
+ wf:"حوّل -1/2 إلى -0.5 ثم رتب من الأقرب للصفر إلى الأبعد.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال: تنازليًا: -1، -2، -3.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 1 — المفهوم 1-3: ضرب الأعداد النسبية ===================== */
+{id:"q1-3-1",c:"c1-3",d:1,t:"mcq",q:"ناتج ضرب 2/3 × 3/5 في أبسط صورة هو:",opts:["2/5","6/15","5/8","9/10"],a:"2/5",
+ ex:"نضرب البسطين والمقامين: 6/15، ثم نبسّط بالقسمة على 3 فنحصل على 2/5. (أو نختصر 3 مع 3 قبل الضرب).",
+ wf:"الناتج 6/15 صحيح لكنه ليس في أبسط صورة؛ بسّط بالقسمة على 3.",
+ mt:"خطأ في التبسيط",
+ se:"مثال محلول: 3/4 × 2/9 = 6/36 = 1/6.",fu:"q1-3-3",tags:["lesson"]},
+{id:"q1-3-2",c:"c1-3",d:1,t:"tf",q:"ناتج ضرب عددين نسبيين سالبين عدد موجب دائمًا.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح، الإشارتان المتشابهتان في الضرب تعطيان ناتجًا موجبًا: (-) × (-) = (+).",
+ wf:"راجع قاعدة الإشارات: متشابهتان ⟸ موجب، مختلفتان ⟸ سالب.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال: (-1/2) × (-4) = 2.",tags:["lesson"]},
+{id:"q1-3-3",c:"c1-3",d:2,t:"fill",q:"أوجد الناتج في أبسط صورة: ‏-3/4 × 8/9 = ___",a:"-2/3",acc:["-٢/٣"],
+ ex:"نختصر: 3 مع 9 (تبقى 3) و 4 مع 8 (يبقى 2): الناتج = -(1×2)/(1×3) = -2/3. الإشارة سالبة لاختلاف الإشارتين.",
+ wf:"اختصر قبل الضرب، ولا تنسَ أن إشارتين مختلفتين تعطيان ناتجًا سالبًا.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: -2/5 × 10/3 = -20/15 = -4/3.",fu:"q1-3-4",tags:["lesson"]},
+{id:"q1-3-4",c:"c1-3",d:2,t:"solve",q:"أوجد ناتج: ‏1 1/2 × 2 2/3 (اكتب الناتج عددًا أو كسرًا).",a:"4",acc:["4/1","4.0"],
+ ex:"نحوّل إلى كسور غير فعلية: 3/2 × 8/3 = 24/6 = 4.",
+ wf:"حوّل العددين الكسريين إلى كسور غير فعلية أولًا (1 1/2 = 3/2) ثم اضرب.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: 2 1/2 × 1 1/5 = 5/2 × 6/5 = 3.",fu:"q1-3-3",tags:["lesson"]},
+{id:"q1-3-5",c:"c1-3",d:4,t:"solve",q:"أوجد قيمة: ‏(-2/5)³",a:"-8/125",acc:["-0.064"],
+ ex:"نضرب الكسر في نفسه ثلاث مرات: (-2/5)×(-2/5)×(-2/5) = -8/125. الأس الفردي يبقي الإشارة سالبة.",
+ wf:"الأس 3 يعني الضرب ثلاث مرات، والسالب مرفوع لأس فردي يبقى سالبًا.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: (-1/2)³ = -1/8 بينما (-1/2)² = +1/4.",fu:"q1-3-4",tags:["test","challenge"]},
+{id:"q1-3-6",c:"c1-3",d:5,t:"solve",q:"تحتاج وصفة كعك إلى 3/4 كوب من السكر. أرادت أم خالد عمل 2/3 الكمية فقط. كم كوبًا من السكر تحتاج؟",a:"1/2",acc:["0.5","2/4"],
+ ex:"الكمية المطلوبة = 2/3 × 3/4 = 6/12 = 1/2 كوب.",
+ wf:"كلمة «من» بين كسرين تعني الضرب: 2/3 من 3/4 = 2/3 × 3/4.",
+ mt:"خطأ في فهم السؤال",
+ se:"مثال محلول: نصف كمية وصفة فيها 2/3 كوب زيت = 1/2 × 2/3 = 1/3 كوب.",fu:"q1-3-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q1-3-7",c:"c1-3",d:6,t:"error",q:"لحساب 2/3 × 4/5 وحّد طالب المقامين فكتب: 10/15 × 12/15 ثم احتار في الإكمال. اكتشف الخطأ.",
+ opts:["كان عليه جمع البسطين بعد التوحيد","توحيد المقامات خطوة الجمع والطرح، أما الضرب فنضرب البسطين والمقامين مباشرة","التوحيد صحيح لكنه أخطأ في حساب 10/15","لا يوجد خطأ"],
+ a:"توحيد المقامات خطوة الجمع والطرح، أما الضرب فنضرب البسطين والمقامين مباشرة",
+ ex:"الخطأ خلط بين قاعدتي الجمع والضرب. الصواب: 2/3 × 4/5 = 8/15 مباشرة.",
+ wf:"اسأل نفسك دائمًا: ما العملية؟ التوحيد للجمع والطرح فقط.",
+ mt:"خطأ في اختيار القانون",
+ se:"قارن: 2/3 + 4/5 = 10/15 + 12/15 = 22/15، لكن 2/3 × 4/5 = 8/15.",tags:["lesson","mistake"]},
+{id:"q1-3-8",c:"c1-3",d:6,t:"teachback",q:"اشرح بكلماتك: لماذا لا نحتاج إلى توحيد المقامات عند ضرب الكسور؟ وما خطوات ضرب عددين كسريين؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["بسط","مقام","جمع|طرح","غير فعلي|تحويل|مباشرة"],
+ ex:"الإجابة الجيدة توضح أن الضرب يتم بضرب البسطين والمقامين مباشرة، وأن التوحيد خاص بالجمع والطرح، وأن العدد الكسري يحوَّل إلى كسر غير فعلي قبل الضرب.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q1-3-9",c:"c1-3",d:6,t:"steps",q:"أوجد ناتج: ‏-5/6 × 3/10 في أبسط صورة، مع كتابة جميع الخطوات (الاختصار قبل الضرب).",a:"-1/4",acc:["-0.25","-٣/١٢"],
+ ex:"نختصر 5 مع 10 (يبقى 2) و 3 مع 6 (يبقى 2): الناتج = -(1×1)/(2×2) = -1/4.",
+ wf:"اختصر بسط أي كسر مع مقام الآخر قبل الضرب، وحدد الإشارة أولًا: مختلفتان ⟸ سالب.",
+ mt:"خطأ في التبسيط",
+ se:"مثال محلول: 4/9 × 3/8 = (1×1)/(3×2) = 1/6 بعد الاختصار.",tags:["test","steps"]},
+{id:"q1-3-10",c:"c1-3",d:2,t:"solve",q:"أوجد الناتج في أبسط صورة: ‏7/8 × 4/7",a:"1/2",acc:["0.5","4/8"],
+ ex:"نختصر 7 مع 7 و 4 مع 8: يبقى 1/2.",
+ wf:"اختصر قبل الضرب: 7 مع 7 تساوي 1، و 4 مع 8 تساوي 1 مع 2.",
+ mt:"خطأ في التبسيط",
+ se:"مثال: 5/6 × 3/5 = 1/2.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 1 — المفهوم 1-4: قسمة الأعداد النسبية ===================== */
+{id:"q1-4-1",c:"c1-4",d:1,t:"mcq",q:"مقلوب العدد 3/7 هو:",opts:["7/3","-3/7","3/7","-7/3"],a:"7/3",
+ ex:"مقلوب الكسر أ/ب هو ب/أ، لأن حاصل ضرب العدد في مقلوبه = 1: ‏3/7 × 7/3 = 1.",
+ wf:"المقلوب يعني تبادل البسط والمقام، وليس تغيير الإشارة.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال: مقلوب 5 هو 1/5، ومقلوب 1/4 هو 4.",fu:"q1-4-3",tags:["lesson"]},
+{id:"q1-4-2",c:"c1-4",d:1,t:"tf",q:"للقسمة على كسر، نضرب في مقلوب ذلك الكسر.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: أ/ب ÷ ج/د = أ/ب × د/ج. نقلب الكسر الثاني (المقسوم عليه) فقط.",
+ wf:"هذه هي قاعدة القسمة الأساسية: اضرب في مقلوب المقسوم عليه.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: 1/2 ÷ 1/4 = 1/2 × 4/1 = 2.",tags:["lesson"]},
+{id:"q1-4-3",c:"c1-4",d:2,t:"fill",q:"أوجد الناتج في أبسط صورة: ‏3/4 ÷ 1/2 = ___",a:"3/2",acc:["1.5","1 1/2"],
+ ex:"‏3/4 ÷ 1/2 = 3/4 × 2/1 = 6/4 = 3/2.",
+ wf:"اقلب الكسر الثاني ثم اضرب: 3/4 × 2/1.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: 2/3 ÷ 1/6 = 2/3 × 6/1 = 4.",fu:"q1-4-4",tags:["lesson"]},
+{id:"q1-4-4",c:"c1-4",d:2,t:"solve",q:"أوجد ناتج: ‏-5/8 ÷ 5/16",a:"-2",acc:["-2.0","-2/1"],
+ ex:"‏-5/8 × 16/5 = -16/8 × 5/5 = -2. الإشارة سالبة لاختلاف الإشارتين.",
+ wf:"اقلب 5/16 إلى 16/5 ثم اختصر: 5 مع 5 و 16 مع 8.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: -3/4 ÷ 3/8 = -3/4 × 8/3 = -2.",fu:"q1-4-3",tags:["lesson"]},
+{id:"q1-4-5",c:"c1-4",d:4,t:"solve",q:"أوجد ناتج: ‏2 1/4 ÷ (-3/8)",a:"-6",acc:["-6.0","-6/1"],
+ ex:"‏2 1/4 = 9/4، إذن 9/4 ÷ (-3/8) = 9/4 × (-8/3) = -72/12 = -6.",
+ wf:"حوّل العدد الكسري إلى كسر غير فعلي أولًا، ثم اضرب في المقلوب، وانتبه للإشارة.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: 1 1/2 ÷ (-1/2) = 3/2 × (-2/1) = -3.",fu:"q1-4-4",tags:["test","challenge"]},
+{id:"q1-4-6",c:"c1-4",d:5,t:"solve",q:"شريط قماش طوله 4 1/2 متر، قُصَّ إلى قطع متساوية طول كل منها 3/4 متر. كم عدد القطع الناتجة؟",a:"6",acc:["6 قطع"],
+ ex:"عدد القطع = 9/2 ÷ 3/4 = 9/2 × 4/3 = 36/6 = 6 قطع.",
+ wf:"«كم قطعة طولها كذا في طول كلي» تعني القسمة: الطول الكلي ÷ طول القطعة.",
+ mt:"خطأ في فهم السؤال",
+ se:"مثال محلول: حبل 6 أمتار يقطع كل 1/2 متر ⟸ 6 ÷ 1/2 = 12 قطعة.",fu:"q1-4-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q1-4-7",c:"c1-4",d:6,t:"error",q:"لحساب 2/3 ÷ 4/5 كتب طالب: ‏3/2 × 4/5 = 12/10. اكتشف الخطأ.",
+ opts:["الخطأ في ضرب البسطين","قلب الكسر الأول، والصواب قلب الثاني: ‏2/3 × 5/4 = 10/12 = 5/6","الناتج 12/10 يحتاج تبسيطًا فقط ولا خطأ في الطريقة","لا يوجد خطأ"],
+ a:"قلب الكسر الأول، والصواب قلب الثاني: ‏2/3 × 5/4 = 10/12 = 5/6",
+ ex:"في القسمة نقلب المقسوم عليه (الكسر الثاني) فقط ونبقي الأول كما هو.",
+ wf:"تذكر: الكسر الأول ثابت، والثاني يُقلب وتتحول القسمة إلى ضرب.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: 1/2 ÷ 2/3 = 1/2 × 3/2 = 3/4.",tags:["lesson","mistake"]},
+{id:"q1-4-8",c:"c1-4",d:6,t:"teachback",q:"اشرح بكلماتك: ما خطوات قسمة كسر على كسر؟ ولماذا يعمل الضرب في المقلوب؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["مقلوب","ضرب","الثاني|المقسوم عليه","واحد|1"],
+ ex:"الإجابة الجيدة تذكر: نثبت الكسر الأول ونقلب الثاني ونحول القسمة إلى ضرب، ولأن ضرب العدد في مقلوبه يساوي 1 فالقسمة على عدد تكافئ الضرب في مقلوبه.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q1-4-9",c:"c1-4",d:6,t:"steps",q:"أوجد ناتج: ‏7/9 ÷ 14/27 في أبسط صورة، مع كتابة جميع الخطوات.",a:"3/2",acc:["1.5","1 1/2","21/14"],
+ ex:"‏7/9 × 27/14: نختصر 7 مع 14 (يبقى 2) و 27 مع 9 (تبقى 3): الناتج = 3/2.",
+ wf:"اقلب الكسر الثاني ثم اختصر قبل الضرب.",
+ mt:"خطأ في التبسيط",
+ se:"مثال محلول: 5/8 ÷ 15/16 = 5/8 × 16/15 = 2/3.",tags:["test","steps"]},
+{id:"q1-4-10",c:"c1-4",d:2,t:"solve",q:"ما مقلوب العدد الكسري 1 2/3؟",a:"3/5",acc:["0.6"],
+ ex:"‏1 2/3 = 5/3، ومقلوبه 3/5.",
+ wf:"حوّل العدد الكسري إلى كسر غير فعلي أولًا ثم اقلبه.",
+ mt:"خطأ في الكسور",
+ se:"مثال: مقلوب 2 1/2 = مقلوب 5/2 = 2/5.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 1 — المفهوم 1-5: جمع الأعداد النسبية وطرحها ===================== */
+{id:"q1-5-1",c:"c1-5",d:1,t:"mcq",q:"ناتج 2/9 + 5/9 يساوي:",opts:["7/9","7/18","10/9","3/9"],a:"7/9",
+ ex:"المقامان متحدان، فنجمع البسطين فقط: (2+5)/9 = 7/9.",
+ wf:"عند اتحاد المقامين نجمع البسطين ويبقى المقام كما هو.",
+ mt:"خطأ في الكسور",
+ se:"مثال: 3/7 + 2/7 = 5/7.",fu:"q1-5-3",tags:["lesson"]},
+{id:"q1-5-2",c:"c1-5",d:1,t:"tf",q:"‏1/2 + 1/3 = 2/5.",opts:["صح","خطأ"],a:"خطأ",
+ ex:"خطأ شائع! لا نجمع البسطين والمقامين. الصواب: توحيد المقامين: 3/6 + 2/6 = 5/6.",
+ wf:"إياك وجمع المقامات؛ وحّد المقامين أولًا بالمضاعف المشترك الأصغر.",
+ mt:"خطأ في الكسور",
+ se:"مثال: 1/4 + 1/2 = 1/4 + 2/4 = 3/4 وليس 2/6.",tags:["lesson"]},
+{id:"q1-5-3",c:"c1-5",d:2,t:"fill",q:"أوجد الناتج في أبسط صورة: ‏5/6 - 1/4 = ___",a:"7/12",acc:["٧/١٢"],
+ ex:"المضاعف المشترك الأصغر 12: ‏10/12 - 3/12 = 7/12.",
+ wf:"وحّد المقامين إلى 12 ثم اطرح البسطين.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: 2/3 - 1/6 = 4/6 - 1/6 = 3/6 = 1/2.",fu:"q1-5-4",tags:["lesson"]},
+{id:"q1-5-4",c:"c1-5",d:2,t:"solve",q:"أوجد ناتج: ‏-3.5 + 1.25",a:"-2.25",acc:["-2 1/4","-9/4"],
+ ex:"الإشارتان مختلفتان: نطرح 3.5 - 1.25 = 2.25 ونأخذ إشارة الأكبر قيمة مطلقة (سالبة): -2.25.",
+ wf:"رتب الفاصلة العشرية، واطرح الأصغر من الأكبر، وخذ إشارة الأكبر.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: -4.2 + 1.7 = -2.5.",fu:"q1-5-3",tags:["lesson"]},
+{id:"q1-5-5",c:"c1-5",d:4,t:"solve",q:"أوجد ناتج: ‏2 1/3 - 4 1/2 (اكتب الناتج كسرًا أو عددًا كسريًا).",a:"-13/6",acc:["-2 1/6","-2.17","-2.1667"],
+ ex:"‏7/3 - 9/2 = 14/6 - 27/6 = -13/6 = -2 1/6.",
+ wf:"حوّل إلى كسور غير فعلية ووحّد المقامين إلى 6، وانتبه: الناتج سالب لأن المطروح أكبر.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: 1 1/4 - 2 1/2 = 5/4 - 10/4 = -5/4.",fu:"q1-5-3",tags:["test","challenge"]},
+{id:"q1-5-6",c:"c1-5",d:5,t:"solve",q:"استعمل خبّاز 2/3 كيس الدقيق في الصباح و 1/4 الكيس في المساء. ما الجزء الذي استعمله من الكيس كاملًا؟",a:"11/12",acc:["١١/١٢"],
+ ex:"المجموع = 2/3 + 1/4 = 8/12 + 3/12 = 11/12 من الكيس.",
+ wf:"وحّد المقامين إلى 12 ثم اجمع البسطين.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: شرب أحمد 1/2 العصير ثم 1/3 منه: المجموع 5/6.",fu:"q1-5-3",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q1-5-7",c:"c1-5",d:6,t:"error",q:"جمع طالب: ‏1/4 + 2/5 = 3/9. اكتشف الخطأ وصحّحه.",
+ opts:["جمع البسطين والمقامين معًا؛ والصواب: 5/20 + 8/20 = 13/20","الخطأ في اختيار البسطين فقط","الناتج صحيح لكنه يحتاج تبسيطًا إلى 1/3","لا يوجد خطأ"],
+ a:"جمع البسطين والمقامين معًا؛ والصواب: 5/20 + 8/20 = 13/20",
+ ex:"جمع المقامات أشهر خطأ في الكسور. لاحظ أن 3/9 = 1/3 أصغر من 2/5 وحده، وهذا مستحيل لجمع كميتين موجبتين.",
+ wf:"اختبر منطقية الناتج: مجموع كسرين موجبين يجب أن يكون أكبر من كل منهما.",
+ mt:"خطأ في الكسور",
+ se:"الصواب: المضاعف المشترك 20: ‏1/4 = 5/20 و ‏2/5 = 8/20 والمجموع 13/20.",tags:["lesson","mistake"]},
+{id:"q1-5-8",c:"c1-5",d:6,t:"teachback",q:"اكتب خطوات جمع كسرين مختلفي المقامين بكلماتك، دون تنفيذ أي حساب.",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["مضاعف|توحيد|مقام مشترك","بسط","مقام","بسّط|أبسط صورة"],
+ ex:"الإجابة الجيدة تذكر: إيجاد المضاعف المشترك الأصغر للمقامين، تحويل كل كسر إلى كسر مكافئ بالمقام الموحد، جمع البسطين وبقاء المقام، ثم التبسيط.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q1-5-9",c:"c1-5",d:6,t:"steps",q:"أوجد ناتج: ‏-5/12 + 7/8 مع كتابة جميع الخطوات.",a:"11/24",acc:["١١/٢٤"],
+ ex:"المضاعف المشترك الأصغر 24: ‏-10/24 + 21/24 = 11/24.",
+ wf:"وحّد المقامين إلى 24، وتعامل مع الإشارة السالبة كجمع عددين مختلفي الإشارة.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: -1/6 + 3/4 = -2/12 + 9/12 = 7/12.",tags:["test","steps"]},
+{id:"q1-5-10",c:"c1-5",d:2,t:"solve",q:"أوجد ناتج: ‏0.8 - 1/5",a:"0.6",acc:["3/5","0.60"],
+ ex:"‏1/5 = 0.2، إذن 0.8 - 0.2 = 0.6.",
+ wf:"وحّد الصورة: حوّل الكسر إلى عدد عشري أو العكس قبل الطرح.",
+ mt:"خطأ في الأعداد العشرية",
+ se:"مثال: 0.9 - 1/2 = 0.4.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 2 — المفهوم 2-1: الجذور التربيعية ===================== */
+{id:"q2-1-1",c:"c2-1",d:1,t:"mcq",q:"قيمة √64 تساوي:",opts:["8","32","16","6"],a:"8",
+ ex:"‏√64 = 8 لأن 8 × 8 = 64. الرمز √ يعني الجذر التربيعي الموجب.",
+ wf:"الجذر التربيعي ليس القسمة على 2؛ ابحث عن عدد مربعه 64.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال: √25 = 5 لأن 5² = 25.",fu:"q2-1-3",tags:["lesson"]},
+{id:"q2-1-2",c:"c2-1",d:1,t:"tf",q:"لكل عدد موجب جذران تربيعيان: أحدهما موجب والآخر سالب.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: جذرا 49 هما 7 و -7 لأن (7)² = 49 و (-7)² = 49. لكن الرمز √49 يعني الجذر الموجب 7 فقط.",
+ wf:"فرّق بين «جذور العدد» (موجب وسالب) ورمز الجذر √ الذي يعني الموجب فقط.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"حل س² = 49 هو س = ±7، بينما √49 = 7.",tags:["lesson"]},
+{id:"q2-1-3",c:"c2-1",d:2,t:"fill",q:"أكمل: ‏√144 = ___",a:"12",
+ ex:"‏12 × 12 = 144 إذن √144 = 12.",
+ wf:"راجع مربعات الأعداد: 11² = 121 و 12² = 144 و 13² = 169.",
+ mt:"خطأ حسابي",
+ se:"مثال: √121 = 11.",fu:"q2-1-4",tags:["lesson"]},
+{id:"q2-1-4",c:"c2-1",d:2,t:"solve",q:"حل المعادلة: ‏س² = 121 (اكتب الحلين مفصولين بفاصلة).",a:"11 , -11",exact:true,acc:["11,-11","-11,11","-11 , 11","±11","11 و -11","-11 و 11"],
+ ex:"حلّا المعادلة س² = 121 هما س = 11 و س = -11 لأن مربع كل منهما 121.",
+ wf:"لا تنسَ الحل السالب: المعادلة س² = أ لها حلان ±√أ.",
+ mt:"خطأ في فهم السؤال",
+ se:"مثال محلول: س² = 36 ⟸ س = 6 أو س = -6.",fu:"q2-1-3",tags:["lesson"]},
+{id:"q2-1-5",c:"c2-1",d:4,t:"solve",q:"أوجد قيمة: ‏√(81/25) (اكتب الناتج كسرًا أو عددًا عشريًا).",a:"9/5",acc:["1.8","1 4/5"],
+ ex:"جذر الكسر = جذر البسط على جذر المقام: √81 / √25 = 9/5 = 1.8.",
+ wf:"خذ جذر البسط وجذر المقام كلًّا على حدة.",
+ mt:"خطأ في الكسور",
+ se:"مثال محلول: √(4/9) = 2/3.",fu:"q2-1-4",tags:["test","challenge"]},
+{id:"q2-1-6",c:"c2-1",d:5,t:"solve",q:"حديقة مربعة الشكل مساحتها 225 مترًا مربعًا. ما طول ضلعها بالمتر؟",a:"15",
+ ex:"طول الضلع = √المساحة = √225 = 15 مترًا، لأن مساحة المربع = الضلع².",
+ wf:"مساحة المربع = الضلع²، فالضلع هو الجذر التربيعي للمساحة.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: مساحة مربع 81 م² ⟸ ضلعه 9 م.",fu:"q2-1-3",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q2-1-7",c:"c2-1",d:6,t:"error",q:"قال طالب: «‏√49 = 24.5 لأننا نقسم على 2». اكتشف الخطأ.",
+ opts:["الجذر التربيعي ليس القسمة على 2؛ الصواب √49 = 7 لأن 7² = 49","الخطأ حسابي فقط: 49 ÷ 2 = 24.5 صحيحة والفكرة سليمة","الصواب √49 = 14 (نصف 28)","لا يوجد خطأ"],
+ a:"الجذر التربيعي ليس القسمة على 2؛ الصواب √49 = 7 لأن 7² = 49",
+ ex:"الجذر التربيعي عملية عكسية للتربيع، لا للضرب في 2. نبحث عن العدد الذي مربعه 49 وهو 7.",
+ wf:"تحقق دائمًا بالتربيع: هل (ناتجك)² يعيد العدد الأصلي؟",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"قارن: نصف 49 هو 24.5، أما جذر 49 فهو 7.",tags:["lesson","mistake"]},
+{id:"q2-1-8",c:"c2-1",d:6,t:"teachback",q:"اشرح بكلماتك: ما معنى «الجذر التربيعي» لعدد ما؟ ولماذا لمعادلة مثل س² = 64 حلان؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["مربع|نفسه|تربيع","موجب","سالب","حلان|جذران"],
+ ex:"الإجابة الجيدة تذكر: الجذر التربيعي لعدد هو العدد الذي إذا ضرب في نفسه أعطى العدد الأصلي، وللمعادلة حلان لأن مربع الموجب ومربع السالب متساويان.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q2-1-9",c:"c2-1",d:6,t:"steps",q:"لوحة مربعة مساحتها 196 سم². أوجد طول ضلعها مع كتابة جميع الخطوات (المعطيات، القانون، التعويض، الحل).",a:"14",
+ ex:"المساحة = الضلع² ⟸ 196 = الضلع² ⟸ الضلع = √196 = 14 سم.",
+ wf:"ابدأ بقانون مساحة المربع ثم خذ الجذر التربيعي للمساحة.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: مساحة 100 سم² ⟸ الضلع = √100 = 10 سم.",tags:["test","steps"]},
+{id:"q2-1-10",c:"c2-1",d:2,t:"solve",q:"أوجد قيمة: ‏√169",a:"13",
+ ex:"‏13² = 169 إذن √169 = 13.",
+ wf:"احفظ مربعات الأعداد حتى 15: ‏13² = 169.",
+ mt:"خطأ حسابي",
+ se:"مثال: √196 = 14.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 2 — المفهوم 2-2: تقدير الجذور التربيعية ===================== */
+{id:"q2-2-1",c:"c2-2",d:1,t:"mcq",q:"أقرب عدد صحيح إلى √52 هو:",opts:["7","8","6","26"],a:"7",
+ ex:"‏52 تقع بين 49 و 64، إذن √52 بين 7 و 8، وهي أقرب إلى 7 لأن 52 قريبة من 49.",
+ wf:"ابحث عن أقرب مربعين كاملين حول العدد: 49 و 64.",
+ mt:"خطأ حسابي",
+ se:"مثال: √18 بين 4 و 5 وأقرب إلى 4 لأن 18 قريبة من 16.",fu:"q2-2-3",tags:["lesson"]},
+{id:"q2-2-2",c:"c2-2",d:1,t:"tf",q:"العدد √30 يقع بين 5 و 6.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: 25 < 30 < 36 إذن 5 < √30 < 6.",
+ wf:"قارن العدد بالمربعين الكاملين 25 و 36.",
+ mt:"خطأ حسابي",
+ se:"مثال: √40 بين 6 و 7 لأن 36 < 40 < 49.",tags:["lesson"]},
+{id:"q2-2-3",c:"c2-2",d:2,t:"solve",q:"ما أكبر عدد صحيح أصغر من √95؟",a:"9",
+ ex:"‏81 < 95 < 100 إذن 9 < √95 < 10، فأكبر عدد صحيح أصغر منه هو 9.",
+ wf:"حدد المربعين الكاملين المحيطين بـ 95: هما 81 و 100.",
+ mt:"خطأ في فهم السؤال",
+ se:"مثال محلول: أكبر صحيح أصغر من √70: ‏64 < 70 < 81 ⟸ الجواب 8.",fu:"q2-2-4",tags:["lesson"]},
+{id:"q2-2-4",c:"c2-2",d:2,t:"solve",q:"قدّر √140 لأقرب عدد صحيح.",a:"12",
+ ex:"‏121 < 140 < 144، و140 أقرب كثيرًا إلى 144، إذن √140 ≈ 12.",
+ wf:"قارن بُعد العدد عن المربعين 121 و 144 واختر الأقرب.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: √84 بين 9 و 10 وأقرب إلى 9 لأن 84 - 81 = 3 فقط.",fu:"q2-2-3",tags:["lesson"]},
+{id:"q2-2-5",c:"c2-2",d:4,t:"mcq",q:"بدون آلة حاسبة، أي تقدير هو الأفضل لقيمة √8.6؟",opts:["3","2.5","4","9"],a:"3",
+ ex:"‏8.6 قريبة من 9، و√9 = 3، إذن √8.6 ≈ 3 (أقل قليلًا من 3).",
+ wf:"ابحث عن أقرب مربع كامل: 9 قريب جدًا من 8.6.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: √15.8 ≈ 4 لأن 15.8 قريبة من 16.",fu:"q2-2-4",tags:["test","challenge"]},
+{id:"q2-2-6",c:"c2-2",d:5,t:"solve",q:"حديقة مربعة مساحتها 110 أمتار مربعة. قدّر طول ضلعها لأقرب متر.",a:"10",
+ ex:"الضلع = √110، و100 < 110 < 121 والعدد 110 أقرب إلى 100، إذن الضلع ≈ 10 أمتار.",
+ wf:"الضلع هو جذر المساحة؛ قدّره بين 10 و 11 ثم اختر الأقرب.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: مساحة 50 م² ⟸ الضلع ≈ 7 م لأن 50 قريبة من 49.",fu:"q2-2-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q2-2-7",c:"c2-2",d:6,t:"error",q:"قدّر طالب: «‏√200 ≈ 100 لأن 200 ÷ 2 = 100». اكتشف الخطأ.",
+ opts:["خلط بين الجذر والقسمة على 2؛ الصواب: √200 بين 14 و 15 لأن 196 < 200 < 225","تقديره مقبول لأن 100 × 2 = 200","الصواب √200 = 20","لا يوجد خطأ"],
+ a:"خلط بين الجذر والقسمة على 2؛ الصواب: √200 بين 14 و 15 لأن 196 < 200 < 225",
+ ex:"لو كان √200 = 100 لكان 100² = 10000 وليس 200. الصواب أن √200 ≈ 14.1.",
+ wf:"اختبر تقديرك بالتربيع دائمًا.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"‏14² = 196 و 15² = 225 إذن √200 بين 14 و 15.",tags:["lesson","mistake"]},
+{id:"q2-2-8",c:"c2-2",d:6,t:"teachback",q:"اشرح بكلماتك: كيف تقدّر قيمة جذر تربيعي لعدد ليس مربعًا كاملًا (مثل √45) دون آلة حاسبة؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["مربع كامل|مربعين","بين","أقرب","36|49"],
+ ex:"الإجابة الجيدة تذكر: نحصر العدد بين أقرب مربعين كاملين (36 و 49) فيقع الجذر بين جذريهما (6 و 7)، ثم نختار الأقرب حسب بعد العدد عن كل مربع.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q2-2-9",c:"c2-2",d:6,t:"steps",q:"قدّر √79 لأقرب عدد صحيح مع كتابة جميع الخطوات (بين أي مربعين كاملين يقع؟ وأيهما أقرب؟).",a:"9",
+ ex:"‏64 < 79 < 81 إذن 8 < √79 < 9، و79 تبعد 2 فقط عن 81 بينما تبعد 15 عن 64، إذن √79 ≈ 9.",
+ wf:"اكتب المربعين المحيطين أولًا ثم قارن المسافات.",
+ mt:"خطأ في كتابة الخطوات",
+ se:"مثال محلول: √33: ‏25 < 33 < 36، أقرب إلى 36 ⟸ √33 ≈ 6.",tags:["test","steps"]},
+{id:"q2-2-10",c:"c2-2",d:2,t:"solve",q:"قدّر √27 لأقرب عدد صحيح.",a:"5",
+ ex:"‏25 < 27 < 36 والعدد 27 قريب من 25، إذن √27 ≈ 5.",
+ wf:"حدد المربعين 25 و 36 ثم اختر الأقرب.",
+ mt:"خطأ حسابي",
+ se:"مثال: √24 ≈ 5.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 2 — المفهوم 2-3: الأعداد الحقيقية وتصنيفها ===================== */
+{id:"q2-3-1",c:"c2-3",d:1,t:"mcq",q:"أي الأعداد الآتية عدد غير نسبي؟",opts:["√2","0.5","-7","4/9"],a:"√2",
+ ex:"‏√2 = 1.41421356... عدد عشري لا منتهٍ وغير دوري، فهو غير نسبي. الباقي كلها أعداد نسبية.",
+ wf:"غير النسبي: عشري لا ينتهي ولا يتكرر بنمط، مثل جذور الأعداد التي ليست مربعات كاملة.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال: √5 غير نسبي، أما √4 = 2 فنسبي.",fu:"q2-3-3",tags:["lesson"]},
+{id:"q2-3-2",c:"c2-3",d:1,t:"tf",q:"كل الأعداد الحقيقية أعداد نسبية.",opts:["صح","خطأ"],a:"خطأ",
+ ex:"خطأ: الأعداد الحقيقية تشمل النسبية وغير النسبية معًا، مثل √3 و π فهي حقيقية غير نسبية.",
+ wf:"الحقيقية مجموعة أكبر تضم النسبية وغير النسبية.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"خريطة: حقيقية = نسبية ∪ غير نسبية.",tags:["lesson"]},
+{id:"q2-3-3",c:"c2-3",d:2,t:"mcq",q:"العدد √36 ينتمي إلى مجموعة:",opts:["الأعداد الطبيعية فقط","الأعداد النسبية فقط","غير النسبية","الطبيعية والصحيحة والنسبية معًا"],a:"الطبيعية والصحيحة والنسبية معًا",
+ ex:"‏√36 = 6 وهو عدد طبيعي، وكل طبيعي صحيح، وكل صحيح نسبي.",
+ wf:"احسب الجذر أولًا: √36 = 6، ثم صنّف الناتج لا الشكل.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال: √100 = 10 عدد طبيعي وصحيح ونسبي.",fu:"q2-3-4",tags:["lesson"]},
+{id:"q2-3-4",c:"c2-3",d:2,t:"mcq",q:"صنّف العدد 0.121221222122221... (نمط لا يتكرر بدورة ثابتة):",opts:["نسبي لأنه عشري","غير نسبي لأنه لا منتهٍ وغير دوري","صحيح","طبيعي"],a:"غير نسبي لأنه لا منتهٍ وغير دوري",
+ ex:"العدد العشري اللامنتهي يكون نسبيًا فقط إذا كان دوريًا (يتكرر بنمط ثابت)، وهذا النمط متغير فهو غير نسبي.",
+ wf:"الفيصل ليس طول العدد بل وجود دورة ثابتة من عدمها.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"قارن: 0.272727... دوري نسبي = 27/99، أما 0.27227222... فغير نسبي.",fu:"q2-3-3",tags:["lesson"]},
+{id:"q2-3-5",c:"c2-3",d:4,t:"mcq",q:"أي عبارة صحيحة عند مقارنة √7 بالعدد 2.7؟",opts:["√7 > 2.7","√7 < 2.7","√7 = 2.7","لا يمكن المقارنة"],a:"√7 < 2.7",
+ ex:"‏2.7² = 7.29 وهو أكبر من 7، إذن 2.7 أكبر من √7. (√7 ≈ 2.646).",
+ wf:"للمقارنة مع جذر: ربّع الطرف الآخر وقارن بالعدد تحت الجذر.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: قارن √10 و 3.1: ‏3.1² = 9.61 < 10 إذن √10 > 3.1.",fu:"q2-3-4",tags:["test","challenge"]},
+{id:"q2-3-6",c:"c2-3",d:5,t:"mcq",q:"مربع طول ضلعه 1 متر. صنّف العدد الذي يمثل طول قطره (√2):",
+ opts:["عدد نسبي","عدد غير نسبي","عدد صحيح","عدد طبيعي"],a:"عدد غير نسبي",
+ ex:"بنظرية فيثاغورس القطر = √(1²+1²) = √2، و2 ليس مربعًا كاملًا فجذره غير نسبي.",
+ wf:"جذر أي عدد طبيعي ليس مربعًا كاملًا يكون عددًا غير نسبي.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثال: قطر مربع ضلعه 2 = √8 غير نسبي أيضًا.",er:"سؤال يربط الفصل بنظرية فيثاغورس",tags:["test","exam","word"]},
+{id:"q2-3-7",c:"c2-3",d:6,t:"error",q:"قال طالب: «‏√9 عدد غير نسبي لأنه مكتوب بعلامة الجذر». اكتشف الخطأ.",
+ opts:["كلامه صحيح؛ كل جذر غير نسبي","الخطأ أن √9 = 3 عدد نسبي؛ العبرة بقيمة العدد لا بشكل كتابته","الخطأ أن √9 = 4.5","الخطأ أن √9 عدد سالب"],
+ a:"الخطأ أن √9 = 3 عدد نسبي؛ العبرة بقيمة العدد لا بشكل كتابته",
+ ex:"جذر المربع الكامل عدد نسبي: √9 = 3 = 3/1. علامة الجذر وحدها لا تجعل العدد غير نسبي.",
+ wf:"احسب قيمة الجذر أولًا؛ إن كانت القيمة كسرًا أو عددًا صحيحًا فهو نسبي.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"قارن: √16 = 4 نسبي، أما √17 فغير نسبي.",tags:["lesson","mistake"]},
+{id:"q2-3-8",c:"c2-3",d:6,t:"teachback",q:"اشرح بكلماتك: ما الفرق بين العدد النسبي والعدد غير النسبي؟ مع مثال لكل منهما.",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["كسر|أ/ب","دوري|يتكرر|منته","غير دوري|لا يتكرر|لا منته","√|جذر|باي|π"],
+ ex:"الإجابة الجيدة تذكر: النسبي يكتب كسرًا من عددين صحيحين وصورته العشرية منتهية أو دورية (مثل 0.75)، وغير النسبي عشري لا منتهٍ وغير دوري ولا يكتب كسرًا (مثل √2 أو π).",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q2-3-9",c:"c2-3",d:6,t:"steps",q:"رتّب الأعداد الآتية تصاعديًا مع كتابة خطوات التحويل والمقارنة: ‏√5 ، 2.3 ، 7/3. اكتب في الإجابة النهائية الترتيب كاملًا.",
+ a:"√5 , 2.3 , 7/3",exact:true,acc:["√5 ، 2.3 ، 7/3","√5, 2.3, 7/3","√5 2.3 7/3","جذر5 ثم 2.3 ثم 7/3"],
+ ex:"‏√5 ≈ 2.236 و ‏7/3 ≈ 2.333، إذن الترتيب التصاعدي: √5 ثم 2.3 ثم 7/3.",
+ wf:"حوّل الثلاثة إلى صور عشرية تقريبية بثلاث منازل ثم رتب.",
+ mt:"خطأ في كتابة الخطوات",
+ se:"مثال محلول: رتب √2، 1.5، 4/3: ‏1.414، 1.5، 1.333 ⟸ ‏4/3، √2، 1.5.",tags:["test","steps"]},
+{id:"q2-3-10",c:"c2-3",d:2,t:"mcq",q:"العدد π (النسبة التقريبية) هو عدد:",opts:["نسبي لأنه يساوي 22/7 تمامًا","غير نسبي، و22/7 مجرد تقريب له","صحيح","طبيعي"],a:"غير نسبي، و22/7 مجرد تقريب له",
+ ex:"‏π = 3.14159265... لا منتهٍ وغير دوري فهو غير نسبي، والكسر 22/7 تقريب شائع له فقط.",
+ wf:"لا تخلط بين العدد وتقريبه: 22/7 ≈ 3.142857 يختلف عن π.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"π و √2 أشهر مثالين على الأعداد غير النسبية.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 2 — المفهوم 2-4: نظرية فيثاغورس ===================== */
+{id:"q2-4-1",c:"c2-4",d:1,t:"mcq",q:"في المثلث القائم الزاوية، «الوتر» هو:",
+ opts:["أقصر الأضلاع","الضلع المقابل للزاوية القائمة وهو أطول الأضلاع","أحد ضلعي الزاوية القائمة","أي ضلع نختاره"],
+ a:"الضلع المقابل للزاوية القائمة وهو أطول الأضلاع",
+ ex:"الوتر دائمًا مقابل الزاوية القائمة، وهو أطول أضلاع المثلث القائم.",
+ wf:"حدد الزاوية القائمة أولًا؛ الضلع الذي يقابلها هو الوتر.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"في مثلث أضلاعه 3 و 4 و 5: الوتر هو 5 (الأطول).",fu:"q2-4-3",tags:["lesson"]},
+{id:"q2-4-2",c:"c2-4",d:1,t:"tf",q:"تنص نظرية فيثاغورس على أن: (الوتر)² = (الضلع الأول)² + (الضلع الثاني)² في المثلث القائم.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: ج² = أ² + ب² حيث ج الوتر و أ، ب ضلعا القائمة، وتصح في المثلث القائم فقط.",
+ wf:"احفظ النص بدقة وتذكر شرطه: مثلث قائم الزاوية.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثلث 6، 8، 10: ‏100 = 36 + 64 ✓.",tags:["lesson"]},
+{id:"q2-4-3",c:"c2-4",d:2,t:"fill",q:"مثلث قائم طولا ضلعي القائمة فيه 3 سم و 4 سم. طول الوتر = ___ سم.",a:"5",
+ ex:"ج² = 3² + 4² = 9 + 16 = 25 ⟸ ج = √25 = 5 سم.",
+ wf:"ربّع الضلعين واجمع ثم خذ الجذر التربيعي.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: ضلعان 5 و 12 ⟸ الوتر = √(25+144) = 13.",fu:"q2-4-4",tags:["lesson"]},
+{id:"q2-4-4",c:"c2-4",d:2,t:"solve",q:"مثلث قائم وتره 13 سم وأحد ضلعي القائمة 5 سم. أوجد طول الضلع الآخر بالسنتيمتر.",a:"12",
+ ex:"ب² = 13² - 5² = 169 - 25 = 144 ⟸ ب = 12 سم. (لإيجاد ضلع: نطرح ثم نجذّر).",
+ wf:"عند البحث عن ضلع (لا الوتر) نطرح مربع الضلع من مربع الوتر.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: وتر 10 وضلع 6 ⟸ الآخر = √(100-36) = 8.",fu:"q2-4-3",tags:["lesson"]},
+{id:"q2-4-5",c:"c2-4",d:4,t:"solve",q:"مثلث قائم طولا ضلعي القائمة فيه 8 سم و 15 سم. أوجد طول الوتر بالسنتيمتر.",a:"17",
+ ex:"ج² = 8² + 15² = 64 + 225 = 289 ⟸ ج = √289 = 17 سم.",
+ wf:"اجمع المربعين ثم ابحث عن جذر 289 (تلميح: 17² = 289).",
+ mt:"خطأ حسابي",
+ se:"ثلاثيات فيثاغورس الشهيرة: (3،4،5)، (5،12،13)، (8،15،17)، (7،24،25).",fu:"q2-4-4",tags:["test","challenge"]},
+{id:"q2-4-6",c:"c2-4",d:5,t:"solve",q:"سُلَّم طوله 10 أمتار أُسند إلى جدار رأسي، وقاعدته تبعد 6 أمتار عن الجدار. إلى أي ارتفاع يصل السلم على الجدار بالمتر؟",a:"8",
+ ex:"السلم وتر طوله 10، والمسافة الأفقية 6: الارتفاع = √(10² - 6²) = √64 = 8 أمتار.",
+ wf:"ارسم المثلث: السلم هو الوتر، والجدار والأرض ضلعا القائمة.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: سلم 5 أمتار وقاعدته على بعد 3 ⟸ يصل لارتفاع 4 أمتار.",fu:"q2-4-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q2-4-7",c:"c2-4",d:6,t:"error",q:"لإيجاد وتر مثلث قائم ضلعاه 3 و 4، كتب طالب: «الوتر = 3 + 4 = 7». اكتشف الخطأ.",
+ opts:["جمع الضلعين دون تربيع؛ الصواب: الوتر = √(3² + 4²) = 5","الخطأ في الجمع: 3 + 4 = 8","الصواب: الوتر = 3 × 4 = 12","لا يوجد خطأ"],
+ a:"جمع الضلعين دون تربيع؛ الصواب: الوتر = √(3² + 4²) = 5",
+ ex:"النظرية تجمع مربعي الضلعين لا الضلعين نفسيهما، ثم نأخذ الجذر التربيعي للمجموع.",
+ wf:"تذكر الترتيب: ربّع، اجمع، جذّر.",
+ mt:"خطأ في اختيار القانون",
+ se:"‏3² + 4² = 25 و √25 = 5، ولاحظ أن 5 ≠ 7.",tags:["lesson","mistake"]},
+{id:"q2-4-8",c:"c2-4",d:6,t:"teachback",q:"اشرح بكلماتك: ماذا تقول نظرية فيثاغورس؟ ومتى يجوز استعمالها ومتى لا يجوز؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["قائم|قائمة","وتر","مربع|تربيع","مجموع"],
+ ex:"الإجابة الجيدة تذكر: في المثلث القائم فقط، مربع الوتر يساوي مجموع مربعي الضلعين الآخرين، ولا تستعمل في مثلث غير قائم.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q2-4-9",c:"c2-4",d:6,t:"steps",q:"مثلث قائم طولا ضلعي القائمة فيه 6 سم و 8 سم. أوجد طول الوتر مع كتابة جميع الخطوات.",a:"10",
+ ex:"ج² = 6² + 8² = 36 + 64 = 100 ⟸ ج = √100 = 10 سم.",
+ wf:"اكتب القانون أولًا ثم عوّض ثم جذّر.",
+ mt:"خطأ في كتابة الخطوات",
+ se:"مثال محلول: ضلعان 9 و 12 ⟸ الوتر = √(81+144) = 15.",tags:["test","steps"]},
+{id:"q2-4-10",c:"c2-4",d:3,t:"mcq",q:"هل المثلث الذي أطوال أضلاعه 5 ، 12 ، 13 قائم الزاوية؟",
+ opts:["نعم، لأن 13² = 5² + 12²","لا، لأن 13 ≠ 5 + 12","لا يمكن المعرفة بدون رسم","نعم، لأن أضلاعه أعداد فردية وزوجية"],
+ a:"نعم، لأن 13² = 5² + 12²",
+ ex:"بعكس النظرية: 169 = 25 + 144 ✓ فالمثلث قائم الزاوية ووتره 13.",
+ wf:"اختبر أطول ضلع: هل مربعه يساوي مجموع مربعي الآخرين؟",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: 6، 8، 10 قائم لأن 100 = 36 + 64.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 2 — المفهوم 2-5: استعمال نظرية فيثاغورس ===================== */
+{id:"q2-5-1",c:"c2-5",d:1,t:"mcq",q:"أي مجموعة من الأطوال الآتية تكوّن مثلثًا قائم الزاوية؟",
+ opts:["9 ، 12 ، 15","4 ، 5 ، 6","2 ، 3 ، 4","7 ، 8 ، 10"],a:"9 ، 12 ، 15",
+ ex:"‏15² = 225 و ‏9² + 12² = 81 + 144 = 225 ✓. وهي ثلاثية (3،4،5) مضروبة في 3.",
+ wf:"اختبر كل مجموعة: مربع الأطول مقابل مجموع مربعي الآخرين.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: 4،5،6: ‏36 ≠ 16+25 = 41 فليست قائمة.",fu:"q2-5-3",tags:["lesson"]},
+{id:"q2-5-2",c:"c2-5",d:1,t:"tf",q:"المثلث الذي أطوال أضلاعه 4 ، 5 ، 6 مثلث قائم الزاوية.",opts:["صح","خطأ"],a:"خطأ",
+ ex:"‏6² = 36 بينما 4² + 5² = 41، وبما أن 36 ≠ 41 فليس قائم الزاوية.",
+ wf:"طبق عكس النظرية على أطول ضلع دائمًا.",
+ mt:"خطأ في اختيار القانون",
+ se:"قارن مع 3،4،5: ‏25 = 9 + 16 ✓ قائم.",tags:["lesson"]},
+{id:"q2-5-3",c:"c2-5",d:2,t:"fill",q:"شاشة مستطيلة عرضها 24 بوصة وارتفاعها 7 بوصات. طول قطرها = ___ بوصة.",a:"25",
+ ex:"القطر وتر مثلث قائم: √(24² + 7²) = √(576 + 49) = √625 = 25 بوصة.",
+ wf:"قطر المستطيل يكوّن مع البعدين مثلثًا قائمًا.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: مستطيل 6×8 ⟸ القطر 10.",fu:"q2-5-4",tags:["lesson"]},
+{id:"q2-5-4",c:"c2-5",d:2,t:"solve",q:"طائرة ورقية مربوطة بخيط مشدود طوله 26 مترًا، والمسافة الأفقية بين الطفل والنقطة أسفل الطائرة 24 مترًا. ما ارتفاع الطائرة عن مستوى يد الطفل بالمتر؟",a:"10",
+ ex:"الارتفاع = √(26² - 24²) = √(676 - 576) = √100 = 10 أمتار.",
+ wf:"الخيط هو الوتر؛ نطرح مربع المسافة الأفقية من مربع الخيط.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: خيط 13 ومسافة أفقية 5 ⟸ الارتفاع 12.",fu:"q2-5-3",tags:["lesson"]},
+{id:"q2-5-5",c:"c2-5",d:4,t:"solve",q:"مستطيل طول قطره 20 سم وعرضه 12 سم. أوجد محيط المستطيل بالسنتيمتر. (خطوتان)",a:"56",
+ ex:"الطول = √(20² - 12²) = √(400 - 144) = √256 = 16 سم، ثم المحيط = 2 × (16 + 12) = 2 × 28 = 56 سم.",
+ wf:"أوجد الطول بنظرية فيثاغورس أولًا ثم طبّق قانون المحيط.",
+ mt:"خطأ في كتابة الخطوات",
+ se:"مثال محلول: قطر 10 وعرض 6 ⟸ الطول 8 والمحيط 28.",fu:"q2-5-4",tags:["test","challenge"]},
+{id:"q2-5-6",c:"c2-5",d:5,t:"solve",q:"ملعب مستطيل طوله 40 مترًا وعرضه 30 مترًا. ما طول المسار المستقيم الواصل بين ركنين متقابلين (القطر) بالمتر؟",a:"50",
+ ex:"القطر = √(40² + 30²) = √(1600 + 900) = √2500 = 50 مترًا.",
+ wf:"القطر وتر مثلث قائم ضلعاه الطول والعرض.",
+ mt:"خطأ في اختيار القانون",
+ se:"وهي الثلاثية (3،4،5) مضروبة في 10.",fu:"q2-5-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q2-5-7",c:"c2-5",d:6,t:"error",q:"مثلث أضلاعه 5 ، 6 ، 8 وليس فيه زاوية قائمة، فكتب طالب: «الضلع المجهول في مسألة أخرى مشابهة = √(6² + 8²)» مطبّقًا نظرية فيثاغورس عليه. اكتشف الخطأ.",
+ opts:["لا يجوز تطبيق النظرية إلا على مثلث قائم الزاوية، وهذا المثلث ليس قائمًا","الخطأ في الجمع داخل الجذر فقط","كان عليه استعمال 5 بدلًا من 6","لا يوجد خطأ"],
+ a:"لا يجوز تطبيق النظرية إلا على مثلث قائم الزاوية، وهذا المثلث ليس قائمًا",
+ ex:"شرط النظرية وجود زاوية قائمة. تحقق: 8² = 64 بينما 5² + 6² = 61 ≠ 64، فالمثلث ليس قائمًا أصلًا.",
+ wf:"قبل استعمال النظرية اسأل: هل المثلث قائم؟",
+ mt:"خطأ في اختيار القانون",
+ se:"عكس النظرية يُستعمل أولًا للتحقق من قيام الزاوية.",tags:["lesson","mistake"]},
+{id:"q2-5-8",c:"c2-5",d:6,t:"teachback",q:"اشرح بكلماتك: كيف تتحقق من أن مثلثًا ما قائم الزاوية إذا عرفت أطوال أضلاعه الثلاثة؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["أطول|الوتر","مربع","مجموع","يساوي|تساوي"],
+ ex:"الإجابة الجيدة تذكر: نأخذ أطول ضلع، فإن كان مربعه يساوي مجموع مربعي الضلعين الآخرين كان المثلث قائمًا (عكس نظرية فيثاغورس)، وإلا فليس قائمًا.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q2-5-9",c:"c2-5",d:6,t:"steps",q:"عمود إنارة ارتفاعه 12 مترًا، يُراد تثبيته بسلك مشدود من قمته إلى نقطة على الأرض تبعد 9 أمتار عن قاعدته. أوجد طول السلك مع كتابة جميع الخطوات.",a:"15",
+ ex:"السلك وتر: ج = √(12² + 9²) = √(144 + 81) = √225 = 15 مترًا.",
+ wf:"ارسم: العمود رأسي والمسافة أفقية والسلك هو الوتر.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: عمود 8 ونقطة على بعد 6 ⟸ السلك 10.",tags:["test","steps"]},
+{id:"q2-5-10",c:"c2-5",d:3,t:"solve",q:"باب مستطيل عرضه 9 أجزاء (وحدات) وارتفاعه 12 وحدة. ما طول قطره بالوحدات؟",a:"15",
+ ex:"القطر = √(9² + 12²) = √(81 + 144) = √225 = 15 وحدة.",
+ wf:"القطر وتر المثلث القائم المكوَّن من العرض والارتفاع.",
+ mt:"خطأ في اختيار القانون",
+ se:"وهي الثلاثية (3،4،5) مضروبة في 3.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 2 — المفهوم 2-6: المسافة بين نقطتين ===================== */
+{id:"q2-6-1",c:"c2-6",d:1,t:"mcq",q:"المسافة بين النقطتين (0 ، 0) و (3 ، 4) في المستوى الإحداثي تساوي:",opts:["5","7","12","25"],a:"5",
+ ex:"المسافة = √((3-0)² + (4-0)²) = √(9 + 16) = √25 = 5 وحدات.",
+ wf:"طبق قانون المسافة: جذر مجموع مربعي فرقي الإحداثيات.",
+ mt:"خطأ في اختيار القانون",
+ se:"لاحظ أنها نظرية فيثاغورس: الفرق الأفقي 3 والرأسي 4 والوتر 5.",fu:"q2-6-3",tags:["lesson"]},
+{id:"q2-6-2",c:"c2-6",d:1,t:"tf",q:"المسافة بين أي نقطتين مختلفتين عدد موجب دائمًا.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: المسافة طول، والجذر التربيعي في القانون يعطي قيمة موجبة، ومربعا الفرقين لا يكونان سالبين.",
+ wf:"حتى لو كانت الإحداثيات سالبة، التربيع يجعل النتائج موجبة.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"المسافة بين (-3،0) و (0،0) هي 3 وليست -3.",tags:["lesson"]},
+{id:"q2-6-3",c:"c2-6",d:2,t:"fill",q:"المسافة بين النقطتين (1 ، 2) و (4 ، 6) = ___ وحدات.",a:"5",
+ ex:"الفرق الأفقي = 3 والرأسي = 4: المسافة = √(9 + 16) = 5.",
+ wf:"اطرح الإحداثيات المتناظرة ثم ربّع واجمع وجذّر.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: (0،0) و (6،8): المسافة = 10.",fu:"q2-6-4",tags:["lesson"]},
+{id:"q2-6-4",c:"c2-6",d:2,t:"solve",q:"أوجد المسافة بين النقطتين (-2 ، 1) و (4 ، 9).",a:"10",
+ ex:"الفرق الأفقي = 4 - (-2) = 6 والرأسي = 9 - 1 = 8: المسافة = √(36 + 64) = √100 = 10.",
+ wf:"انتبه لطرح السالب: 4 - (-2) = 6 وليس 2.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: (-1،0) و (2،4): الفرقان 3 و 4 والمسافة 5.",fu:"q2-6-3",tags:["lesson"]},
+{id:"q2-6-5",c:"c2-6",d:4,t:"solve",q:"أوجد المسافة بين النقطتين (2 ، -3) و (7 ، 9).",a:"13",
+ ex:"الفرق الأفقي = 5 والرأسي = 9 - (-3) = 12: المسافة = √(25 + 144) = √169 = 13.",
+ wf:"الفرق الرأسي يمر عبر الصفر: من -3 إلى 9 يساوي 12.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"وهي الثلاثية (5،12،13).",fu:"q2-6-4",tags:["test","challenge"]},
+{id:"q2-6-6",c:"c2-6",d:5,t:"solve",q:"على خريطة إحداثية بالكيلومترات، يقع منزل سالم عند النقطة (1 ، 1) ومدرسته عند النقطة (4 ، 5). ما طول المسار المستقيم بين المنزل والمدرسة بالكيلومتر؟",a:"5",
+ ex:"الفرقان 3 و 4: المسافة = √(9 + 16) = 5 كم.",
+ wf:"مثّل الموقعين نقطتين وطبق قانون المسافة.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: (0،0) إلى (5،12) = 13 كم.",fu:"q2-6-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q2-6-7",c:"c2-6",d:6,t:"error",q:"لحساب المسافة بين (1 ، 2) و (4 ، 6) كتب طالب: «المسافة = (4-1) + (6-2) = 7». اكتشف الخطأ.",
+ opts:["جمع الفرقين مباشرة دون تربيع وجذر؛ الصواب √(3² + 4²) = 5","الخطأ في الطرح: 4-1 = 5","الصواب ضرب الفرقين: 3 × 4 = 12","لا يوجد خطأ"],
+ a:"جمع الفرقين مباشرة دون تربيع وجذر؛ الصواب √(3² + 4²) = 5",
+ ex:"جمع الفرقين يعطي طول الطريق المتعرج (أفقي ثم رأسي)، أما المسافة المستقيمة فهي وتر المثلث = 5.",
+ wf:"تذكر أن قانون المسافة هو نظرية فيثاغورس: ربّع، اجمع، جذّر.",
+ mt:"خطأ في اختيار القانون",
+ se:"المسار المستقيم (5) أقصر دائمًا من المسار المتعرج (7).",tags:["lesson","mistake"]},
+{id:"q2-6-8",c:"c2-6",d:6,t:"teachback",q:"اشرح بكلماتك: ما علاقة قانون المسافة بين نقطتين بنظرية فيثاغورس؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["وتر","قائم","أفقي|الفرق في س","رأسي|الفرق في ص"],
+ ex:"الإجابة الجيدة توضح: الفرق الأفقي والفرق الرأسي يكوّنان ضلعي مثلث قائم، والمسافة المطلوبة هي الوتر، فالقانون تطبيق مباشر لنظرية فيثاغورس.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q2-6-9",c:"c2-6",d:6,t:"steps",q:"أوجد المسافة بين النقطتين (3 ، 1) و (6 ، 5) مع كتابة جميع الخطوات (الفرق الأفقي، الفرق الرأسي، التعويض، الناتج).",a:"5",
+ ex:"الفرق الأفقي = 3 والرأسي = 4: المسافة = √(3² + 4²) = √25 = 5 وحدات.",
+ wf:"رتب الخطوات: فرقان، تربيع، جمع، جذر.",
+ mt:"خطأ في كتابة الخطوات",
+ se:"مثال محلول: (2،2) و (5،6): الفرقان 3 و4 والمسافة 5.",tags:["test","steps"]},
+{id:"q2-6-10",c:"c2-6",d:3,t:"solve",q:"أوجد المسافة بين النقطتين (-3 ، -4) ونقطة الأصل (0 ، 0).",a:"5",
+ ex:"المسافة = √((-3)² + (-4)²) = √(9 + 16) = 5. التربيع يلغي أثر الإشارة السالبة.",
+ wf:"ربّع الإحداثيين؛ المربعات موجبة دائمًا.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال: (-6،-8) عن الأصل = 10.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 3 — المفهوم 3-1: العلاقات المتناسبة وغير المتناسبة ===================== */
+{id:"q3-1-1",c:"c3-1",d:1,t:"mcq",q:"أي الكسور الآتية يكوّن نسبة متكافئة مع 2/3؟",opts:["8/12","6/8","4/5","3/2"],a:"8/12",
+ ex:"‏8/12 = 2/3 بالقسمة على 4، فالنسبتان متكافئتان.",
+ wf:"بسّط كل خيار وقارن بـ 2/3.",
+ mt:"خطأ في الكسور",
+ se:"مثال: 2/3 = 10/15 بالضرب في 5.",fu:"q3-1-3",tags:["lesson"]},
+{id:"q3-1-2",c:"c3-1",d:1,t:"tf",q:"العلاقة بين محيط المربع وطول ضلعه علاقة متناسبة.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: المحيط = 4 × الضلع، فالنسبة (المحيط ÷ الضلع) ثابتة دائمًا وتساوي 4 (ثابت التناسب).",
+ wf:"العلاقة متناسبة إذا كانت نسبة الكميتين ثابتة لكل القيم.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"ضلع 2 ⟸ محيط 8، وضلع 5 ⟸ محيط 20، والنسبة 4 في الحالتين.",tags:["lesson"]},
+{id:"q3-1-3",c:"c3-1",d:2,t:"fill",q:"الجدول يمثل علاقة متناسبة. أكمل القيمة الناقصة:",
+ fig:"عدد العلب: 2 | 3 | 5\nالثمن بالريال: 6 | 9 | ؟",a:"15",
+ ex:"ثابت التناسب = 6 ÷ 2 = 3 ريالات للعلبة، إذن ثمن 5 علب = 5 × 3 = 15 ريالًا.",
+ wf:"أوجد ثابت التناسب (الثمن ÷ العدد) ثم اضربه في 5.",
+ mt:"خطأ في قراءة الجدول",
+ se:"مثال محلول: 4 أقلام بـ 8 ريالات ⟸ 7 أقلام بـ 14 ريالًا.",fu:"q3-1-4",tags:["lesson"]},
+{id:"q3-1-4",c:"c3-1",d:2,t:"mcq",q:"هل النسبتان 4/10 و 6/15 متناسبتان؟",
+ opts:["نعم، لأن كلًّا منهما يساوي 2/5","لا، لأن البسطين مختلفان","لا، لأن 4 + 6 ≠ 10 + 15","لا يمكن المعرفة"],
+ a:"نعم، لأن كلًّا منهما يساوي 2/5",
+ ex:"‏4/10 = 2/5 و ‏6/15 = 2/5، فهما متكافئتان (أو بالضرب التبادلي: 4×15 = 60 = 10×6).",
+ wf:"بسّط النسبتين أو استعمل الضرب التبادلي للتحقق.",
+ mt:"خطأ في الكسور",
+ se:"مثال: 3/9 و 5/15 متناسبتان لأن كليهما 1/3.",fu:"q3-1-3",tags:["lesson"]},
+{id:"q3-1-5",c:"c3-1",d:4,t:"mcq",q:"سيارة أجرة تتقاضى 5 ريالات أجرة ثابتة عند الركوب + 2 ريال لكل كيلومتر. هل العلاقة بين الأجرة الكلية والمسافة متناسبة؟",
+ opts:["لا، لأن وجود المبلغ الثابت يجعل النسبة (الأجرة ÷ المسافة) غير ثابتة","نعم، لأن الأجرة تزيد كلما زادت المسافة","نعم، لأن 2 ريال ثابت لكل كيلومتر","لا يمكن المعرفة"],
+ a:"لا، لأن وجود المبلغ الثابت يجعل النسبة (الأجرة ÷ المسافة) غير ثابتة",
+ ex:"لكيلومتر واحد: الأجرة 7 والنسبة 7. لكيلومترين: 9 والنسبة 4.5. النسبة غير ثابتة فالعلاقة غير متناسبة.",
+ wf:"مجرد الزيادة لا تكفي؛ اختبر ثبات النسبة بقيمتين مختلفتين.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"كل علاقة فيها «مبلغ بداية ثابت» غير متناسبة.",fu:"q3-1-4",tags:["test","challenge"]},
+{id:"q3-1-6",c:"c3-1",d:5,t:"mcq",q:"اشترى ماجد 3 أقلام بـ 12 ريالًا، واشترى عمر 7 أقلام من النوع نفسه بـ 28 ريالًا. هل الثمن متناسب مع عدد الأقلام؟",
+ opts:["نعم، لأن 12/3 = 28/7 = 4 ريالات للقلم","لا، لأن 12 ≠ 28","لا، لأن 7 - 3 = 4 و 28 - 12 = 16","لا يمكن المعرفة"],
+ a:"نعم، لأن 12/3 = 28/7 = 4 ريالات للقلم",
+ ex:"معدل الوحدة واحد في الحالتين (4 ريالات للقلم) فالعلاقة متناسبة.",
+ wf:"قارن معدل الوحدة (الثمن ÷ العدد) في الحالتين.",
+ mt:"خطأ في فهم السؤال",
+ se:"مثال: 5 دفاتر بـ 10 و 8 دفاتر بـ 16 ⟸ متناسبة (2 ريال للدفتر).",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q3-1-7",c:"c3-1",d:6,t:"error",q:"للتحقق هل 3/4 و 9/12 متناسبتان، كتب طالب: «‏9 - 3 = 6 و ‏12 - 4 = 8، والفرقان مختلفان فهما غير متناسبتين». اكتشف الخطأ.",
+ opts:["استعمل الطرح، والتناسب يُختبر بالقسمة أو الضرب التبادلي: 3×12 = 4×9 = 36 فهما متناسبتان","الخطأ حسابي: 9 - 3 = 5","استنتاجه صحيح لأن الفرقين مختلفان","لا يوجد خطأ"],
+ a:"استعمل الطرح، والتناسب يُختبر بالقسمة أو الضرب التبادلي: 3×12 = 4×9 = 36 فهما متناسبتان",
+ ex:"التناسب علاقة ضربية لا جمعية: نقارن النسب بالقسمة أو الضرب التبادلي، لا بالفروق.",
+ wf:"تذكر: تساوي الفروق لا يعني التناسب، وتساوي النسب هو المعيار.",
+ mt:"خطأ في اختيار القانون",
+ se:"‏3/4 = 9/12 لأن كليهما 0.75.",tags:["lesson","mistake"]},
+{id:"q3-1-8",c:"c3-1",d:6,t:"teachback",q:"اشرح بكلماتك: متى نقول إن علاقة بين كميتين «متناسبة»؟ وكيف تكتشف من جدولٍ أن العلاقة غير متناسبة؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["نسبة|قسمة","ثابت","جدول|أزواج","تختلف|غير ثابتة"],
+ ex:"الإجابة الجيدة تذكر: العلاقة متناسبة إذا كانت نسبة الكمية الثانية إلى الأولى ثابتة لكل الأزواج (ثابت التناسب)، ومن الجدول نقسم كل زوج فإن اختلفت النواتج فهي غير متناسبة.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q3-1-9",c:"c3-1",d:6,t:"steps",q:"يبيّن الجدول عدد ساعات عمل وأجرة عامل: 2 ساعة ⟸ 70 ريالًا، 4 ساعات ⟸ 140 ريالًا، 6 ساعات ⟸ 210 ريالات. تحقق بالخطوات هل العلاقة متناسبة، واكتب في الإجابة النهائية ثابت التناسب.",a:"35",
+ ex:"‏70/2 = 35 و ‏140/4 = 35 و ‏210/6 = 35؛ النسبة ثابتة فالعلاقة متناسبة وثابت التناسب 35 ريالًا للساعة.",
+ wf:"اقسم الأجرة على الساعات في كل عمود وقارن النواتج.",
+ mt:"خطأ في قراءة الجدول",
+ se:"مثال محلول: 3⟸15، 5⟸25: النسبة 5 ثابتة فهي متناسبة.",tags:["test","steps"]},
+{id:"q3-1-10",c:"c3-1",d:2,t:"mcq",q:"أي جدول يمثل علاقة متناسبة؟",
+ opts:["س: 1، 2، 3 — ص: 4، 8، 12","س: 1، 2، 3 — ص: 3، 5، 7","س: 1، 2، 3 — ص: 1، 4، 9","س: 1، 2، 3 — ص: 5، 6، 7"],
+ a:"س: 1، 2، 3 — ص: 4، 8، 12",
+ ex:"في الجدول الأول النسبة ص/س = 4 ثابتة لكل الأزواج، فالعلاقة متناسبة.",
+ wf:"اقسم ص على س في كل زوج؛ يجب أن تثبت النتيجة.",
+ mt:"خطأ في قراءة الجدول",
+ se:"‏4/1 = 8/2 = 12/3 = 4 ✓.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 3 — المفهوم 3-2: معدل التغير ===================== */
+{id:"q3-2-1",c:"c3-2",d:1,t:"mcq",q:"قطعت سيارة 120 كيلومترًا في ساعتين. معدل التغير (السرعة) يساوي:",
+ opts:["60 كم/ساعة","240 كم/ساعة","118 كم/ساعة","30 كم/ساعة"],a:"60 كم/ساعة",
+ ex:"معدل التغير = التغير في المسافة ÷ التغير في الزمن = 120 ÷ 2 = 60 كم/ساعة.",
+ wf:"اقسم المسافة على الزمن، ولا تطرح أو تضرب.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: 180 كم في 3 ساعات ⟸ 60 كم/ساعة.",fu:"q3-2-3",tags:["lesson"]},
+{id:"q3-2-2",c:"c3-2",d:1,t:"tf",q:"يمكن أن يكون معدل التغير سالبًا.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: إذا كانت الكمية تتناقص (كمستوى ماء خزان يفرغ) كان معدل التغير سالبًا.",
+ wf:"معدل التغير يصف الاتجاه أيضًا: زيادة (+) أو نقصان (-).",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"نقص الماء من 100 إلى 80 لترًا في 4 دقائق: المعدل = -5 لتر/دقيقة.",tags:["lesson"]},
+{id:"q3-2-3",c:"c3-2",d:2,t:"fill",q:"يبيّن الجدول أجرة عامل: بعد ساعتين 60 ريالًا، وبعد 4 ساعات 120 ريالًا. معدل التغير = ___ ريالًا لكل ساعة.",a:"30",
+ ex:"معدل التغير = (120 - 60) ÷ (4 - 2) = 60 ÷ 2 = 30 ريالًا/ساعة.",
+ wf:"اقسم التغير في الأجرة على التغير في الساعات.",
+ mt:"خطأ في قراءة الجدول",
+ se:"مثال محلول: من (1، 25) إلى (3، 75): المعدل = 50/2 = 25.",fu:"q3-2-4",tags:["lesson"]},
+{id:"q3-2-4",c:"c3-2",d:2,t:"solve",q:"ازداد ارتفاع شجرة من 150 سم إلى 180 سم خلال 6 أشهر. ما معدل التغير بالسنتيمتر لكل شهر؟",a:"5",
+ ex:"معدل التغير = (180 - 150) ÷ 6 = 30 ÷ 6 = 5 سم/شهر.",
+ wf:"التغير في الارتفاع 30 سم، اقسمه على عدد الأشهر.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: نما طفل من 90 إلى 102 سم في 4 سنوات ⟸ 3 سم/سنة.",fu:"q3-2-3",tags:["lesson"]},
+{id:"q3-2-5",c:"c3-2",d:4,t:"solve",q:"انخفض مستوى الماء في خزان من 500 لتر إلى 200 لتر خلال 15 دقيقة. ما معدل التغير باللتر لكل دقيقة؟ (انتبه للإشارة)",a:"-20",
+ ex:"معدل التغير = (200 - 500) ÷ 15 = -300 ÷ 15 = -20 لترًا/دقيقة. الإشارة السالبة تعني نقصانًا.",
+ wf:"اطرح القيمة الأولى من الأخيرة (النهاية - البداية) فيظهر السالب.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"مثال محلول: هبطت درجة الحرارة من 30 إلى 18 خلال 6 ساعات ⟸ -2 درجة/ساعة.",fu:"q3-2-4",tags:["test","challenge"]},
+{id:"q3-2-6",c:"c3-2",d:5,t:"solve",q:"يبيّن جدول رحلة دراجة: عند الساعة 8:00 كان عداد المسافة 10 كم، وعند الساعة 11:00 كان 55 كم. ما معدل التغير (متوسط السرعة) بالكيلومتر لكل ساعة؟",a:"15",
+ ex:"التغير في المسافة = 55 - 10 = 45 كم، والزمن 3 ساعات: المعدل = 45 ÷ 3 = 15 كم/ساعة.",
+ wf:"احسب التغيرين أولًا (مسافة وزمن) ثم اقسم.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: من 20 كم إلى 80 كم خلال ساعتين ⟸ 30 كم/ساعة.",fu:"q3-2-4",er:"مسألة جدول على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q3-2-7",c:"c3-2",d:6,t:"error",q:"لحساب معدل تغير أجرة (4 ساعات ⟸ 100 ريال)، كتب طالب: «المعدل = 4 ÷ 100 = 0.04 ساعة/ريال إذن الأجرة 0.04 ريال للساعة». اكتشف الخطأ.",
+ opts:["قسم الساعات على الريالات وعكس الوحدتين؛ الصواب 100 ÷ 4 = 25 ريالًا للساعة","المعدل صحيح لكن الوحدة خاطئة فقط","كان عليه الطرح: 100 - 4 = 96","لا يوجد خطأ"],
+ a:"قسم الساعات على الريالات وعكس الوحدتين؛ الصواب 100 ÷ 4 = 25 ريالًا للساعة",
+ ex:"معدل التغير = الكمية التابعة (الأجرة) ÷ الكمية المستقلة (الزمن)، والوحدة الناتجة ريال/ساعة.",
+ wf:"اكتب الوحدة دائمًا مع المعدل؛ الوحدة المعكوسة تكشف القسمة المعكوسة.",
+ mt:"خطأ في الوحدات",
+ se:"‏100 ريال ÷ 4 ساعات = 25 ريالًا/ساعة.",tags:["lesson","mistake"]},
+{id:"q3-2-8",c:"c3-2",d:6,t:"teachback",q:"اشرح بكلماتك: ما معدل التغير؟ وكيف تحسبه من جدول؟ ومتى يكون سالبًا؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["التغير|الفرق","قسمة|÷|نقسم","سالب|نقصان|يقل","وحدة|وحدات"],
+ ex:"الإجابة الجيدة تذكر: المعدل هو التغير في الكمية الثانية مقسومًا على التغير في الأولى، ونحسبه من فرق قيمتين في الجدول، ويكون سالبًا عند التناقص، ويكتب مع وحدته.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q3-2-9",c:"c3-2",d:6,t:"steps",q:"يصف رسم بياني مسافة عدّاء: عند الدقيقة 5 قطع 1000 متر، وعند الدقيقة 25 قطع 5000 متر. أوجد معدل التغير بالمتر لكل دقيقة مع كتابة جميع الخطوات.",a:"200",
+ ex:"التغير في المسافة = 4000 متر، والتغير في الزمن = 20 دقيقة: المعدل = 4000 ÷ 20 = 200 متر/دقيقة.",
+ wf:"خذ نقطتين من الرسم واحسب الفرقين ثم اقسم.",
+ mt:"خطأ في قراءة الرسم البياني",
+ se:"مثال محلول: من (2، 100) إلى (7، 350): المعدل = 250/5 = 50.",tags:["test","steps"]},
+{id:"q3-2-10",c:"c3-2",d:3,t:"solve",q:"هبطت درجة الحرارة من 5 درجات إلى -3 درجات خلال 4 ساعات. ما معدل التغير بالدرجة لكل ساعة؟",a:"-2",
+ ex:"التغير = -3 - 5 = -8 درجات خلال 4 ساعات: المعدل = -8 ÷ 4 = -2 درجة/ساعة.",
+ wf:"اطرح: (النهاية - البداية) = -3 - 5 = -8 وليس 2.",
+ mt:"خطأ في الإشارة السالبة أو الموجبة",
+ se:"يجمع هذا السؤال معدل التغير مع طرح الأعداد النسبية (الفصل 1).",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 3 — المفهوم 3-3: حل التناسبات ===================== */
+{id:"q3-3-1",c:"c3-3",d:1,t:"mcq",q:"في التناسب: س/6 = 5/3، قيمة س تساوي:",opts:["10","15","2.5","30"],a:"10",
+ ex:"بالضرب التبادلي: 3س = 30 إذن س = 10.",
+ wf:"اضرب طرفي التناسب تبادليًا: س × 3 = 6 × 5.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: س/4 = 3/2 ⟸ 2س = 12 ⟸ س = 6.",fu:"q3-3-3",tags:["lesson"]},
+{id:"q3-3-2",c:"c3-3",d:1,t:"tf",q:"في التناسب أ/ب = ج/د يكون: أ × د = ب × ج.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح، هذه خاصية الضرب التبادلي: حاصل ضرب الطرفين يساوي حاصل ضرب الوسطين.",
+ wf:"هذه الخاصية أساس حل أي تناسب.",
+ mt:"خطأ في اختيار القانون",
+ se:"‏2/3 = 8/12: ‏2×12 = 24 = 3×8 ✓.",tags:["lesson"]},
+{id:"q3-3-3",c:"c3-3",d:2,t:"fill",q:"حل التناسب: ‏4/9 = 12/س ⟸ س = ___",a:"27",
+ ex:"بالضرب التبادلي: 4س = 108 إذن س = 27.",
+ wf:"اضرب 9 × 12 ثم اقسم على 4.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: 2/5 = 6/س ⟸ 2س = 30 ⟸ س = 15.",fu:"q3-3-4",tags:["lesson"]},
+{id:"q3-3-4",c:"c3-3",d:2,t:"solve",q:"حل التناسب: ‏ن/8 = 15/20",a:"6",acc:["ن=6","ن = 6"],
+ ex:"‏20ن = 120 إذن ن = 6. (أو بسّط 15/20 = 3/4 ثم ن = 8 × 3/4).",
+ wf:"الضرب التبادلي: ن × 20 = 8 × 15.",
+ mt:"خطأ حسابي",
+ se:"مثال محلول: م/6 = 10/12 ⟸ م = 5.",fu:"q3-3-3",tags:["lesson"]},
+{id:"q3-3-5",c:"c3-3",d:4,t:"solve",q:"حل التناسب: ‏(س + 1)/4 = 9/6",a:"5",acc:["س=5","س = 5"],
+ ex:"بالضرب التبادلي: 6(س + 1) = 36 إذن س + 1 = 6 إذن س = 5.",
+ wf:"عامل (س + 1) كتلة واحدة في الضرب التبادلي ثم حل المعادلة.",
+ mt:"خطأ في التعويض",
+ se:"مثال محلول: (س - 2)/3 = 4/6 ⟸ 6(س-2) = 12 ⟸ س = 4.",fu:"q3-3-4",tags:["test","challenge"]},
+{id:"q3-3-6",c:"c3-3",d:5,t:"solve",q:"ثمن 5 كيلوجرامات من التفاح 35 ريالًا. ما ثمن 8 كيلوجرامات من النوع نفسه بالريال؟",a:"56",
+ ex:"‏5/35 = 8/س ⟸ 5س = 280 ⟸ س = 56 ريالًا. (أو: الكيلو بـ 7 ريالات × 8).",
+ wf:"كوّن تناسبًا: كجم/ريال = كجم/ريال، أو أوجد سعر الكيلو أولًا.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: 3 دفاتر بـ 12 ريالًا ⟸ 7 دفاتر بـ 28 ريالًا.",fu:"q3-3-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q3-3-7",c:"c3-3",d:6,t:"error",q:"لحل التناسب 3/5 = س/20 كتب طالب: «‏3 × س = 5 × 20 إذن س = 100/3». اكتشف الخطأ.",
+ opts:["ضرب الطرفين الخطأ تبادليًا؛ الصواب: 3 × 20 = 5 × س إذن س = 12","الخطأ في القسمة فقط: 100/3 = 33","الناتج صحيح","لا يوجد خطأ"],
+ a:"ضرب الطرفين الخطأ تبادليًا؛ الصواب: 3 × 20 = 5 × س إذن س = 12",
+ ex:"في الضرب التبادلي يُضرب بسط كل كسر في مقام الكسر الآخر: 3×20 و 5×س.",
+ wf:"ارسم سهمين متقاطعين بين الكسرين لتحديد الأزواج الصحيحة.",
+ mt:"خطأ في اختيار القانون",
+ se:"تحقق: 3/5 = 12/20 = 0.6 ✓.",tags:["lesson","mistake"]},
+{id:"q3-3-8",c:"c3-3",d:6,t:"teachback",q:"اشرح بكلماتك: ما خطوات حل تناسب فيه قيمة مجهولة؟ ولماذا يصح الضرب التبادلي؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["تبادلي|الطرفين|الوسطين","معادلة","قسمة|اقسم","تحقق|تأكد"],
+ ex:"الإجابة الجيدة تذكر: نضرب تبادليًا فنحول التناسب إلى معادلة، ثم نقسم لإيجاد المجهول ونتحقق بالتعويض، ويصح الضرب التبادلي لأنه يكافئ ضرب الطرفين في المقامين.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q3-3-9",c:"c3-3",d:6,t:"steps",q:"تكفي 3 أكواب من الدقيق لصنع 24 قطعة بسكويت. كم كوبًا يلزم لصنع 40 قطعة؟ اكتب التناسب وجميع خطوات الحل.",a:"5",
+ ex:"‏3/24 = س/40 ⟸ 24س = 120 ⟸ س = 5 أكواب.",
+ wf:"رتب التناسب بوحدات متناظرة: أكواب/قطع = أكواب/قطع.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: كوبان لـ 16 قطعة ⟸ لـ 24 قطعة نحتاج 3 أكواب.",tags:["test","steps"]},
+{id:"q3-3-10",c:"c3-3",d:3,t:"solve",q:"حل التناسب: ‏2/3 = س/4.5",a:"3",acc:["س=3","س = 3"],
+ ex:"‏3س = 9 إذن س = 3. لاحظ التعامل مع العدد العشري 4.5 (من الفصل الأول).",
+ wf:"الضرب التبادلي يصح مع الأعداد العشرية أيضًا: 2 × 4.5 = 9.",
+ mt:"خطأ في الأعداد العشرية",
+ se:"يجمع هذا السؤال حل التناسب مع ضرب الأعداد النسبية.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 3 — المفهوم 3-4: المضلعات المتشابهة ===================== */
+{id:"q3-4-1",c:"c3-4",d:1,t:"mcq",q:"يتشابه مضلعان إذا:",
+ opts:["تطابقت زواياهما المتناظرة وتناسبت أضلاعهما المتناظرة","تساوت مساحتاهما","تساوى محيطاهما","كانا من النوع نفسه فقط"],
+ a:"تطابقت زواياهما المتناظرة وتناسبت أضلاعهما المتناظرة",
+ ex:"هذا تعريف التشابه: تطابق الزوايا المتناظرة وتناسب الأضلاع المتناظرة معًا.",
+ wf:"الشرطان معًا مطلوبان: الزوايا والأضلاع.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مثلثان زواياهما 30-60-90 وأضلاع أحدهما ضعف الآخر: متشابهان.",fu:"q3-4-3",tags:["lesson"]},
+{id:"q3-4-2",c:"c3-4",d:1,t:"tf",q:"كل مربعين متشابهان.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: زوايا المربع كلها قائمة، وأضلاع كل مربع متساوية فالنسبة بين أضلاع المربعين ثابتة دائمًا.",
+ wf:"المربعات حالة خاصة تتحقق فيها شروط التشابه دائمًا.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مربع ضلعه 2 ومربع ضلعه 5: نسبة التشابه 2/5 لكل الأضلاع.",tags:["lesson"]},
+{id:"q3-4-3",c:"c3-4",d:2,t:"fill",q:"مثلثان متشابهان نسبة التشابه بينهما 2 : 3. إذا كان طول ضلع في الأول 8 سم، فطول الضلع المناظر له في الثاني = ___ سم.",a:"12",
+ ex:"‏2/3 = 8/س ⟸ 2س = 24 ⟸ س = 12 سم.",
+ wf:"كوّن تناسبًا بين نسبة التشابه والضلعين المتناظرين.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: نسبة 1:4 وضلع 3 ⟸ المناظر 12.",fu:"q3-4-4",tags:["lesson"]},
+{id:"q3-4-4",c:"c3-4",d:2,t:"mcq",q:"مستطيل أبعاده 4 × 6، ومستطيل آخر أبعاده 6 × 9. هل هما متشابهان؟",
+ opts:["نعم، لأن 4/6 = 6/9 = 2/3","لا، لأن المساحتين مختلفتان","لا، لأن 6 - 4 ≠ 9 - 6","لا يمكن المعرفة"],
+ a:"نعم، لأن 4/6 = 6/9 = 2/3",
+ ex:"الزوايا كلها قائمة، ونسبتا الضلعين المتناظرين متساويتان (2/3) فالمستطيلان متشابهان.",
+ wf:"قارن نسب الأضلاع المتناظرة (قصير/قصير وطويل/طويل).",
+ mt:"خطأ في الكسور",
+ se:"مثال: 2×3 و 4×6 متشابهان بنسبة 1/2.",fu:"q3-4-3",tags:["lesson"]},
+{id:"q3-4-5",c:"c3-4",d:4,t:"solve",q:"مضلعان متشابهان نسبة التشابه بينهما 2/5، ومحيط الأصغر 20 سم. أوجد محيط الأكبر بالسنتيمتر.",a:"50",
+ ex:"نسبة المحيطين = نسبة التشابه: 2/5 = 20/س ⟸ 2س = 100 ⟸ س = 50 سم.",
+ wf:"المحيطان يتناسبان بنسبة التشابه نفسها.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: نسبة 1/3 ومحيط الأصغر 12 ⟸ محيط الأكبر 36.",fu:"q3-4-3",tags:["test","challenge"]},
+{id:"q3-4-6",c:"c3-4",d:5,t:"solve",q:"لوحة مستطيلة أبعادها 30 سم × 45 سم، صُنعت منها نسخة مكبَّرة متشابهة طول ضلعها الأصغر 50 سم. ما طول ضلعها الأكبر بالسنتيمتر؟",a:"75",
+ ex:"‏30/50 = 45/س ⟸ 30س = 2250 ⟸ س = 75 سم.",
+ wf:"رتب التناسب: أصغر/أصغر = أكبر/أكبر.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: صورة 10×15 كُبّرت ليصبح أصغر ضلعيها 20 ⟸ الأكبر 30.",fu:"q3-4-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q3-4-7",c:"c3-4",d:6,t:"error",q:"قال طالب: «كل مستطيلين متشابهان لأن زواياهما كلها قائمة». اكتشف الخطأ.",
+ opts:["تطابق الزوايا وحده لا يكفي؛ يجب أيضًا تناسب الأضلاع: مستطيل 2×3 ومستطيل 2×5 غير متشابهين","كلامه صحيح؛ كل المستطيلات متشابهة","الخطأ أن زوايا المستطيل ليست قائمة","لا يوجد خطأ"],
+ a:"تطابق الزوايا وحده لا يكفي؛ يجب أيضًا تناسب الأضلاع: مستطيل 2×3 ومستطيل 2×5 غير متشابهين",
+ ex:"شرطا التشابه معًا: زوايا متطابقة وأضلاع متناسبة. في المثال: 2/2 = 1 بينما 3/5 ≠ 1.",
+ wf:"قارن مع المربعات: هناك يتحقق الشرطان دائمًا، أما المستطيلات فلا.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مستطيل التلفاز 16:9 لا يشبه مستطيل الورقة A4.",tags:["lesson","mistake"]},
+{id:"q3-4-8",c:"c3-4",d:6,t:"teachback",q:"اشرح بكلماتك: ما شرطا تشابه مضلعين؟ ولماذا لا يكفي أحدهما وحده؟ أعطِ مثالًا.",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["زوايا|الزوايا","متناظرة","أضلاع|الأضلاع","تناسب|متناسبة"],
+ ex:"الإجابة الجيدة تذكر الشرطين (تطابق الزوايا المتناظرة وتناسب الأضلاع المتناظرة) مع مثال مضاد مثل مستطيلين غير متشابهين أو معين ومربع.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q3-4-9",c:"c3-4",d:6,t:"steps",q:"مثلثان متشابهان: أضلاع الأول 6، 8، 10 سم، وأطول أضلاع الثاني 25 سم. أوجد طول أقصر أضلاع الثاني مع كتابة التناسب وجميع الخطوات.",a:"15",
+ ex:"نسبة التشابه = 25/10 = 2.5، إذن أقصر ضلع في الثاني = 6 × 2.5 = 15 سم.",
+ wf:"ناظر الأطول مع الأطول والأقصر مع الأقصر، ثم كوّن التناسب.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: مثلث 3،4،5 يشابه مثلثًا أطول أضلاعه 15 ⟸ أقصرها 9.",tags:["test","steps"]},
+{id:"q3-4-10",c:"c3-4",d:3,t:"solve",q:"مثلثان متشابهان نسبة التشابه بينهما 3/4. إذا كان محيط الأول 36 سم فما محيط الثاني بالسنتيمتر؟",a:"48",
+ ex:"‏3/4 = 36/س ⟸ 3س = 144 ⟸ س = 48 سم.",
+ wf:"نسبة المحيطين تساوي نسبة التشابه.",
+ mt:"خطأ في اختيار القانون",
+ se:"يجمع هذا السؤال التشابه مع حل التناسبات.",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 3 — المفهوم 3-5: القياس غير المباشر ===================== */
+{id:"q3-5-1",c:"c3-5",d:1,t:"mcq",q:"عمود طوله 2 م وظله 3 م، وفي اللحظة نفسها كان ظل شجرة 12 م. ما ارتفاع الشجرة؟",
+ opts:["8 م","18 م","13 م","6 م"],a:"8 م",
+ ex:"‏2/3 = س/12 ⟸ 3س = 24 ⟸ س = 8 أمتار.",
+ wf:"كوّن التناسب: طول/ظل = طول/ظل في اللحظة نفسها.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: عصا 1م ظلها 2م وبرج ظله 30م ⟸ ارتفاعه 15م.",fu:"q3-5-3",tags:["lesson"]},
+{id:"q3-5-2",c:"c3-5",d:1,t:"tf",q:"يعتمد القياس غير المباشر بالظل على أن المثلثين المتكونين متشابهان في اللحظة نفسها.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: أشعة الشمس متوازية فتتكون مثلثات قائمة متشابهة، لذا تتناسب الأطوال مع الظلال.",
+ wf:"شرط «اللحظة نفسها» مهم لأن زاوية الشمس تتغير خلال اليوم.",
+ mt:"خطأ في فهم السؤال",
+ se:"لو قيس الظلان في وقتين مختلفين لما صح التناسب.",tags:["lesson"]},
+{id:"q3-5-3",c:"c3-5",d:2,t:"fill",q:"طول شخص 1.8 م وظله 2.4 م، وظل برج في اللحظة نفسها 40 م. ارتفاع البرج = ___ م.",a:"30",
+ ex:"‏1.8/2.4 = س/40 ⟸ 2.4س = 72 ⟸ س = 30 مترًا.",
+ wf:"رتب التناسب: طول الشخص/ظله = ارتفاع البرج/ظله.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: شخص 1.5م ظله 2م، عمارة ظلها 24م ⟸ ارتفاعها 18م.",fu:"q3-5-4",tags:["lesson"]},
+{id:"q3-5-4",c:"c3-5",d:2,t:"solve",q:"مثلثان متشابهان بسبب انعكاس في مرآة موضوعة على الأرض: يبعد الطالب 2 م عن المرآة وعيناه على ارتفاع 1.6 م، وتبعد المرآة 15 م عن أساس مئذنة. ما ارتفاع المئذنة بالمتر؟",a:"12",
+ ex:"‏1.6/2 = س/15 ⟸ 2س = 24 ⟸ س = 12 مترًا.",
+ wf:"النسبة: ارتفاع العين/بعد الطالب عن المرآة = ارتفاع الجسم/بعده عن المرآة.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: عينان 1.5م وبعد 3م ومرآة تبعد 20م عن برج ⟸ ارتفاعه 10م.",fu:"q3-5-3",tags:["lesson"]},
+{id:"q3-5-5",c:"c3-5",d:4,t:"solve",q:"في اللحظة نفسها: ظل شجرة 18 م وظل عصا طولها 1.2 م يساوي 0.9 م. أوجد ارتفاع الشجرة بالمتر.",a:"24",
+ ex:"‏1.2/0.9 = س/18 ⟸ 0.9س = 21.6 ⟸ س = 24 مترًا.",
+ wf:"انتبه: العصا أطول من ظلها هنا، فالشجرة أطول من ظلها أيضًا.",
+ mt:"خطأ في الأعداد العشرية",
+ se:"مثال محلول: عصا 1م ظلها 0.8م وشجرة ظلها 8م ⟸ ارتفاعها 10م.",fu:"q3-5-3",tags:["test","challenge"]},
+{id:"q3-5-6",c:"c3-5",d:5,t:"solve",q:"أراد مهندس قياس عرض نهر، فكوّن مثلثين متشابهين على الضفة: الضلع المناظر لعرض النهر في المثلث الصغير 5 م ويناظره في الكبير عرض النهر، وضلع في الصغير 4 م يناظره 32 م في الكبير. ما عرض النهر بالمتر؟",a:"40",
+ ex:"نسبة التشابه = 32/4 = 8، إذن عرض النهر = 5 × 8 = 40 مترًا.",
+ wf:"أوجد نسبة التشابه من الضلعين المعلومين ثم اضرب.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: نسبة 6 وضلع صغير 7 ⟸ المناظر 42.",fu:"q3-5-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q3-5-7",c:"c3-5",d:6,t:"error",q:"لحساب ارتفاع شجرة ظلها 10 م بمعلومية عمود طوله 2 م وظله 5 م، كتب طالب: «‏2/5 = 10/س إذن س = 25». اكتشف الخطأ.",
+ opts:["وضع ظل الشجرة مكان ارتفاعها؛ الصواب: 2/5 = س/10 إذن س = 4 أمتار","الناتج صحيح","الخطأ في الضرب التبادلي فقط وكان الناتج 50","لا يوجد خطأ"],
+ a:"وضع ظل الشجرة مكان ارتفاعها؛ الصواب: 2/5 = س/10 إذن س = 4 أمتار",
+ ex:"يجب أن تتناظر المواضع: الارتفاعان في البسطين والظلان في المقامين.",
+ wf:"اكتب فوق كل عدد ما يمثله (ارتفاع/ظل) قبل تكوين التناسب.",
+ mt:"خطأ في نقل المعطيات",
+ se:"تحقق بالمنطق: العمود أقصر من ظله، فالشجرة (ظلها 10) ارتفاعها 4 أقصر من ظلها أيضًا ✓.",tags:["lesson","mistake"]},
+{id:"q3-5-8",c:"c3-5",d:6,t:"teachback",q:"اشرح بكلماتك: كيف نقيس ارتفاع شيء مرتفع (شجرة أو برج) دون تسلقه؟ وما الشرط الأساسي لصحة الطريقة؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["ظل|الظل","تشابه|متشابه","تناسب","اللحظة نفسها|الوقت نفسه"],
+ ex:"الإجابة الجيدة تذكر: نقيس ظل الجسم وظل جسم معلوم الطول في اللحظة نفسها، فيتكون مثلثان متشابهان ونحل التناسب، والشرط أن يكون القياسان في الوقت نفسه وعلى أرض مستوية.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q3-5-9",c:"c3-5",d:6,t:"steps",q:"سارية علم ظلها 9 أمتار، وفي اللحظة نفسها كان ظل طالب طوله 1.5 م يساوي 1 م. أوجد ارتفاع السارية مع كتابة التناسب وجميع الخطوات.",a:"13.5",acc:["13.5 م","27/2","13 1/2"],
+ ex:"‏1.5/1 = س/9 ⟸ س = 13.5 مترًا.",
+ wf:"الارتفاعان في البسطين والظلان في المقامين.",
+ mt:"خطأ في نقل المعطيات",
+ se:"مثال محلول: طالب 1.6م ظله 2م وسارية ظلها 10م ⟸ 8م.",tags:["test","steps"]},
+{id:"q3-5-10",c:"c3-5",d:3,t:"solve",q:"عمود كهرباء ظله 6 أمتار، وعصا طولها 1 م ظلها 0.5 م في اللحظة نفسها. ما ارتفاع العمود بالمتر؟",a:"12",
+ ex:"‏1/0.5 = س/6 ⟸ 0.5س = 6 ⟸ س = 12 مترًا.",
+ wf:"نسبة الطول إلى الظل هنا 2، فالارتفاع ضعف الظل.",
+ mt:"خطأ في الأعداد العشرية",
+ se:"يجمع هذا السؤال التشابه مع قسمة الأعداد العشرية (الفصل 1).",tags:["delayed","cumulative"]},
+
+/* ===================== الفصل 3 — المفهوم 3-6: مقياس الرسم ===================== */
+{id:"q3-6-1",c:"c3-6",d:1,t:"mcq",q:"مقياس رسم خريطة: 1 سم : 50 كم. مسافة بين مدينتين على الخريطة 3 سم، فالمسافة الحقيقية:",
+ opts:["150 كم","53 كم","16.7 كم","350 كم"],a:"150 كم",
+ ex:"كل سنتيمتر يمثل 50 كم: المسافة الحقيقية = 3 × 50 = 150 كم.",
+ wf:"اضرب البعد على الخريطة في قيمة المقياس.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال: مقياس 1سم:20كم وبعد 4سم ⟸ 80 كم.",fu:"q3-6-3",tags:["lesson"]},
+{id:"q3-6-2",c:"c3-6",d:1,t:"tf",q:"مقياس الرسم هو نسبة بين البعد في الرسم والبعد الحقيقي.",opts:["صح","خطأ"],a:"صح",
+ ex:"صحيح: المقياس = بعد الرسم : البعد الحقيقي، مثل 1 : 100.",
+ wf:"احفظ الترتيب: الرسم أولًا ثم الحقيقي.",
+ mt:"خطأ في التمييز بين المفاهيم المتشابهة",
+ se:"مقياس 1:200 يعني كل وحدة في الرسم تمثل 200 وحدة حقيقية.",tags:["lesson"]},
+{id:"q3-6-3",c:"c3-6",d:2,t:"fill",q:"رسم هندسي لمنزل بمقياس 1 : 200. إذا كان طول جدار في الرسم 5 سم، فطوله الحقيقي = ___ أمتار.",a:"10",
+ ex:"الطول الحقيقي = 5 × 200 = 1000 سم = 10 أمتار.",
+ wf:"اضرب في 200 ثم حوّل من سنتيمترات إلى أمتار (÷ 100).",
+ mt:"خطأ في الوحدات",
+ se:"مثال محلول: مقياس 1:100 وطول بالرسم 7 سم ⟸ 7 أمتار حقيقية.",fu:"q3-6-4",tags:["lesson"]},
+{id:"q3-6-4",c:"c3-6",d:2,t:"solve",q:"المسافة الحقيقية بين مدينتين 360 كم، وتظهر على خريطة بطول 4 سم. اكتب قيمة المقياس: كل 1 سم يمثل كم كيلومترًا؟",a:"90",acc:["90 كم","1:90"],
+ ex:"المقياس = 360 ÷ 4 = 90، أي كل 1 سم على الخريطة يمثل 90 كم.",
+ wf:"اقسم البعد الحقيقي على البعد في الخريطة.",
+ mt:"خطأ في اختيار القانون",
+ se:"مثال محلول: 200 كم تظهر بـ 5 سم ⟸ 1سم : 40كم.",fu:"q3-6-3",tags:["lesson"]},
+{id:"q3-6-5",c:"c3-6",d:4,t:"solve",q:"نموذج مصغر لسيارة بمقياس 1 : 24، طول النموذج 18 سم. ما الطول الحقيقي للسيارة بالأمتار؟",a:"4.32",acc:["4.32 م","432 سم"],
+ ex:"الطول الحقيقي = 18 × 24 = 432 سم = 4.32 أمتار.",
+ wf:"اضرب في 24 ثم حوّل السنتيمترات إلى أمتار.",
+ mt:"خطأ في الوحدات",
+ se:"مثال محلول: نموذج طائرة 1:100 طوله 30 سم ⟸ 30 مترًا حقيقية.",fu:"q3-6-4",tags:["test","challenge"]},
+{id:"q3-6-6",c:"c3-6",d:5,t:"solve",q:"خريطة مقياسها 1 سم : 25 كم. يريد فيصل السفر بين مدينتين تفصل بينهما مسافة 6.4 سم على الخريطة. ما المسافة الحقيقية بالكيلومترات؟",a:"160",
+ ex:"المسافة الحقيقية = 6.4 × 25 = 160 كم.",
+ wf:"اضرب البعد على الخريطة في 25 (تذكر ضرب الأعداد العشرية من الفصل 1).",
+ mt:"خطأ في الأعداد العشرية",
+ se:"مثال محلول: 3.2 سم بمقياس 1سم:50كم ⟸ 160 كم.",fu:"q3-6-4",er:"مسألة لفظية على نمط الاختبارات",tags:["test","exam","word"]},
+{id:"q3-6-7",c:"c3-6",d:6,t:"error",q:"خريطة مقياسها 1 سم : 30 كم، والبعد الحقيقي 90 كم. كتب طالب: «البعد على الخريطة = 90 × 30 = 2700 سم». اكتشف الخطأ.",
+ opts:["ضرب بدل القسمة؛ الصواب: 90 ÷ 30 = 3 سم على الخريطة","الناتج صحيح","الخطأ في جدول الضرب: 90 × 30 = 270","لا يوجد خطأ"],
+ a:"ضرب بدل القسمة؛ الصواب: 90 ÷ 30 = 3 سم على الخريطة",
+ ex:"من الحقيقي إلى الخريطة نقسم على قيمة المقياس، ومن الخريطة إلى الحقيقي نضرب.",
+ wf:"اسأل نفسك: هل أنتقل من الصغير إلى الكبير (ضرب) أم العكس (قسمة)؟",
+ mt:"خطأ في اختيار القانون",
+ se:"تحقق بالمنطق: بعد على خريطة لا يكون 27 مترًا!",tags:["lesson","mistake"]},
+{id:"q3-6-8",c:"c3-6",d:6,t:"teachback",q:"اشرح بكلماتك: ما مقياس الرسم؟ وكيف تحسب البعد الحقيقي من الخريطة والعكس؟ وما دور الوحدات؟",
+ a:"إجابة حرة تُقيّم بالكلمات المفتاحية",
+ ks:["نسبة","رسم|خريطة|نموذج","حقيقي","وحدات|تحويل"],
+ ex:"الإجابة الجيدة تذكر: المقياس نسبة بعد الرسم إلى البعد الحقيقي؛ للحقيقي نضرب وللخريطة نقسم، مع توحيد الوحدات قبل الحساب.",
+ mt:"خطأ في كتابة الخطوات",tags:["lesson","teachback"]},
+{id:"q3-6-9",c:"c3-6",d:6,t:"steps",q:"مخطط شقة بمقياس 1 : 150. طول غرفة في المخطط 4 سم. أوجد طولها الحقيقي بالأمتار مع كتابة جميع الخطوات وتحويل الوحدات.",a:"6",acc:["6 م","600 سم"],
+ ex:"الطول الحقيقي = 4 × 150 = 600 سم، وبالتحويل: 600 ÷ 100 = 6 أمتار.",
+ wf:"خطوتان: الضرب في المقياس ثم تحويل سم إلى متر.",
+ mt:"خطأ في الوحدات",
+ se:"مثال محلول: 3 سم بمقياس 1:250 ⟸ 750 سم = 7.5 م.",tags:["test","steps"]},
+{id:"q3-6-10",c:"c3-6",d:3,t:"solve",q:"خريطة مقياسها 1 سم : 40 كم. مدينة تبعد عن أخرى 100 كم. ما البعد بينهما على الخريطة بالسنتيمترات؟",a:"2.5",acc:["2.5 سم","2 1/2","5/2"],
+ ex:"البعد على الخريطة = 100 ÷ 40 = 2.5 سم.",
+ wf:"من الحقيقي إلى الخريطة: اقسم على 40.",
+ mt:"خطأ في اختيار القانون",
+ se:"يجمع هذا السؤال مقياس الرسم مع قسمة الأعداد النسبية (الفصل 1).",tags:["delayed","cumulative"]}
+];
+
+const QUESTION_BANK=RAW_QUESTIONS.map(expandQuestion);
+const QUESTIONS_BY_ID={};
+QUESTION_BANK.forEach(q=>{QUESTIONS_BY_ID[q.id]=q;});
+
+/* ============================================================================
+   حالة التطبيق والتخزين المحلي
+   ============================================================================ */
+function defaultState(){
+  const st={studentName:"",createdAt:new Date().toISOString(),lastStudyTime:null,
+    perChapter:{},questions:{},reports:[],events:{tabSwitches:0,pastes:0},
+    midTestDone:false,midTestScore:null,finalDone:false,finalScore:null,finalPassed:false};
+  CURRICULUM.chapters.forEach(ch=>{
+    st.perChapter[ch.id]={prereqDone:false,prereqScore:null,prereqWeak:[],
+      delayedDone:false,delayedScore:null,
+      conceptsDone:{},testDone:false,testScore:null,testFirstScore:null,
+      timeUsedSec:0,timerExpired:false,status:"locked",blockers:[],
+      recoveryDone:false,warn75:false,warn90:false,reportCount:0};
+  });
+  st.perChapter[CURRICULUM.chapters[0].id].status="unlocked";
+  return st;
+}
+let state=null;
+function loadProgress(){
+  try{
+    const raw=localStorage.getItem(CONFIG.STORAGE_KEY);
+    if(raw){const parsed=JSON.parse(raw);state=Object.assign(defaultState(),parsed);
+      // دمج عميق بسيط للفصول والأحداث
+      const d=defaultState();
+      state.perChapter=Object.assign(d.perChapter,parsed.perChapter||{});
+      state.events=Object.assign(d.events,parsed.events||{});
+      return true;}
+  }catch(e){console.warn("تعذرت قراءة التقدم المحفوظ",e);}
+  state=defaultState();
+  return false;
+}
+function saveProgress(){
+  try{state.lastStudyTime=new Date().toISOString();
+    localStorage.setItem(CONFIG.STORAGE_KEY,JSON.stringify(state));}
+  catch(e){console.warn("تعذر الحفظ",e);}
+}
+function qRec(qid){
+  if(!state.questions[qid]) state.questions[qid]={attempts:0,wrongCount:0,correct:null,
+    firstTryCorrect:null,timeSpent:0,fast:false,confidence:null,answerChanges:0,
+    answers:[],steps:null,stepsOk:null,teachText:null,teachOk:null,delayedWrong:false};
+  return state.questions[qid];
+}
+
+/* ============================================================================
+   أدوات الواجهة العامة
+   ============================================================================ */
+function $(id){return document.getElementById(id);}
+function show(screenId){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  $(screenId).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+let toastTimer=null;
+function toast(msg){
+  const t=$("toast");t.textContent=msg;t.style.display="block";
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>{t.style.display="none";},3500);
+}
+function masteryBadgeClass(m){
+  if(m===MASTERY.VERY||m===MASTERY.OK) return "b-green";
+  if(m===MASTERY.REVIEW||m===MASTERY.FIX) return "b-warn";
+  if(m===MASTERY.VERIFY||m===MASTERY.PARTIAL||m===MASTERY.SHORT) return "b-purple";
+  if(m===MASTERY.NONE) return "b-gray";
+  return "b-red";
+}
+
+/* ============================================================================
+   حساب الإتقان لكل مفهوم (قواعد ثابتة وفق منهجية النظام)
+   ============================================================================ */
+function conceptQuestions(cid){return QUESTION_BANK.filter(q=>q.conceptId===cid);}
+function updateMastery(cid){return computeMastery(cid);} // اسم بديل مطلوب في الواجهة
+function computeMastery(cid){
+  const qs=conceptQuestions(cid);
+  let attempted=0,firstWrong=0,anyTriple=false,anyDouble=false,partial=false,
+      verify=false,fix=false,guess=false,delayedFail=false,teachOk=null,allFirst=true;
+  qs.forEach(q=>{
+    const r=state.questions[q.id];
+    if(!r||r.attempts===0){if(q.tags.indexOf("lesson")>=0||q.tags.indexOf("test")>=0)allFirst=false;return;}
+    attempted++;
+    if(q.questionType==="teachback"){teachOk=r.teachOk;return;}
+    if(r.firstTryCorrect===false){firstWrong++;allFirst=false;}
+    if(r.wrongCount>=3) anyTriple=true;
+    if(r.wrongCount===2) anyDouble=true;
+    if(q.questionType==="steps"&&r.correct&&r.stepsOk===false) partial=true;
+    if(r.correct&&r.fast&&q.difficulty>=3) verify=true;
+    if(r.correct&&r.confidence==="كنت أخمن") guess=true;
+    if(r.correct&&r.confidence==="غير متأكد") fix=true;
+    if(q.tags.indexOf("delayed")>=0&&r.delayedWrong) delayedFail=true;
+  });
+  if(attempted===0) return MASTERY.NONE;
+  if(anyTriple) return MASTERY.RETEACH;
+  if(firstWrong>=2||anyDouble) return MASTERY.WEAK;
+  if(delayedFail) return MASTERY.SHORT;
+  if(partial) return MASTERY.PARTIAL;
+  if(verify||guess) return MASTERY.VERIFY;
+  if(fix) return MASTERY.FIX;
+  if(firstWrong===1) return MASTERY.REVIEW;
+  if(allFirst&&teachOk===true) return MASTERY.VERY;
+  return MASTERY.OK;
+}
+function chapterConcepts(ch){const out=[];ch.lessons.forEach(l=>l.concepts.forEach(c=>out.push(c)));return out;}
+function chapterBlockers(ch){
+  const blockers=[];
+  chapterConcepts(ch).forEach(cid=>{
+    const m=computeMastery(cid);
+    if(CONCEPTS[cid].critical&&[MASTERY.WEAK,MASTERY.FAIL,MASTERY.RETEACH,MASTERY.NONE,MASTERY.SHORT].indexOf(m)>=0)
+      blockers.push("مفهوم حرج غير متقن: "+CONCEPTS[cid].title+" ("+m+")");
+    if(CONCEPTS[cid].critical&&m===MASTERY.PARTIAL)
+      blockers.push("إجابات صحيحة بدون خطوات كافية في مفهوم حرج: "+CONCEPTS[cid].title);
+  });
+  // أخطاء متكررة من النوع نفسه
+  const mistakeCounts={};
+  QUESTION_BANK.filter(q=>q.chapterId===ch.id).forEach(q=>{
+    const r=state.questions[q.id];
+    if(r&&r.wrongCount>0) mistakeCounts[q.mistakeType]=(mistakeCounts[q.mistakeType]||0)+r.wrongCount;
+  });
+  for(const mt in mistakeCounts) if(mistakeCounts[mt]>=4)
+    blockers.push("خطأ متكرر ("+mistakeCounts[mt]+" مرات): "+mt);
+  // إجابات سريعة على أسئلة صعبة
+  const fastHard=QUESTION_BANK.filter(q=>q.chapterId===ch.id&&q.difficulty>=3)
+    .filter(q=>{const r=state.questions[q.id];return r&&r.correct&&r.fast;}).length;
+  if(fastHard>=2) blockers.push("إجابات صحيحة بسرعة عالية جدًا على "+fastHard+" من الأسئلة الصعبة — قد تحتاج إلى إعادة هذا الجزء للتأكد من الفهم");
+  return blockers;
+}
+
+/* ============================================================================
+   اختيار الأسئلة (عشوائي مع الحفاظ على صحة الشروح والمراجع)
+   ============================================================================ */
+function pickQuestions(filterFn,limit){
+  let qs=shuffle(QUESTION_BANK.filter(filterFn));
+  if(limit&&qs.length>limit) qs=qs.slice(0,limit);
+  return qs.map(q=>q.id);
+}
+function lessonRunIds(cid){
+  // مسار الدرس: الأساسية والمتوسطة + اكتشف الخطأ + اشرح بكلماتك (بترتيب عشوائي مع بقاء الشرح آخرًا)
+  const base=shuffle(conceptQuestions(cid).filter(q=>q.tags.indexOf("lesson")>=0&&q.questionType!=="teachback").map(q=>q.id));
+  const teach=conceptQuestions(cid).filter(q=>q.questionType==="teachback").map(q=>q.id);
+  return base.concat(teach);
+}
+function chapterTestIds(chId){
+  const test=shuffle(QUESTION_BANK.filter(q=>q.chapterId===chId&&q.tags.indexOf("test")>=0).map(q=>q.id));
+  return test;
+}
+function delayedIds(beforeChapterNum){
+  return pickQuestions(q=>{
+    const ch=CURRICULUM.chapters.find(c=>c.id===q.chapterId);
+    return ch&&ch.num<beforeChapterNum&&q.tags.indexOf("delayed")>=0;
+  },beforeChapterNum===2?4:6);
+}
+function recoveryIds(chId){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId);
+  const weak=chapterConcepts(ch).filter(cid=>{
+    const m=computeMastery(cid);
+    return [MASTERY.OK,MASTERY.VERY].indexOf(m)<0;
+  });
+  let ids=[];
+  weak.forEach(cid=>{
+    ids=ids.concat(conceptQuestions(cid)
+      .filter(q=>q.questionType!=="teachback")
+      .map(q=>q.id));
+  });
+  return shuffle(ids).slice(0,Math.max(6,Math.min(12,ids.length)));
+}
+
+/* ============================================================================
+   مؤقّت الفصل
+   ============================================================================ */
+let chapterTimerInterval=null,activeChapterId=null;
+function startChapterTimer(chId){
+  activeChapterId=chId;
+  stopChapterTimer();
+  chapterTimerInterval=setInterval(()=>{
+    if(document.hidden) return; // لا نحسب الوقت والتبويب مخفي
+    const pc=state.perChapter[chId];
+    pc.timeUsedSec++;
+    const ch=CURRICULUM.chapters.find(c=>c.id===chId);
+    const budget=ch.minutes*60,left=budget-pc.timeUsedSec;
+    updateTimerBar(chId,left,budget);
+    if(!pc.warn75&&pc.timeUsedSec>=budget*0.75){pc.warn75=true;toast("تنبيه: استُهلك 75% من وقت الفصل المقترح.");}
+    if(!pc.warn90&&pc.timeUsedSec>=budget*0.90){pc.warn90=true;toast("تنبيه مهم: استُهلك 90% من وقت الفصل!");}
+    if(left<=0&&!pc.timerExpired){pc.timerExpired=true;onChapterTimeExpired(chId);}
+    if(pc.timeUsedSec%20===0) saveProgress();
+  },1000);
+}
+function stopChapterTimer(){if(chapterTimerInterval){clearInterval(chapterTimerInterval);chapterTimerInterval=null;}}
+function updateTimerBar(chId,left,budget){
+  const el=$("chapter-timer-num");
+  if(!el) return;
+  el.textContent=fmtTime(Math.max(0,left));
+  el.className="timer-num"+(left<=budget*0.1?" t-danger":(left<=budget*0.25?" t-warn":""));
+}
+function onChapterTimeExpired(chId){
+  saveProgress();
+  toast("انتهى وقت الفصل المقترح. سيُحفظ ما أُنجز ويُولَّد تقرير جزئي.");
+  if(RUN&&RUN.chapterId===chId&&RUN.mode!=="final"){
+    finishRun(true); // إنهاء جزئي
+  }else{
+    generateChapterReport(chId,true);
+  }
+}
+
+/* ============================================================================
+   محرك تشغيل الأسئلة (يخدم: المتطلبات، الدروس، الاختبارات، المراجعات...)
+   ============================================================================ */
+let RUN=null,qTimerInterval=null,qStartTime=null;
+function startQuiz(mode,ids,ctx){
+  ctx=ctx||{};
+  if(!ids.length){toast("لا توجد أسئلة متاحة لهذا الجزء.");return;}
+  RUN={mode,list:ids.slice(),idx:0,results:[],chapterId:ctx.chapterId||null,
+    conceptId:ctx.conceptId||null,title:ctx.title||"",injected:{},startedAt:Date.now(),
+    timeLimitSec:ctx.timeLimitSec||null,timeLeft:ctx.timeLimitSec||null};
+  show("screen-quiz");
+  renderQuestion();
+}
+function currentQuestion(){return QUESTIONS_BY_ID[RUN.list[RUN.idx]];}
+
+function startQuestionTimer(){
+  qStartTime=Date.now();
+  clearInterval(qTimerInterval);
+  qTimerInterval=setInterval(()=>{
+    const el=$("q-elapsed");
+    if(el) el.textContent=fmtTime((Date.now()-qStartTime)/1000);
+    if(RUN&&RUN.timeLimitSec){
+      RUN.timeLeft=RUN.timeLimitSec-Math.round((Date.now()-RUN.startedAt)/1000);
+      const rl=$("run-left");
+      if(rl) rl.textContent=fmtTime(Math.max(0,RUN.timeLeft));
+      if(RUN.timeLeft<=0){clearInterval(qTimerInterval);toast("انتهى وقت هذا الاختبار.");finishRun(true);}
+    }
+  },1000);
+}
+function questionTimeSpent(){return Math.round((Date.now()-qStartTime)/1000);}
+
+function renderQuestion(){
+  const q=currentQuestion();
+  const ch=RUN.chapterId?CURRICULUM.chapters.find(c=>c.id===RUN.chapterId):null;
+  const total=RUN.list.length,pos=RUN.idx+1;
+  let timerHtml="";
+  if(ch&&["lesson","prereq","test","recovery","delayed"].indexOf(RUN.mode)>=0){
+    const left=ch.minutes*60-state.perChapter[ch.id].timeUsedSec;
+    timerHtml='<div>⏱ وقت الفصل المتبقي: <span class="timer-num" id="chapter-timer-num">'+fmtTime(Math.max(0,left))+'</span></div>';
+  }
+  if(RUN.timeLimitSec) timerHtml+='<div>⏱ وقت الاختبار المتبقي: <span class="timer-num" id="run-left">'+fmtTime(Math.max(0,RUN.timeLeft))+'</span></div>';
+  const optionsShuffled=(q.options&&q.questionType!=="tf")?shuffle(q.options):q.options;
+  let body="";
+  if(q.options){
+    body=optionsShuffled.map(o=>'<button type="button" class="opt" data-val="'+esc(o)+'" onclick="selectOption(this)">'+esc(o)+'</button>').join("");
+    body+='<div class="btn-row"><button class="btn green" onclick="submitAnswer()">تأكيد الإجابة</button></div>';
+  }else if(q.questionType==="steps"){
+    body='<div class="steps-grid">'
+      +'<label>المعطيات:</label><textarea id="st-given" rows="2"></textarea>'
+      +'<label>القانون المستخدم:</label><textarea id="st-law" rows="2"></textarea>'
+      +'<label>التعويض:</label><textarea id="st-sub" rows="2"></textarea>'
+      +'<label>خطوات الحل:</label><textarea id="st-work" rows="3"></textarea>'
+      +'<label>الإجابة النهائية:</label><input type="text" id="st-final" autocomplete="off">'
+      +'</div><div class="btn-row"><button class="btn green" onclick="submitAnswer()">تأكيد الإجابة</button></div>';
+  }else if(q.questionType==="teachback"){
+    body='<textarea id="answer-input" rows="5" placeholder="اكتب شرحك هنا بكلماتك..."></textarea>'
+      +'<p class="muted">أقل طول مقبول: '+CONFIG.TEACHBACK_MIN_LEN+' حرفًا. تُحفظ إجابتك في التقرير لمراجعة ولي الأمر/المعلم.</p>'
+      +'<div class="btn-row"><button class="btn green" onclick="submitAnswer()">حفظ الشرح</button></div>';
+  }else{
+    body='<input type="text" id="answer-input" autocomplete="off" placeholder="اكتب إجابتك (تُقبل الأرقام العربية ٠١٢٣ والإنجليزية 0123 والكسور مثل 3/4)">'
+      +'<div class="btn-row"><button class="btn green" onclick="submitAnswer()">تأكيد الإجابة</button></div>';
+  }
+  const figureHtml=q.figure?'<div class="q-figure">'+esc(q.figure)+'</div>':"";
+  $("screen-quiz").innerHTML=
+    '<div class="timer-bar no-print">'
+      +'<div><b>'+esc(RUN.title)+'</b> — سؤال <span class="num">'+pos+' / '+total+'</span></div>'
+      +timerHtml
+      +'<div class="qtimer">زمن السؤال: <span class="num" id="q-elapsed">00:00</span></div>'
+    +'</div>'
+    +'<div class="progress-wrap"><div class="progress-bar" style="width:'+Math.round(100*(pos-1)/total)+'%"></div></div>'
+    +'<div class="card" id="question-card">'
+      +'<div class="q-meta">'
+        +'<span class="badge b-blue">'+esc(q.questionTypeLabel)+'</span>'
+        +'<span class="badge b-warn">'+esc(q.difficultyLabel)+'</span>'
+        +(q.isCritical?'<span class="badge b-red">مفهوم حرج</span>':"")
+        +(q.conceptTitle?'<span class="badge b-gray">'+esc(q.conceptTitle)+'</span>':"")
+      +'</div>'
+      +'<div class="q-text">'+esc(q.questionText)+'</div>'
+      +figureHtml
+      +'<div id="answer-area">'+body+'</div>'
+      +'<div id="feedback-area"></div>'
+    +'</div>'
+    +'<p class="muted no-print">'+esc(q.pageReference)+'</p>';
+  attachPasteTracking();
+  startQuestionTimer();
+}
+function selectOption(btn){
+  const card=$("question-card");
+  if(card.dataset.locked) return;
+  const prev=card.querySelector(".opt.sel");
+  if(prev&&prev!==btn){const q=currentQuestion();qRec(q.id).answerChanges++;}
+  card.querySelectorAll(".opt").forEach(o=>o.classList.remove("sel"));
+  btn.classList.add("sel");
+}
+function attachPasteTracking(){
+  document.querySelectorAll("#screen-quiz textarea, #screen-quiz input[type=text]").forEach(el=>{
+    el.addEventListener("paste",()=>{state.events.pastes++;
+      toast("لوحظ لصق نص. يُفضَّل الكتابة بأسلوبك الخاص ليعكس فهمك.");saveProgress();});
+  });
+}
+
+/* ============================================================================
+   فحص الإجابة، تشخيص الخطأ، التغذية الراجعة
+   ============================================================================ */
+function checkAnswer(q,userInput){
+  if(q.exactMatch){
+    const u=normalizeAnswer(userInput);
+    return [q.correctAnswer].concat(q.acceptedAnswers).some(c=>normalizeAnswer(c)===u);
+  }
+  return compareAnswers(userInput,q.correctAnswer,q.acceptedAnswers,q.allowPercent);
+}
+function diagnoseMistake(q,userInput){
+  // تشخيص قائم على قواعد: نستعمل نوع الخطأ المعرف للسؤال + فحوص عامة
+  const diags=[q.mistakeType];
+  const num=parseNumeric(userInput),correctNum=parseNumeric(q.correctAnswer);
+  if(num!==null&&correctNum!==null){
+    if(Math.abs(num+correctNum)<0.005&&correctNum!==0) diags.push("خطأ في الإشارة السالبة أو الموجبة (الناتج معكوس الإشارة)");
+    if(Math.abs(num-correctNum*10)<0.01||Math.abs(num*10-correctNum)<0.01) diags.push("خطأ في الأعداد العشرية (موضع الفاصلة)");
+  }
+  return diags;
+}
+function showExplanation(q,correct,userInput,extraNote){
+  const fb=$("feedback-area");
+  const diags=correct?[]:diagnoseMistake(q,userInput);
+  let html='<div class="feedback '+(correct?"good":"bad")+'">';
+  html+='<h3>'+(correct?"✅ إجابة صحيحة":"❌ إجابة غير صحيحة")+'</h3>';
+  if(!correct){
+    html+='<p class="diag">التشخيص المحتمل: '+esc(diags.join("؛ "))+'</p>';
+    if(q.wrongAnswerFeedback) html+='<p><b>ما الذي حدث على الأرجح:</b> '+esc(q.wrongAnswerFeedback)+'</p>';
+    html+='<p><b>الإجابة الصحيحة:</b> '+esc(q.correctAnswer)+'</p>';
+  }
+  if(extraNote) html+='<p><b>ملاحظة:</b> '+esc(extraNote)+'</p>';
+  html+='<p><b>الشرح:</b> '+esc(q.explanation)+'</p>';
+  if(q.solvedExample) html+='<div class="solved-example"><b>مثال محلول مشابه:</b>\n'+esc(q.solvedExample)+'</div>';
+  const cn=CONCEPTS[q.conceptId];
+  if(!correct&&cn) html+='<p class="muted">إن تكرر الخطأ هنا فراجع أولًا: '+esc(cn.reviewFirst.join("، "))
+    +' — <a href="'+ytLink(cn.title)+'" target="_blank" rel="noopener">ابحث في يوتيوب عن شرح هذا الدرس</a></p>';
+  html+='</div>';
+  fb.innerHTML=html;
+}
+function submitAnswer(){
+  const q=currentQuestion(),card=$("question-card");
+  if(card.dataset.locked) return;
+  const r=qRec(q.id);
+  const spent=questionTimeSpent();
+  let userInput="",correct=false,extraNote="";
+  if(q.questionType==="teachback"){
+    userInput=($("answer-input").value||"").trim();
+    if(userInput.length<CONFIG.TEACHBACK_MIN_LEN){toast("الشرح قصير جدًا — اكتب جملة أو جملتين على الأقل بكلماتك.");return;}
+    const tb=checkTeachBackKeywords(userInput,q.keywordsForTeachBack);
+    r.teachText=userInput;r.teachOk=tb.autoOk;
+    r.attempts++;r.timeSpent+=spent;r.answers.push(userInput);
+    card.dataset.locked="1";
+    let html='<div class="feedback '+(tb.autoOk?"good":"neutral")+'">';
+    html+='<h3>'+(tb.autoOk?"✅ شرح جيد — وُجدت العناصر الأساسية":"📝 حُفظ شرحك — يحتاج مراجعة ولي الأمر/المعلم")+'</h3>';
+    if(tb.found.length) html+='<p>عناصر وردت في شرحك: '+esc(tb.found.join("، "))+'</p>';
+    if(tb.missing.length) html+='<p>عناصر لم تُذكر بوضوح: <b>'+esc(tb.missing.join("، "))+'</b></p>';
+    html+='<p><b>الإجابة النموذجية:</b> '+esc(q.explanation)+'</p></div>';
+    $("feedback-area").innerHTML=html;
+    RUN.results.push({qid:q.id,correct:tb.autoOk,first:true,spent,teach:true});
+    afterAnswerControls(q,tb.autoOk,true);
+    saveProgress();
+    return;
+  }
+  if(q.questionType==="steps"){
+    const fields={given:$("st-given").value,law:$("st-law").value,
+      substitution:$("st-sub").value,work:$("st-work").value,final:$("st-final").value};
+    userInput=fields.final;
+    if(!userInput.trim()){toast("اكتب الإجابة النهائية.");return;}
+    const stepsCheck=checkRequiredSteps(fields);
+    correct=checkAnswer(q,userInput);
+    r.steps=fields;r.stepsOk=stepsCheck.ok;
+    if(correct&&!stepsCheck.ok){
+      extraNote="إجابة صحيحة لكن الفهم غير مؤكد — الخطوات الناقصة: "+stepsCheck.missing.join("، ")+". لا يُمنح الإتقان الكامل بدون خطوات مقبولة.";
+    }
+  }else if(q.options){
+    const sel=card.querySelector(".opt.sel");
+    if(!sel){toast("اختر إجابة أولًا.");return;}
+    userInput=sel.dataset.val;
+    correct=normalizeAnswer(userInput)===normalizeAnswer(q.correctAnswer);
+    card.querySelectorAll(".opt").forEach(o=>{
+      if(normalizeAnswer(o.dataset.val)===normalizeAnswer(q.correctAnswer)) o.classList.add("ok");
+      else if(o===sel&&!correct) o.classList.add("bad");
+    });
+  }else{
+    userInput=($("answer-input").value||"").trim();
+    if(!userInput){toast("اكتب إجابتك أولًا.");return;}
+    correct=checkAnswer(q,userInput);
+  }
+  // تسجيل المحاولة
+  r.attempts++;r.timeSpent+=spent;r.answers.push(userInput);
+  const isFirst=r.attempts===1;
+  if(isFirst) r.firstTryCorrect=correct;
+  if(!correct) r.wrongCount++;
+  r.correct=correct;
+  // مؤشر السرعة يعكس آخر محاولة صحيحة: إجابة لاحقة متأنية تزيل التحذير
+  if(correct) r.fast=spent<q.estimatedTime*CONFIG.FAST_RATIO;
+  if(RUN.mode==="delayed"||RUN.mode==="cumulative"||RUN.mode==="mid") r.delayedWrong=!correct;
+  card.dataset.locked="1";
+  RUN.results.push({qid:q.id,correct,first:isFirst,spent,steps:q.questionType==="steps"?r.stepsOk:null});
+  showExplanation(q,correct,userInput,extraNote);
+  afterAnswerControls(q,correct,false);
+  saveProgress();
+}
+/* الثقة بعد الأسئلة المهمة + زر المتابعة */
+function afterAnswerControls(q,correct,isTeach){
+  const fb=$("feedback-area");
+  const needConf=!isTeach&&(q.difficulty>=3||q.isCritical||RUN.mode==="test"||RUN.mode==="final");
+  let html="";
+  if(needConf){
+    html+='<div class="card tight" id="conf-box"><b>ما مدى ثقتك في إجابتك؟</b><div class="conf-row">'
+      +["واثق جدًا","واثق","غير متأكد","كنت أخمن"].map(c=>'<button type="button" class="opt" onclick="setConfidence(this,\''+c+'\')">'+c+'</button>').join("")
+      +'</div></div>';
+  }
+  html+='<div class="btn-row"><button class="btn" id="next-btn" onclick="nextQuestion()" '+(needConf?"disabled":"")+'>'
+    +(RUN.idx+1>=RUN.list.length?"إنهاء هذا الجزء":"السؤال التالي")+'</button></div>';
+  fb.insertAdjacentHTML("beforeend",html);
+}
+function setConfidence(btn,val){
+  const q=currentQuestion();
+  qRec(q.id).confidence=val;
+  document.querySelectorAll("#conf-box .opt").forEach(o=>o.classList.remove("sel"));
+  btn.classList.add("sel");
+  $("next-btn").disabled=false;
+  if(val==="كنت أخمن"&&qRec(q.id).correct)
+    toast("إجابة صحيحة مع تخمين — سيُعاد اختبار هذا المفهوم للتأكد من الفهم.");
+  saveProgress();
+}
+function nextQuestion(){
+  const q=currentQuestion(),r=qRec(q.id);
+  // سؤال متابعة مشابه بعد الخطأ (في وضع الدرس والعلاج فقط)
+  if(!r.correct&&q.followUpQuestionId&&["lesson","recovery","prereq"].indexOf(RUN.mode)>=0
+     &&!RUN.injected[q.followUpQuestionId]&&RUN.list.indexOf(q.followUpQuestionId)<0){
+    RUN.injected[q.followUpQuestionId]=true;
+    RUN.list.splice(RUN.idx+1,0,q.followUpQuestionId);
+    toast("سؤال متابعة مشابه للتأكد من تجاوز الخطأ.");
+  }
+  RUN.idx++;
+  if(RUN.idx>=RUN.list.length){finishRun(false);return;}
+  renderQuestion();
+}
+function runScore(){
+  const scored=RUN.results.filter(x=>!x.teach);
+  if(!scored.length) return 100;
+  // أسئلة الخطوات: صحيحة بدون خطوات = نصف درجة فقط
+  let pts=0;
+  scored.forEach(x=>{
+    if(x.correct&&x.first){pts+=(x.steps===false?0.5:1);}
+  });
+  return Math.round(100*pts/scored.length);
+}
+/* ============================================================================
+   إنهاء الجزء الحالي وتوجيه المسار
+   ============================================================================ */
+function finishRun(expired){
+  clearInterval(qTimerInterval);
+  const mode=RUN.mode,chId=RUN.chapterId,score=runScore(),run=RUN;
+  RUN=null;
+  if(mode==="prereq"){
+    const pc=state.perChapter[chId];
+    pc.prereqDone=true;pc.prereqScore=score;
+    pc.prereqWeak=run.results.filter(x=>!x.correct).map(x=>QUESTIONS_BY_ID[x.qid].questionText);
+    saveProgress();
+    if(score<100) toast("توجد متطلبات سابقة تحتاج تقوية — ستُسجَّل في التقرير وسيُتابع الفصل مع تنبيه خاص.");
+    renderChapter(chId);
+  }else if(mode==="delayed"){
+    const pc=state.perChapter[chId];
+    pc.delayedDone=true;pc.delayedScore=score;
+    saveProgress();
+    if(score<70) toast("نتيجة المراجعة المؤجلة منخفضة — أعيدت بعض المفاهيم القديمة إلى قائمة المراجعة.");
+    renderChapter(chId);
+  }else if(mode==="lesson"){
+    const pc=state.perChapter[chId];
+    if(run.conceptId) pc.conceptsDone[run.conceptId]=true;
+    saveProgress();
+    toast("اكتمل هذا الدرس. مستوى المفهوم الآن: "+computeMastery(run.conceptId));
+    renderChapter(chId);
+  }else if(mode==="test"){
+    const pc=state.perChapter[chId];
+    pc.testDone=true;
+    if(pc.testFirstScore===null) pc.testFirstScore=score;
+    pc.testScore=score;
+    evaluateChapter(chId,expired);
+  }else if(mode==="recovery"){
+    const pc=state.perChapter[chId];
+    pc.recoveryDone=true;
+    saveProgress();
+    toast("اكتملت جولة معالجة نقاط الضعف. يمكنك الآن إعادة اختبار الفصل.");
+    renderChapter(chId);
+  }else if(mode==="mid"){
+    state.midTestDone=true;state.midTestScore=score;
+    saveProgress();
+    toast("اكتمل الاختبار الشامل لمنتصف المنهج. النتيجة: "+score+"%");
+    renderDashboard();
+  }else if(mode==="cumulative"){
+    saveProgress();
+    toast("اكتملت المراجعة التراكمية. النتيجة: "+score+"%");
+    renderDashboard();
+  }else if(mode==="final"){
+    state.finalDone=true;state.finalScore=score;
+    evaluateFinal(score);
+  }else{
+    renderDashboard();
+  }
+}
+/* تقييم الفصل بعد اختبار الإتقان */
+function evaluateChapter(chId,expired){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId),pc=state.perChapter[chId];
+  stopChapterTimer();
+  const blockers=chapterBlockers(ch);
+  pc.blockers=blockers;
+  const score=pc.testScore;
+  let status;
+  if(expired&&score===null){status="failed";}
+  if(blockers.length>0){status="verify";}
+  else if(score>=ch.passPercent){status="passed";}
+  else if(score>=CONFIG.REVIEW_PERCENT){status="review";}
+  else{status="failed";}
+  pc.status=status;
+  if(status==="passed"){
+    const idx=CURRICULUM.chapters.findIndex(c=>c.id===chId);
+    if(idx+1<CURRICULUM.chapters.length){
+      const nxt=CURRICULUM.chapters[idx+1].id;
+      if(state.perChapter[nxt].status==="locked") state.perChapter[nxt].status="unlocked";
+    }
+  }
+  saveProgress();
+  generateChapterReport(chId,expired);
+}
+
+/* ============================================================================
+   الشاشات: الترحيب — لوحة الفصول — شاشة الفصل
+   ============================================================================ */
+const CH_STATUS_LABEL={locked:"مقفل 🔒",unlocked:"متاح",review:"يحتاج مراجعة",
+  failed:"لم يُجتز — تجب إعادته",verify:"غير مكتمل — يحتاج تحقق إضافي",passed:"مُجتاز ✔"};
+function chStatusBadge(s){
+  return '<span class="badge '+({passed:"b-green",unlocked:"b-blue",review:"b-warn",
+    failed:"b-red",verify:"b-purple",locked:"b-gray"}[s]||"b-gray")+'">'+CH_STATUS_LABEL[s]+'</span>';
+}
+function renderWelcome(){
+  const hasProgress=!!state.studentName;
+  $("screen-welcome").innerHTML=
+    '<div class="hero"><h1>📘 نظام إتقان الرياضيات الشامل</h1>'
+    +'<p>'+esc(CURRICULUM.title)+'</p>'
+    +'<p>نظام تقييم صارم قائم على الإتقان: مؤقتات، تشخيص أخطاء، شرح بكلماتك، خطوات حل، مراجعات مؤجلة، وتقارير مفصلة لولي الأمر.</p></div>'
+    +'<div class="card"><h2>'+(hasProgress?"مرحبًا بعودتك يا "+esc(state.studentName)+" 👋":"البدء")+'</h2>'
+    +(hasProgress?'<p class="muted">آخر دراسة: '+(state.lastStudyTime?new Date(state.lastStudyTime).toLocaleString("ar-SA"):"—")+'</p>'
+      +'<div class="btn-row"><button class="btn green" onclick="renderDashboard()">متابعة الدراسة</button>'
+      +'<button class="btn gray" onclick="exportProgress()">تصدير التقدم</button>'
+      +'<button class="btn gray" onclick="$(\'import-file\').click()">استيراد التقدم</button>'
+      +'<button class="btn red" onclick="resetProgress()">إعادة ضبط التقدم</button></div>'
+     :'<label for="student-name"><b>اسم الطالب:</b></label>'
+      +'<input type="text" id="student-name" placeholder="اكتب اسمك هنا" autocomplete="off">'
+      +'<div class="btn-row"><button class="btn green" onclick="startNew()">بدء رحلة الإتقان</button>'
+      +'<button class="btn gray" onclick="$(\'import-file\').click()">استيراد تقدم سابق</button></div>')
+    +'<input type="file" id="import-file" accept="application/json" style="display:none" onchange="importProgress(event)">'
+    +'</div>'
+    +'<div class="card tight"><h3>قواعد النظام</h3><ul class="clean">'
+    +'<li>لا يُفتح فصل قبل اجتياز الفصل السابق بنسبة '+CONFIG.PASS_PERCENT+'% مع إتقان المفاهيم الحرجة.</li>'
+    +'<li>لكل فصل مؤقّت، ولكل سؤال زمن يُسجَّل، وتُرصد الإجابات السريعة جدًا.</li>'
+    +'<li>بعد كل فصل يُولَّد تقرير مفصل ويُرسَل إلى ولي الأمر ('+esc(CONFIG.REPORT_RECIPIENT)+').</li>'
+    +'<li>الإجابة الصحيحة وحدها لا تكفي: مطلوب شرح بكلماتك وخطوات حل وثقة حقيقية.</li></ul></div>';
+  show("screen-welcome");
+}
+function startNew(){
+  const name=($("student-name").value||"").trim();
+  if(!name){toast("اكتب اسم الطالب أولًا.");return;}
+  state.studentName=name;saveProgress();renderDashboard();
+}
+function overallProgress(){
+  const total=CURRICULUM.chapters.length;
+  const done=CURRICULUM.chapters.filter(c=>state.perChapter[c.id].status==="passed").length;
+  return Math.round(100*done/total);
+}
+function renderDashboard(){
+  stopChapterTimer();
+  const allPassed=CURRICULUM.chapters.every(c=>state.perChapter[c.id].status==="passed");
+  const ch2Passed=state.perChapter["ch2"]&&state.perChapter["ch2"].status==="passed";
+  const anyPassed=CURRICULUM.chapters.some(c=>state.perChapter[c.id].status==="passed");
+  let html='<div class="hero"><h1>لوحة الفصول — '+esc(state.studentName)+'</h1>'
+    +'<p>التقدم الكلي في المنهج</p>'
+    +'<div class="progress-wrap"><div class="progress-bar" style="width:'+overallProgress()+'%"></div></div>'
+    +'<p class="num">'+overallProgress()+'%</p></div>';
+  CURRICULUM.chapters.forEach(ch=>{
+    const pc=state.perChapter[ch.id];
+    const locked=pc.status==="locked";
+    const concepts=chapterConcepts(ch);
+    const masteredCount=concepts.filter(c=>[MASTERY.VERY,MASTERY.OK].indexOf(computeMastery(c))>=0).length;
+    html+='<div class="card '+(locked?"locked":"")+'"><div class="chapter-card">'
+      +'<div class="info"><h2>'+(locked?'<span class="lock-ico">🔒</span> ':"")+'الفصل '+ch.num+': '+esc(ch.title)+'</h2>'
+      +'<p class="muted">'+ch.lessons.length+' دروس — '+concepts.length+' مفاهيم — الوقت المقترح: '+ch.minutes+' دقيقة</p>'
+      +'<p>'+chStatusBadge(pc.status)
+      +(pc.testScore!==null?' <span class="badge b-blue">آخر نتيجة: '+pc.testScore+'%</span>':"")
+      +' <span class="badge b-green">إتقان: '+masteredCount+'/'+concepts.length+'</span></p></div>'
+      +'<div>'+(locked?'<p class="muted">يُفتح بعد اجتياز الفصل السابق</p>'
+        :'<button class="btn" onclick="enterChapter(\''+ch.id+'\')">دخول الفصل</button>')
+      +'</div></div></div>';
+  });
+  html+='<div class="card"><h2>🧠 المراجعات والاختبارات الشاملة</h2><div class="btn-row">';
+  html+='<button class="btn purple" '+(anyPassed?"":"disabled")+' onclick="startCumulativeReview()">مراجعة تراكمية</button>';
+  html+='<button class="btn purple" '+(ch2Passed&&!state.midTestDone?"":"disabled")+' onclick="startMidTest()">اختبار منتصف المنهج'+(state.midTestDone?" (تم: "+state.midTestScore+"%)":"")+'</button>';
+  html+='<button class="btn red" '+(allPassed?"":"disabled")+' onclick="startFinalAssessment()">الاختبار الشامل النهائي'+(state.finalDone?" (تم: "+state.finalScore+"%)":"")+'</button>';
+  html+='<button class="btn green" '+(state.finalDone?"":"disabled")+' onclick="renderFinalReport()">التقرير النهائي</button>';
+  html+='</div><p class="muted">الاختبار النهائي لا يُفتح إلا بعد اجتياز جميع الفصول.</p></div>';
+  html+='<div class="card tight"><div class="btn-row">'
+    +'<button class="btn gray" onclick="renderParentDashboard()">👨‍👦 لوحة ولي الأمر / المعلم</button>'
+    +'<button class="btn gray" onclick="exportProgress()">تصدير التقدم</button>'
+    +'<button class="btn gray" onclick="$(\'import-file2\').click()">استيراد التقدم</button>'
+    +'<button class="btn red" onclick="resetProgress()">إعادة ضبط التقدم</button>'
+    +'<button class="btn outline" onclick="renderWelcome()">الشاشة الرئيسة</button></div>'
+    +'<input type="file" id="import-file2" accept="application/json" style="display:none" onchange="importProgress(event)"></div>';
+  $("screen-dashboard").innerHTML=html;
+  show("screen-dashboard");
+  saveProgress();
+}
+function enterChapter(chId){
+  const pc=state.perChapter[chId];
+  if(pc.status==="locked"){toast("هذا الفصل مقفل — أكمل الفصل السابق أولًا.");return;}
+  renderChapter(chId);
+}
+function renderChapter(chId){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId),pc=state.perChapter[chId];
+  startChapterTimer(chId);
+  const budget=ch.minutes*60,left=budget-pc.timeUsedSec;
+  const concepts=chapterConcepts(ch);
+  const allConceptsDone=concepts.every(c=>pc.conceptsDone[c]);
+  const needsDelayed=ch.num>1&&!pc.delayedDone;
+  let html='<div class="timer-bar no-print"><div><b>الفصل '+ch.num+': '+esc(ch.title)+'</b></div>'
+    +'<div>⏱ المتبقي من وقت الفصل: <span class="timer-num" id="chapter-timer-num">'+fmtTime(Math.max(0,left))+'</span></div>'
+    +'<button class="btn small gray" onclick="renderDashboard()">⬅ لوحة الفصول</button></div>';
+  html+='<div class="card"><h2>نظرة عامة</h2><p>'+esc(ch.overview)+'</p>'
+    +'<p>'+chStatusBadge(pc.status)+(pc.timerExpired?' <span class="badge b-red">انتهى الوقت المقترح</span>':"")+'</p>'
+    +'<p class="muted">'+esc(PAGE_NOTE)+'</p></div>';
+  // بوابة المراجعة المؤجلة (أسئلة مفاجئة من الفصول السابقة)
+  if(needsDelayed){
+    html+='<div class="card"><h3>🔄 مراجعة مؤجلة إلزامية</h3>'
+      +'<p>قبل البدء، أسئلة مفاجئة من الفصول السابقة للتأكد من بقاء الفهم.</p>'
+      +'<button class="btn purple" onclick="startDelayed(\''+chId+'\')">بدء المراجعة المؤجلة</button></div>';
+  }
+  // فحص المتطلبات السابقة
+  if(!pc.prereqDone){
+    html+='<div class="card"><h3>🚪 فحص المتطلبات السابقة</h3><p>'+esc(ch.prereqNote)+'</p>'
+      +'<button class="btn" '+(needsDelayed?"disabled":"")+' onclick="startPrereq(\''+chId+'\')">بدء فحص المتطلبات (4 أسئلة)</button>'
+      +(needsDelayed?'<p class="muted">أكمل المراجعة المؤجلة أولًا.</p>':"")+'</div>';
+  }else if(pc.prereqWeak.length){
+    html+='<div class="alert warn"><b>متطلبات تحتاج تقوية (نتيجة الفحص: '+pc.prereqScore+'%):</b><br>'
+      +pc.prereqWeak.map(esc).join("<br>")+'</div>';
+  }
+  // الدروس والمفاهيم
+  html+='<div class="card"><h2>الدروس</h2>';
+  ch.lessons.forEach(l=>{
+    l.concepts.forEach(cid=>{
+      const m=computeMastery(cid),done=!!pc.conceptsDone[cid];
+      const enabled=pc.prereqDone&&!needsDelayed;
+      html+='<div class="card tight"><div class="chapter-card"><div class="info">'
+        +'<h3>الدرس '+l.num+': '+esc(l.title)+'</h3>'
+        +'<p><span class="badge '+masteryBadgeClass(m)+'">'+m+'</span>'
+        +(CONCEPTS[cid].critical?' <span class="badge b-red">مفهوم حرج</span>':"")+'</p>'
+        +'<p class="muted">'+esc(CONCEPTS[cid].rule)+'</p>'
+        +'<p><a href="'+ytLink(l.title)+'" target="_blank" rel="noopener">🎬 ابحث في يوتيوب عن شرح هذا الدرس</a></p></div>'
+        +'<div><button class="btn'+(done?" outline":"")+'" '+(enabled?"":"disabled")+' onclick="startLesson(\''+chId+'\',\''+cid+'\')">'
+        +(done?"إعادة المحاولة":"بدء الدرس")+'</button></div></div></div>';
+    });
+  });
+  html+='</div>';
+  // اختبار الفصل والإجراءات
+  const weakConcepts=concepts.filter(c=>[MASTERY.VERY,MASTERY.OK].indexOf(computeMastery(c))<0&&computeMastery(c)!==MASTERY.NONE);
+  html+='<div class="card"><h2>🎓 اختبار إتقان الفصل + أسئلة التحدي</h2>'
+    +'<p>يشمل أسئلة نمط اختبار ومسائل لفظية وأسئلة تحدٍّ وأسئلة «أظهر خطواتك». النجاح: '+ch.passPercent+'% مع إتقان المفاهيم الحرجة.</p>'
+    +'<div class="btn-row">'
+    +'<button class="btn green" '+(allConceptsDone&&pc.prereqDone?"":"disabled")+' onclick="startChapterTest(\''+chId+'\')">'
+    +(pc.testDone?"إعادة اختبار الفصل":"بدء اختبار الفصل")+'</button>'
+    +'<button class="btn purple" '+(weakConcepts.length?"":"disabled")+' onclick="startRecovery(\''+chId+'\')">مراجعة نقاط الضعف ('+weakConcepts.length+')</button>'
+    +(pc.reportCount>0?'<button class="btn gray" onclick="showLastReport(\''+chId+'\')">عرض آخر تقرير</button>':"")
+    +'</div>'
+    +(allConceptsDone?"":'<p class="muted">يجب إكمال جميع الدروس قبل اختبار الفصل.</p>')
+    +(pc.blockers&&pc.blockers.length?'<div class="alert err"><b>موانع الاجتياز الحالية:</b><br>'+pc.blockers.map(esc).join("<br>")+'</div>':"")
+    +'</div>';
+  $("screen-chapter").innerHTML=html;
+  show("screen-chapter");
+}
+function startPrereq(chId){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId);
+  startQuiz("prereq",shuffle(ch.prereqIds.slice()),{chapterId:chId,title:"فحص المتطلبات — الفصل "+ch.num});
+}
+function startDelayed(chId){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId);
+  startQuiz("delayed",delayedIds(ch.num),{chapterId:chId,title:"مراجعة مؤجلة قبل الفصل "+ch.num});
+}
+function startLesson(chId,cid){
+  startQuiz("lesson",lessonRunIds(cid),{chapterId:chId,conceptId:cid,title:CONCEPTS[cid].title});
+}
+function startChapterTest(chId){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId);
+  startQuiz("test",chapterTestIds(chId),{chapterId:chId,title:"اختبار إتقان الفصل "+ch.num});
+}
+function startRecovery(chId){
+  startQuiz("recovery",recoveryIds(chId),{chapterId:chId,title:"معالجة نقاط الضعف"});
+}
+function renderWeaknessRecovery(chId){startRecovery(chId);} // اسم بديل مطلوب
+function startCumulativeReview(){
+  const passedCh=CURRICULUM.chapters.filter(c=>state.perChapter[c.id].status==="passed").map(c=>c.id);
+  const ids=pickQuestions(q=>passedCh.indexOf(q.chapterId)>=0&&q.tags.indexOf("cumulative")>=0,10);
+  startQuiz("cumulative",ids,{title:"مراجعة تراكمية"});
+}
+function renderCumulativeReview(){startCumulativeReview();}
+function startMidTest(){
+  const ids=pickQuestions(q=>(q.chapterId==="ch1"||q.chapterId==="ch2")&&(q.tags.indexOf("delayed")>=0||q.tags.indexOf("exam")>=0),10);
+  startQuiz("mid",ids,{title:"اختبار منتصف المنهج (الفصلان 1 و2)",timeLimitSec:25*60});
+}
+function renderDelayedRetest(chId){startDelayed(chId);} // اسم بديل مطلوب
+
+/* ============================================================================
+   محرك التقارير
+   ============================================================================ */
+function chapterReportData(chId,partial){
+  const ch=CURRICULUM.chapters.find(c=>c.id===chId),pc=state.perChapter[chId];
+  const chQs=QUESTION_BANK.filter(q=>q.chapterId===chId);
+  let answered=0,correct=0,wrong=0,multi=[],fast=[],noSteps=[],teach=[],unanswered=[];
+  const mistakeCounts={};
+  let times=[];
+  chQs.forEach(q=>{
+    const r=state.questions[q.id];
+    if(!r||r.attempts===0){unanswered.push(q.id);return;}
+    answered++;times.push(r.timeSpent);
+    if(r.firstTryCorrect)correct++;else wrong++;
+    if(r.attempts>1)multi.push(q.questionText);
+    if(r.correct&&r.fast)fast.push(q.questionText);
+    if(q.questionType==="steps"&&r.correct&&r.stepsOk===false)noSteps.push(q.questionText);
+    if(q.questionType==="teachback"&&r.teachText)teach.push({q:q.questionText,a:r.teachText,ok:r.teachOk});
+    if(r.wrongCount>0)mistakeCounts[q.mistakeType]=(mistakeCounts[q.mistakeType]||0)+r.wrongCount;
+  });
+  const masteryMap={};
+  chapterConcepts(ch).forEach(cid=>{masteryMap[CONCEPTS[cid].title]=computeMastery(cid);});
+  const strong=Object.keys(masteryMap).filter(k=>[MASTERY.VERY,MASTERY.OK].indexOf(masteryMap[k])>=0);
+  const weak=Object.keys(masteryMap).filter(k=>[MASTERY.VERY,MASTERY.OK,MASTERY.NONE].indexOf(masteryMap[k])<0);
+  const criticalFailed=chapterConcepts(ch).filter(cid=>CONCEPTS[cid].critical
+    &&[MASTERY.VERY,MASTERY.OK].indexOf(computeMastery(cid))<0).map(cid=>CONCEPTS[cid].title);
+  const topMistakes=Object.entries(mistakeCounts).sort((a,b)=>b[1]-a[1]).slice(0,4)
+    .map(([k,v])=>k+" ("+v+" مرات)");
+  const pct=answered?Math.round(100*correct/answered):0;
+  const masteryLevel=pc.status==="passed"?(pct>=95?MASTERY.VERY:MASTERY.OK)
+    :pc.status==="review"?MASTERY.REVIEW:pc.status==="verify"?MASTERY.VERIFY:MASTERY.WEAK;
+  let recommendation;
+  if(pc.status==="passed") recommendation="الفصل مُجتاز. يُنصح بمراجعة خفيفة لنقاط الضعف المذكورة ثم الانتقال للفصل التالي.";
+  else if(pc.status==="review") recommendation="النتيجة بين 80% و90%: راجع المفاهيم الضعيفة عبر «مراجعة نقاط الضعف» ثم أعد اختبار الفصل قبل الانتقال.";
+  else if(pc.status==="verify") recommendation="توجد موانع اجتياز (مفاهيم حرجة أو مؤشرات تخمين/سرعة): قد تحتاج إلى إعادة هذا الجزء للتأكد من الفهم، لأن بعض الإجابات كانت سريعة جدًا أو بدون خطوات كافية.";
+  else recommendation="النتيجة أقل من 80%: يجب إعادة دروس الفصل من البداية مع التركيز على المفاهيم الحرجة قبل أي تقدم.";
+  return {chapterId:chId,chapterTitle:"الفصل "+ch.num+": "+ch.title,partial:!!partial,
+    date:new Date().toLocaleString("ar-SA"),
+    lessonsDone:ch.lessons.filter(l=>l.concepts.every(c=>pc.conceptsDone[c])).map(l=>l.title),
+    budgetMin:ch.minutes,usedMin:Math.round(pc.timeUsedSec/60),
+    withinTime:pc.timeUsedSec<=ch.minutes*60,
+    answered,correct,wrong,pct,score:pc.testScore,prereqScore:pc.prereqScore,prereqWeak:pc.prereqWeak,
+    delayedScore:pc.delayedScore,masteryLevel,masteryMap,strong,weak,criticalFailed,topMistakes,
+    multi,fast,noSteps,teach,unansweredCount:unanswered.length,
+    avgQuestionTime:times.length?Math.round(times.reduce((a,b)=>a+b,0)/times.length):0,
+    blockers:pc.blockers||[],status:CH_STATUS_LABEL[pc.status]||pc.status,
+    statusKey:pc.status,recommendation,
+    tabSwitches:state.events.tabSwitches,pastes:state.events.pastes};
+}
+function reportEmailBody(d){
+  const L=a=>a&&a.length?a.map(x=>"- "+x).join("\n"):"- لا يوجد";
+  return "السلام عليكم،\n\n"
+    +"تم "+(d.partial?"توليد تقرير جزئي (انتهى الوقت) عن":"إتمام")+" الفصل التالي في نظام تقييم الرياضيات:\n\n"
+    +"الطالب:\n"+state.studentName+"\n\n"
+    +"الفصل:\n"+d.chapterTitle+"\n\n"
+    +"النتيجة:\n"+(d.score!==null?d.score+"% (اختبار الفصل) — "+d.pct+"% (إجمالي الإجابات من أول محاولة)":d.pct+"%")+"\n\n"
+    +"مستوى الإتقان:\n"+d.masteryLevel+"\n\n"
+    +"حالة الفصل:\n"+d.status+"\n\n"
+    +"الوقت المستخدم:\n"+d.usedMin+" دقيقة من أصل "+d.budgetMin+" دقيقة مقترحة"
+    +(d.withinTime?" (ضمن الوقت)":" (تجاوز الوقت)")+"\n\n"
+    +"أقوى المفاهيم:\n"+L(d.strong)+"\n\n"
+    +"نقاط الضعف:\n"+L(d.weak)+"\n\n"
+    +"مفاهيم حرجة غير متقنة:\n"+L(d.criticalFailed)+"\n\n"
+    +"الأخطاء المتكررة:\n"+L(d.topMistakes)+"\n\n"
+    +"إجابات تحتاج مراجعة (شرح الطالب بكلماته):\n"
+    +(d.teach.length?d.teach.map(t=>"- س: "+t.q+"\n  ج: "+t.a+(t.ok?" (مقبول آليًا)":" (يحتاج مراجعة ولي الأمر/المعلم)")).join("\n"):"- لا يوجد")+"\n\n"
+    +"ملاحظات مهمة:\n"
+    +"- أسئلة حُلَّت بأكثر من محاولة: "+d.multi.length+"\n"
+    +"- إجابات صحيحة بسرعة عالية جدًا: "+d.fast.length+"\n"
+    +"- إجابات صحيحة بدون خطوات كافية: "+d.noSteps.length+"\n"
+    +"- أسئلة غير مُجابة: "+d.unansweredCount+"\n"
+    +"- مرات مغادرة التبويب أثناء الدراسة: "+d.tabSwitches+" — مرات لصق نص: "+d.pastes+"\n"
+    +(d.blockers.length?"- موانع الاجتياز:\n"+L(d.blockers)+"\n":"")
+    +"\nالتوصية:\n"+d.recommendation+"\n\n"
+    +"مع تحيات نظام تقييم الرياضيات";
+}
+function generateChapterReport(chId,partial){
+  const d=chapterReportData(chId,partial);
+  const rep={id:"rep-"+Date.now(),chapterId:chId,dateISO:new Date().toISOString(),
+    data:d,text:reportEmailBody(d),emailStatus:"لم يُرسل بعد"};
+  state.reports.push(rep);
+  state.perChapter[chId].reportCount++;
+  saveProgress();
+  renderReport(rep);
+  sendChapterReport(rep);
+  return rep;
+}
+function lastReportFor(chId){
+  for(let i=state.reports.length-1;i>=0;i--) if(state.reports[i].chapterId===chId) return state.reports[i];
+  return null;
+}
+function showLastReport(chId){const r=lastReportFor(chId);if(r)renderReport(r);else toast("لا يوجد تقرير بعد.");}
+function renderReport(rep){
+  stopChapterTimer();
+  const d=rep.data;
+  const row=(k,v)=>'<tr><th>'+k+'</th><td>'+v+'</td></tr>';
+  const list=a=>a&&a.length?a.map(esc).join("<br>"):"لا يوجد";
+  let masteryRows="";
+  for(const k in d.masteryMap) masteryRows+=row(esc(k),'<span class="badge '+masteryBadgeClass(d.masteryMap[k])+'">'+d.masteryMap[k]+'</span>');
+  $("screen-report").innerHTML=
+    '<div class="hero"><h1>📋 تقرير '+(d.partial?"جزئي — ":"")+esc(d.chapterTitle)+'</h1>'
+    +'<p>'+esc(d.date)+' — الطالب: '+esc(state.studentName)+'</p></div>'
+    +'<div class="card"><table class="report">'
+    +row("حالة الفصل",chStatusBadge(d.statusKey))
+    +row("نتيجة اختبار الفصل",d.score!==null?'<span class="num">'+d.score+'%</span>':"لم يُختبر")
+    +row("نسبة الإجابات الصحيحة من أول محاولة",'<span class="num">'+d.pct+'%</span> ('+d.correct+' صحيحة / '+d.wrong+' خاطئة من '+d.answered+')')
+    +row("مستوى الإتقان العام",'<span class="badge '+masteryBadgeClass(d.masteryLevel)+'">'+d.masteryLevel+'</span>')
+    +row("الدروس المكتملة",list(d.lessonsDone))
+    +row("الوقت",'<span class="num">'+d.usedMin+'</span> دقيقة من <span class="num">'+d.budgetMin+'</span> مقترحة — '+(d.withinTime?"ضمن الوقت ✔":"تجاوز الوقت ⚠")+' — متوسط زمن السؤال: <span class="num">'+d.avgQuestionTime+'</span> ثانية')
+    +row("فحص المتطلبات السابقة",(d.prereqScore!==null?d.prereqScore+"%":"—")+(d.prereqWeak&&d.prereqWeak.length?"<br>ضعف في:<br>"+list(d.prereqWeak):""))
+    +(d.delayedScore!==null?row("المراجعة المؤجلة",d.delayedScore+"%"):"")
+    +'</table></div>'
+    +'<div class="card"><h3>إتقان المفاهيم</h3><table class="report">'+masteryRows+'</table></div>'
+    +'<div class="card"><table class="report">'
+    +row("المفاهيم المتقنة",list(d.strong))
+    +row("المفاهيم الضعيفة",list(d.weak))
+    +row("مفاهيم حرجة غير متقنة",'<b>'+list(d.criticalFailed)+'</b>')
+    +row("أكثر الأخطاء تكرارًا",list(d.topMistakes))
+    +row("أسئلة احتاجت أكثر من محاولة",list(d.multi))
+    +row("إجابات صحيحة بسرعة غير طبيعية",list(d.fast))
+    +row("أسئلة خطوات ناقصة",list(d.noSteps))
+    +row("أسئلة غير مُجابة",d.unansweredCount)
+    +(d.blockers.length?row("موانع الاجتياز",list(d.blockers)):"")
+    +row("التوصية",'<b>'+esc(d.recommendation)+'</b>')
+    +'</table></div>'
+    +'<div class="card"><h3>إجابات «اشرح بكلماتك»</h3>'
+    +(d.teach.length?d.teach.map(t=>'<div class="card tight"><p><b>س:</b> '+esc(t.q)+'</p><p><b>ج:</b> '+esc(t.a)+'</p>'
+      +'<span class="badge '+(t.ok?"b-green":"b-warn")+'">'+(t.ok?"مقبول آليًا":"يحتاج مراجعة ولي الأمر/المعلم")+'</span></div>').join("")
+     :'<p class="muted">لا توجد إجابات شرح بعد.</p>')+'</div>'
+    +'<div class="card no-print"><h3>إرسال التقرير إلى '+esc(CONFIG.REPORT_RECIPIENT)+'</h3>'
+    +'<p>حالة الإرسال: <span id="email-status" class="badge b-gray">'+esc(rep.emailStatus)+'</span></p>'
+    +'<div class="btn-row">'
+    +'<button class="btn green" onclick="sendChapterReport(findReport(\''+rep.id+'\'))">إرسال التقرير</button>'
+    +'<button class="btn" onclick="copyReport(\''+rep.id+'\')">نسخ التقرير</button>'
+    +'<button class="btn" onclick="downloadReport(\''+rep.id+'\')">تحميل التقرير</button>'
+    +'<button class="btn" onclick="window.print()">طباعة التقرير</button>'
+    +'<button class="btn purple" onclick="openMailtoReport(findReport(\''+rep.id+'\'))">فتح البريد لإرسال التقرير</button>'
+    +'</div></div>'
+    +'<div class="btn-row no-print">'
+    +'<button class="btn gray" onclick="renderChapter(\''+rep.chapterId+'\')">العودة للفصل</button>'
+    +'<button class="btn" onclick="renderDashboard()">لوحة الفصول</button></div>';
+  show("screen-report");
+}
+function findReport(id){return state.reports.find(r=>r.id===id);}
+function copyReport(id){
+  const rep=findReport(id);
+  const done=()=>toast("نُسخ التقرير إلى الحافظة.");
+  if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(rep.text).then(done,()=>fallbackCopy(rep.text,done));
+  else fallbackCopy(rep.text,done);
+}
+function fallbackCopy(text,done){
+  const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);
+  ta.select();try{document.execCommand("copy");done();}catch(e){toast("تعذر النسخ آليًا.");}
+  document.body.removeChild(ta);
+}
+function downloadReport(id){
+  const rep=findReport(id);
+  const blob=new Blob(["﻿"+rep.text],{type:"text/plain;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="تقرير_"+rep.data.chapterTitle.replace(/[\s:]+/g,"_")+".txt";
+  a.click();URL.revokeObjectURL(a.href);
+}
+/* ============================================================================
+   محرك البريد: EmailJS تلقائي إذا هُيِّئ، وإلا mailto احتياطي
+   ============================================================================ */
+function emailConfigured(){
+  return CONFIG.EMAILJS_PUBLIC_KEY&&CONFIG.EMAILJS_SERVICE_ID&&CONFIG.EMAILJS_TEMPLATE_ID
+    &&CONFIG.EMAILJS_PUBLIC_KEY.indexOf("ضع_")!==0
+    &&CONFIG.EMAILJS_SERVICE_ID.indexOf("ضع_")!==0
+    &&CONFIG.EMAILJS_TEMPLATE_ID.indexOf("ضع_")!==0;
+}
+let emailjsLoading=null;
+function loadEmailJs(){
+  if(window.emailjs) return Promise.resolve();
+  if(emailjsLoading) return emailjsLoading;
+  emailjsLoading=new Promise((res,rej)=>{
+    const s=document.createElement("script");
+    s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+    s.onload=res;s.onerror=()=>rej(new Error("تعذر تحميل مكتبة EmailJS (لا يوجد اتصال؟)"));
+    document.head.appendChild(s);
+  });
+  return emailjsLoading;
+}
+function setEmailStatus(rep,status){
+  rep.emailStatus=status;saveProgress();
+  const el=$("email-status");if(el)el.textContent=status;
+}
+function sendChapterReport(rep){
+  const subject="تقرير إتمام فصل رياضيات - "+rep.data.chapterTitle;
+  if(emailConfigured()){
+    setEmailStatus(rep,"جارٍ الإرسال عبر EmailJS...");
+    loadEmailJs().then(()=>{
+      window.emailjs.init({publicKey:CONFIG.EMAILJS_PUBLIC_KEY});
+      return window.emailjs.send(CONFIG.EMAILJS_SERVICE_ID,CONFIG.EMAILJS_TEMPLATE_ID,
+        {to_email:CONFIG.REPORT_RECIPIENT,subject:subject,message:rep.text,student:state.studentName});
+    }).then(()=>{setEmailStatus(rep,"أُرسل آليًا ✔");toast("أُرسل التقرير بالبريد آليًا.");})
+      .catch(err=>{setEmailStatus(rep,"فشل الإرسال الآلي — استُخدم البريد الاحتياطي");
+        console.warn(err);openMailtoReport(rep);});
+  }else{
+    setEmailStatus(rep,"EmailJS غير مُهيأ — وضع mailto الاحتياطي");
+    openMailtoReport(rep);
+  }
+}
+function openMailtoReport(rep){
+  const subject="تقرير إتمام فصل رياضيات - "+rep.data.chapterTitle;
+  let body=rep.text;
+  // روابط mailto الطويلة جدًا قد تفشل؛ نقتطع ونحيل إلى النسخ/التحميل
+  const url="mailto:"+CONFIG.REPORT_RECIPIENT+"?subject="+encodeURIComponent(subject)+"&body=";
+  const maxBody=1800-url.length;
+  if(encodeURIComponent(body).length>maxBody){
+    body=body.split("ملاحظات مهمة:")[0]
+      +"\n(التقرير الكامل أطول من حد رسالة mailto — استخدم زر «نسخ التقرير» أو «تحميل التقرير» وأرفقه بالرسالة.)";
+    toast("التقرير طويل: فُتح ملخص في البريد، وانسخ التقرير الكامل من الشاشة.");
+  }
+  window.location.href=url+encodeURIComponent(body);
+  if(rep.emailStatus.indexOf("أُرسل آليًا")<0) setEmailStatus(rep,"فُتح بريد mailto — بانتظار إرسال المستخدم");
+}
+
+/* ============================================================================
+   الاختبار الشامل النهائي والتقرير النهائي
+   ============================================================================ */
+function renderFinalAssessment(){startFinalAssessment();}
+function startFinalAssessment(){
+  const allPassed=CURRICULUM.chapters.every(c=>state.perChapter[c.id].status==="passed");
+  if(!allPassed){toast("الاختبار النهائي يُفتح بعد اجتياز جميع الفصول.");return;}
+  // تركيبة الاختبار: أسئلة اختبار/تحدٍّ/مسائل من كل الفصول + أسئلة من المفاهيم الضعيفة + خطوات + شرح
+  let ids=[];
+  CURRICULUM.chapters.forEach(ch=>{
+    ids=ids.concat(pickQuestions(q=>q.chapterId===ch.id&&(q.tags.indexOf("exam")>=0||q.tags.indexOf("challenge")>=0),4));
+    ids=ids.concat(pickQuestions(q=>q.chapterId===ch.id&&q.tags.indexOf("delayed")>=0,2));
+  });
+  // مفاهيم ضعيفة: سؤال إضافي لكل منها
+  Object.keys(CONCEPTS).forEach(cid=>{
+    const m=computeMastery(cid);
+    if([MASTERY.VERY,MASTERY.OK].indexOf(m)<0)
+      ids=ids.concat(pickQuestions(q=>q.conceptId===cid&&q.tags.indexOf("test")>=0,1));
+  });
+  ids=ids.concat(pickQuestions(q=>q.questionType==="steps",2));
+  ids=ids.concat(pickQuestions(q=>q.questionType==="teachback",2));
+  ids=shuffle(Array.from(new Set(ids))).slice(0,26);
+  startQuiz("final",ids,{title:"الاختبار الشامل النهائي",timeLimitSec:60*60});
+}
+function evaluateFinal(score){
+  const criticalIds=Object.keys(CONCEPTS).filter(c=>CONCEPTS[c].critical);
+  const criticalOk=criticalIds.every(c=>[MASTERY.VERY,MASTERY.OK,MASTERY.REVIEW].indexOf(computeMastery(c))>=0);
+  const weakChapters=CURRICULUM.chapters.filter(c=>state.perChapter[c.id].status!=="passed");
+  state.finalPassed=score>=85&&criticalOk&&weakChapters.length===0;
+  saveProgress();
+  renderFinalReport();
+}
+function readinessLevel(){
+  const score=state.finalScore===null?0:state.finalScore;
+  const criticalIds=Object.keys(CONCEPTS).filter(c=>CONCEPTS[c].critical);
+  const criticalOk=criticalIds.every(c=>[MASTERY.VERY,MASTERY.OK].indexOf(computeMastery(c))>=0);
+  const criticalAcceptable=criticalIds.every(c=>[MASTERY.VERY,MASTERY.OK,MASTERY.REVIEW,MASTERY.FIX,MASTERY.VERIFY].indexOf(computeMastery(c))>=0);
+  if(!state.finalDone) return "لم يُنجز الاختبار النهائي بعد";
+  if(score>=90&&criticalOk) return "جاهز جدًا";
+  if(score>=85&&criticalAcceptable) return "جاهز";
+  if(score>=80) return "جاهز مع مراجعة بسيطة";
+  if(score>=65) return "يحتاج مراجعة إضافية";
+  return "غير جاهز بعد";
+}
+function renderFinalReport(){
+  const allConcepts=Object.keys(CONCEPTS);
+  const mastered=allConcepts.filter(c=>[MASTERY.VERY,MASTERY.OK].indexOf(computeMastery(c))>=0);
+  const weak=allConcepts.filter(c=>{const m=computeMastery(c);return m!==MASTERY.NONE&&[MASTERY.VERY,MASTERY.OK].indexOf(m)<0;});
+  const lessonsDone=CURRICULUM.chapters.reduce((n,ch)=>n+ch.lessons.filter(l=>l.concepts.every(c=>state.perChapter[ch.id].conceptsDone[c])).length,0);
+  const chaptersDone=CURRICULUM.chapters.filter(c=>state.perChapter[c.id].status==="passed").length;
+  const avgTime=Math.round(CURRICULUM.chapters.reduce((n,c)=>n+state.perChapter[c.id].timeUsedSec,0)/60/CURRICULUM.chapters.length);
+  // أكثر خطأ متكرر على مستوى المنهج
+  const mc={};
+  QUESTION_BANK.forEach(q=>{const r=state.questions[q.id];if(r&&r.wrongCount>0)mc[q.mistakeType]=(mc[q.mistakeType]||0)+r.wrongCount;});
+  const top=Object.entries(mc).sort((a,b)=>b[1]-a[1]);
+  // أقوى/أضعف فصل
+  const byScore=CURRICULUM.chapters.map(ch=>{
+    const qs=QUESTION_BANK.filter(q=>q.chapterId===ch.id);
+    let a=0,c=0;qs.forEach(q=>{const r=state.questions[q.id];if(r&&r.attempts){a++;if(r.firstTryCorrect)c++;}});
+    return {title:ch.title,pct:a?Math.round(100*c/a):0,answered:a};
+  }).filter(x=>x.answered>0).sort((a,b)=>b.pct-a.pct);
+  const row=(k,v)=>'<tr><th>'+k+'</th><td>'+v+'</td></tr>';
+  const readiness=readinessLevel();
+  $("screen-final").innerHTML=
+    '<div class="hero"><h1>🏁 التقرير النهائي للمنهج</h1><p>'+esc(state.studentName)+' — '+new Date().toLocaleString("ar-SA")+'</p></div>'
+    +'<div class="card"><table class="report">'
+    +row("عدد الفصول المكتملة",'<span class="num">'+chaptersDone+' / '+CURRICULUM.chapters.length+'</span>')
+    +row("عدد الدروس المكتملة",'<span class="num">'+lessonsDone+' / '+CURRICULUM.chapters.reduce((n,c)=>n+c.lessons.length,0)+'</span>')
+    +row("عدد المفاهيم المتقنة",'<span class="num">'+mastered.length+' / '+allConcepts.length+'</span>')
+    +row("عدد المفاهيم الضعيفة",'<span class="num">'+weak.length+'</span>'+(weak.length?'<br>'+weak.map(c=>esc(CONCEPTS[c].title)+' ('+computeMastery(c)+')').join("<br>"):""))
+    +row("النتيجة النهائية",state.finalDone?'<span class="num">'+state.finalScore+'%</span>':"لم يُنجز بعد")
+    +row("اختبار منتصف المنهج",state.midTestDone?'<span class="num">'+state.midTestScore+'%</span>':"لم يُنجز")
+    +row("متوسط الوقت لكل فصل",'<span class="num">'+avgTime+'</span> دقيقة')
+    +row("أكثر نوع خطأ متكرر",top.length?esc(top[0][0])+" ("+top[0][1]+" مرات)":"لا أخطاء مسجلة")
+    +row("أقوى فصل",byScore.length?esc(byScore[0].title)+" ("+byScore[0].pct+"%)":"—")
+    +row("أضعف فصل",byScore.length?esc(byScore[byScore.length-1].title)+" ("+byScore[byScore.length-1].pct+"%)":"—")
+    +row("أكثر موضوع يحتاج مراجعة",weak.length?esc(CONCEPTS[weak[0]].title):"لا يوجد")
+    +row("هل الطالب جاهز للاختبار؟",'<b><span class="badge '+(readiness.indexOf("جاهز")===0?"b-green":"b-warn")+'">'+readiness+'</span></b>')
+    +'</table>'
+    +'<div class="alert info">هذا التقييم يعبّر عن مستوى الجاهزية وفق هذا النظام فقط، ولا يضمن نتيجة الاختبار الفعلي.</div>'
+    +'<div class="btn-row no-print"><button class="btn" onclick="window.print()">طباعة التقرير</button>'
+    +'<button class="btn gray" onclick="renderDashboard()">لوحة الفصول</button></div></div>';
+  show("screen-final");
+}
+
+/* ============================================================================
+   لوحة ولي الأمر / المعلم (محمية برقم سري)
+   ============================================================================ */
+function renderParentDashboard(){
+  $("screen-parent").innerHTML=
+    '<div class="card pin-box"><h2>🔐 لوحة ولي الأمر / المعلم</h2>'
+    +'<p>أدخل الرقم السري:</p><input type="password" id="pin-input" inputmode="numeric" autocomplete="off">'
+    +'<div class="btn-row" style="justify-content:center"><button class="btn" onclick="checkPin()">دخول</button>'
+    +'<button class="btn gray" onclick="renderDashboard()">رجوع</button></div></div>';
+  show("screen-parent");
+}
+function checkPin(){
+  if(($("pin-input").value||"")!==CONFIG.PARENT_PIN){toast("الرقم السري غير صحيح.");return;}
+  renderParentContent();
+}
+function renderParentContent(){
+  let html='<div class="hero"><h1>👨‍👦 لوحة ولي الأمر / المعلم</h1><p>الطالب: '+esc(state.studentName)+' — التقدم الكلي: '+overallProgress()+'%</p></div>';
+  // مؤشرات النزاهة العامة
+  const guessy=QUESTION_BANK.filter(q=>{const r=state.questions[q.id];return r&&r.correct&&r.confidence==="كنت أخمن";}).length;
+  const lowConf=QUESTION_BANK.filter(q=>{const r=state.questions[q.id];return r&&r.correct&&r.confidence==="غير متأكد";}).length;
+  const fastAll=QUESTION_BANK.filter(q=>{const r=state.questions[q.id];return r&&r.correct&&r.fast;}).length;
+  html+='<div class="card"><h3>مؤشرات التحقق من الفهم (صياغة محايدة)</h3><ul class="clean">'
+    +'<li>إجابات صحيحة لكن بسرعة عالية: <b class="num">'+fastAll+'</b></li>'
+    +'<li>إجابات صحيحة مع ثقة منخفضة: <b class="num">'+lowConf+'</b></li>'
+    +'<li>إجابات صحيحة وصرّح الطالب بأنه خمّن: <b class="num">'+guessy+'</b></li>'
+    +'<li>مرات مغادرة التبويب: <b class="num">'+state.events.tabSwitches+'</b> — مرات لصق نص: <b class="num">'+state.events.pastes+'</b></li>'
+    +'</ul><p class="muted">قد تحتاج بعض الأجزاء إلى إعادة للتأكد من الفهم، لأن بعض الإجابات كانت سريعة جدًا أو بدون خطوات كافية.</p></div>';
+  CURRICULUM.chapters.forEach(ch=>{
+    const pc=state.perChapter[ch.id];
+    const concepts=chapterConcepts(ch);
+    html+='<div class="card"><h2>الفصل '+ch.num+': '+esc(ch.title)+' '+chStatusBadge(pc.status)+'</h2>'
+      +'<div class="kv"><span>نتيجة اختبار الفصل (أول مرة / آخر مرة)</span><b class="num">'+(pc.testFirstScore===null?"—":pc.testFirstScore+"%")+' / '+(pc.testScore===null?"—":pc.testScore+"%")+'</b></div>'
+      +'<div class="kv"><span>الوقت المستخدم</span><b class="num">'+Math.round(pc.timeUsedSec/60)+' دقيقة من '+ch.minutes+'</b></div>'
+      +'<div class="kv"><span>فحص المتطلبات / المراجعة المؤجلة</span><b class="num">'+(pc.prereqScore===null?"—":pc.prereqScore+"%")+' / '+(pc.delayedScore===null?"—":pc.delayedScore+"%")+'</b></div>'
+      +'<div class="kv"><span>عدد التقارير المولدة</span><b class="num">'+pc.reportCount+'</b></div>'
+      +(pc.blockers&&pc.blockers.length?'<div class="alert err"><b>موانع الاجتياز:</b><br>'+pc.blockers.map(esc).join("<br>")+'</div>':"")
+      +'<h3>المفاهيم</h3>';
+    concepts.forEach(cid=>{
+      const m=computeMastery(cid);
+      html+='<div class="kv"><span>'+esc(CONCEPTS[cid].title)+(CONCEPTS[cid].critical?' <span class="badge b-red">حرج</span>':"")+'</span>'
+        +'<span class="badge '+masteryBadgeClass(m)+'">'+m+'</span></div>';
+    });
+    // إجابات الشرح والخطوات
+    const teach=QUESTION_BANK.filter(q=>q.chapterId===ch.id&&q.questionType==="teachback")
+      .map(q=>({q,r:state.questions[q.id]})).filter(x=>x.r&&x.r.teachText);
+    const steps=QUESTION_BANK.filter(q=>q.chapterId===ch.id&&q.questionType==="steps")
+      .map(q=>({q,r:state.questions[q.id]})).filter(x=>x.r&&x.r.steps);
+    if(teach.length){
+      html+='<h3>إجابات «اشرح بكلماتك»</h3>';
+      teach.forEach(x=>{html+='<div class="card tight"><p><b>س:</b> '+esc(x.q.questionText)+'</p><p><b>ج:</b> '+esc(x.r.teachText)+'</p>'
+        +'<span class="badge '+(x.r.teachOk?"b-green":"b-warn")+'">'+(x.r.teachOk?"مقبول آليًا":"يحتاج مراجعة ولي الأمر/المعلم")+'</span></div>';});
+    }
+    if(steps.length){
+      html+='<h3>إجابات «أظهر خطواتك»</h3>';
+      steps.forEach(x=>{html+='<div class="card tight"><p><b>س:</b> '+esc(x.q.questionText)+'</p>'
+        +'<p><b>المعطيات:</b> '+esc(x.r.steps.given||"—")+'<br><b>القانون:</b> '+esc(x.r.steps.law||"—")
+        +'<br><b>التعويض:</b> '+esc(x.r.steps.substitution||"—")+'<br><b>الخطوات:</b> '+esc(x.r.steps.work||"—")
+        +'<br><b>الإجابة النهائية:</b> '+esc(x.r.steps.final||"—")+'</p>'
+        +'<span class="badge '+(x.r.stepsOk?"b-green":"b-warn")+'">'+(x.r.stepsOk?"خطوات مقبولة":"خطوات ناقصة — إجابة صحيحة لكن الفهم غير مؤكد")+'</span></div>';});
+    }
+    html+='</div>';
+  });
+  // التقارير
+  html+='<div class="card"><h2>سجل التقارير</h2>';
+  if(state.reports.length){
+    state.reports.forEach(r=>{html+='<div class="kv"><span>'+esc(r.data.chapterTitle)+' — '+new Date(r.dateISO).toLocaleString("ar-SA")+'</span>'
+      +'<span class="badge b-blue">'+esc(r.emailStatus)+'</span></div>';});
+  }else html+='<p class="muted">لا تقارير بعد.</p>';
+  html+='</div>'
+    +'<div class="card"><h3>الجاهزية النهائية</h3><p><span class="badge b-purple">'+readinessLevel()+'</span></p></div>'
+    +'<div class="btn-row no-print"><button class="btn" onclick="window.print()">طباعة</button>'
+    +'<button class="btn gray" onclick="renderDashboard()">رجوع للوحة الفصول</button></div>';
+  $("screen-parent").innerHTML=html;
+  window.scrollTo(0,0);
+}
+
+/* ============================================================================
+   تصدير/استيراد/إعادة ضبط التقدم
+   ============================================================================ */
+function exportProgress(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="math_mastery_progress_"+new Date().toISOString().slice(0,10)+".json";
+  a.click();URL.revokeObjectURL(a.href);
+  toast("صُدِّر التقدم إلى ملف JSON.");
+}
+function importProgress(ev){
+  const f=ev.target.files&&ev.target.files[0];
+  if(!f) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const parsed=JSON.parse(reader.result);
+      if(!parsed.perChapter||!parsed.questions) throw new Error("بنية الملف غير صحيحة");
+      state=Object.assign(defaultState(),parsed);
+      saveProgress();toast("استُورد التقدم بنجاح.");
+      renderDashboard();
+    }catch(e){toast("فشل الاستيراد: "+e.message);}
+  };
+  reader.readAsText(f);
+  ev.target.value="";
+}
+function resetProgress(){
+  if(!confirm("هل أنت متأكد من إعادة ضبط جميع التقدم؟ سيُحذف كل شيء (الإجابات، التقارير، الإتقان). يُنصح بتصدير التقدم أولًا.")) return;
+  if(!confirm("تأكيد أخير: لا يمكن التراجع بعد الحذف. هل تريد المتابعة؟")) return;
+  localStorage.removeItem(CONFIG.STORAGE_KEY);
+  state=defaultState();
+  saveProgress();
+  toast("أُعيد ضبط التقدم.");
+  renderWelcome();
+}
+
+/* ============================================================================
+   مراقبة النزاهة + الإقلاع
+   ============================================================================ */
+function initApp(){
+  loadProgress();
+  document.addEventListener("visibilitychange",()=>{
+    if(document.hidden&&RUN){state.events.tabSwitches++;saveProgress();}
+  });
+  window.addEventListener("beforeunload",saveProgress);
+  renderWelcome();
+}
+if(typeof document!=="undefined"&&typeof window!=="undefined"&&window.document===document){
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",initApp);
+  else initApp();
+}
+</script>
+</body>
+</html>
